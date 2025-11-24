@@ -10,7 +10,7 @@ export default function Navigation() {
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
+          <Link href="/" className="flex items-center">
             <Image
               src="/logo.png"
               alt="Helping Heart Family Rwanda"
@@ -18,7 +18,7 @@ export default function Navigation() {
               height={80}
               className="h-16 w-auto"
             />
-          </div>
+          </Link>
           <div className="hidden md:flex space-x-8">
             <Link href="/about" className="text-gray-700 hover:text-orange-600">About Us</Link>
             <Link href="/programs" className="text-gray-700 hover:text-orange-600">Our Programs</Link>
