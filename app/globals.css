@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary-orange: #f76e2f;
+  --primary-yellow: #fec415;
+  --secondary-orange: #e55a1f;
+  --secondary-yellow: #f0b90b;
 }
 
 @theme inline {
@@ -23,4 +27,129 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom gradient backgrounds */
+.bg-gradient-orange {
+  background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+}
+
+.bg-gradient-yellow {
+  background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--secondary-yellow) 100%);
+}
+
+/* Custom color classes */
+.bg-custom-orange {
+  background-color: #f76e2f;
+}
+
+.bg-custom-orange-600 {
+  background-color: #f76e2f;
+}
+
+.bg-custom-orange-700 {
+  background-color: #e55a1f;
+}
+
+.bg-custom-orange-800 {
+  background-color: #d14d0f;
+}
+
+.bg-custom-yellow {
+  background-color: #fec415;
+}
+
+.bg-custom-yellow-500 {
+  background-color: #fec415;
+}
+
+.bg-custom-yellow-600 {
+  background-color: #f0b90b;
+}
+
+.text-custom-orange {
+  color: #f76e2f;
+}
+
+.text-custom-yellow {
+  color: #fec415;
+}
+
+.hover\:bg-custom-orange:hover {
+  background-color: #e55a1f;
+}
+
+.hover\:bg-custom-yellow:hover {
+  background-color: #f0b90b;
+}
+
+.hover\:text-custom-orange:hover {
+  color: #e55a1f;
+}
+
+.hover\:text-custom-yellow:hover {
+  color: #f0b90b;
+}
+
+.border-custom-orange {
+  border-color: #f76e2f;
+}
+
+.ring-custom-orange {
+  --tw-ring-color: #f76e2f;
+}
+
+/* Hero Slider Styles */
+.hero-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.slide-animation {
+  animation: slideIn 1s ease-in-out;
 }
