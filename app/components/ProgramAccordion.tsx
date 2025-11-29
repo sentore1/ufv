@@ -107,6 +107,18 @@ export default function ProgramAccordion() {
     return images[id as keyof typeof images] || '/Picture6 (1).png';
   };
 
+  const getUrlForProgram = (id: number) => {
+    const urls = {
+      1: '/justice-begins-at-home',
+      2: '/tumurere-yize',
+      3: '/mama-youth-empowerment',
+      4: '/mentorship-youth-empowerment',
+      5: '/drug-prevention',
+      6: '/kura-neza-mwana'
+    };
+    return urls[id as keyof typeof urls] || '/';
+  };
+
   const activeItem = programs.find(p => p.id === activeProgram) || programs[0];
 
   return (
@@ -139,7 +151,7 @@ export default function ProgramAccordion() {
                   <h3 className="text-2xl font-bold">{activeItem.title}</h3>
                 </div>
                 <p className="text-lg mb-6 leading-relaxed">{activeItem.description}</p>
-                <a href={`/${activeItem.title.toLowerCase().replace(/ /g, '-').replace(/\(.*?\)/g, '').trim()}`} className="inline-block text-white px-6 py-2 rounded-2xl font-medium bg-orange-500/30 backdrop-blur-md border border-orange-400/50 hover:bg-orange-500/50 transition-all">
+                <a href={getUrlForProgram(activeItem.id)} className="inline-block text-white px-6 py-2 rounded-2xl font-medium bg-orange-500/30 backdrop-blur-md border border-orange-400/50 hover:bg-orange-500/50 transition-all">
                   Read More →
                 </a>
               </div>
