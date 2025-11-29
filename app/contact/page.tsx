@@ -41,7 +41,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-xl mb-2 text-gray-900">Office Location</h3>
-                  <p className="text-gray-600 text-lg">Kigali, Rwanda<br/>Kinyinya Sector, Gasabo District</p>
+                  <p className="text-gray-600 text-lg">Kigali, Rwanda<br/>Kimironko Sector, Gasabo District</p>
                 </div>
               </div>
 

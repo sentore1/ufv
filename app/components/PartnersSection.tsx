@@ -10,7 +10,9 @@ export default function PartnersSection() {
     { id: 2, name: 'Partner 2', logo: '/partners/partner2.png' },
     { id: 3, name: 'Partner 3', logo: '/partners/partner3.jpeg' },
     { id: 4, name: 'Partner 4', logo: '/partners/partner4.jpeg' },
-    { id: 5, name: 'Partner 5', logo: '/partners/partner5.jpeg' }
+    { id: 5, name: 'Partner 5', logo: '/partners/partner5.JPG' },
+    { id: 6, name: 'Partner 6', logo: '/partners/partner6.JPG' },
+    { id: 7, name: 'Partner 7', logo: '/partners/partner7.JPG' }
   ];
 
   return (

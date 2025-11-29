@@ -97,14 +97,14 @@ export default function ProgramAccordion() {
 
   const getImageForProgram = (id: number) => {
     const images = {
-      1: '/IMG_3588.jpg',
-      2: '/IMG_4186.jpg', 
-      3: '/IMG_4746 (1).jpg',
-      4: '/IMG_5564 (1).jpg',
-      5: '/IMG_6242-1.jpg',
-      6: '/Picture6 (1).png'
+      1: '/program/Justice Begans at Home pictures/Justice Begans at Home pictures 1.jpg',
+      2: '/program/Tumurere Yize Program pictures/Tumurere Yize Program 1.jpg', 
+      3: '/program/Mama youth empowerment pictures/IMG_5928.JPG',
+      4: '/program/Mentorship and Youth empowerment/Mentorship and Youth Empowerment  1.JPG',
+      5: '/program/Drug Prevention and Reintegration Program/5. Drug Prevention and Reintegration Program 1.JPG',
+      6: '/program/Kura neza Mwana program/Kuraneza 1.JPG'
     };
-    return images[id as keyof typeof images] || '/Picture6 (1).png';
+    return images[id as keyof typeof images] || '/program/Kura neza Mwana program/Kuraneza 1.JPG';
   };
 
   const getUrlForProgram = (id: number) => {

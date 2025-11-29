@@ -15,8 +15,7 @@ export default function Footer() {
               className="mb-4"
             />
             <p className="text-white mb-4">
-              We work to improve nutrition and health by providing skills and innovative solutions needed to
-              build thriving communities.
+              We  are dedicated to promoting justice, accountability, and nonviolence within families by increasing legal awareness, strengthening peaceful dialogue, and reinforcing the role of parents and leaders in protecting children.
             </p>
           </div>
           <div>

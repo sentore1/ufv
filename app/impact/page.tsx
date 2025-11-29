@@ -28,7 +28,7 @@ export default function ImpactPage() {
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-10 rounded-3xl text-center text-white shadow-xl transform hover:scale-105 transition-transform">
             <div className="text-6xl font-bold mb-3">125K+</div>
             <p className="text-xl font-semibold mb-2">People Reached</p>
-            <p className="text-sm text-white/90">Legal awareness raised in Kinyinya</p>
+            <p className="text-sm text-white/90">Legal awareness raised</p>
           </div>
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-10 rounded-3xl text-center text-white shadow-xl transform hover:scale-105 transition-transform">
             <div className="text-6xl font-bold mb-3">500+</div>
