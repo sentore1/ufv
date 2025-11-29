@@ -29,16 +29,14 @@ export default function DonatePage() {
                 <Image src="/MTN-Rwanda-MoMo-Logo-2 (1).jpg" alt="MTN Mobile Money" width={80} height={80} className="rounded-xl" />
                 <div>
                   <p className="font-semibold text-gray-800 text-lg mb-2">MTN Mobile Money</p>
-                  <p className="text-3xl font-bold text-orange-600 mb-1">*182*8*1#</p>
-                  <p className="text-sm text-gray-600">Business Code: 07857</p>
+                  <p className="text-3xl font-bold text-orange-600 mb-1">*182*8*1*078577#</p>
+                  <p className="text-sm text-gray-600">Helping Heart Family Rwanda</p>
                 </div>
               </div>
               <div className="bg-orange-100 p-6 rounded-2xl">
                 <h4 className="font-bold text-gray-900 mb-2">How to Donate:</h4>
                 <ol className="text-gray-700 space-y-2 list-decimal list-inside">
-                  <li>Dial *182*8*1*07857# on your MTN phone</li>
-                  <li>Select "Send Money"</li>
-                  <li>Enter our business number</li>
+                  <li>Dial *182*8*1*078577# on your MTN phone</li>
                   <li>Enter amount and confirm</li>
                 </ol>
               </div>
@@ -51,7 +49,7 @@ export default function DonatePage() {
             <div className="space-y-6 bg-white p-8 rounded-2xl shadow-sm">
               <div>
                 <p className="text-sm text-gray-600 mb-1">Bank Name</p>
-                <p className="font-bold text-xl text-gray-900">Bank of Kigali</p>
+                <p className="font-bold text-xl text-gray-900">EQUITY Bank</p>
               </div>
               <div className="border-t border-gray-200 pt-6">
                 <p className="text-sm text-gray-600 mb-1">Account Name</p>
@@ -59,11 +57,7 @@ export default function DonatePage() {
               </div>
               <div className="border-t border-gray-200 pt-6">
                 <p className="text-sm text-gray-600 mb-1">Account Number</p>
-                <p className="font-bold text-xl text-gray-900">[Your Account Number]</p>
-              </div>
-              <div className="border-t border-gray-200 pt-6">
-                <p className="text-sm text-gray-600 mb-1">Swift Code</p>
-                <p className="font-bold text-xl text-gray-900">BKIGRWRW</p>
+                <p className="font-bold text-xl text-gray-900">4074200088126</p>
               </div>
             </div>
           </div>
