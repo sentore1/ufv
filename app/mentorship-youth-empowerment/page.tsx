@@ -7,7 +7,7 @@ export default function MentorshipYouthEmpowerment() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <div className="relative h-96">
-        <Image src="/IMG_5963 (1).jpg" alt="Mentorship and Youth Empowerment" fill className="object-cover" />
+        <Image src="/program/Mentorship and Youth empowerment/Mentorship and Youth Empowerment  1.JPG" alt="Mentorship and Youth Empowerment" fill className="object-cover" />
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <h1 className="text-5xl font-bold text-white text-center px-4">Mentorship and Youth Empowerment</h1>
@@ -24,7 +24,7 @@ export default function MentorshipYouthEmpowerment() {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-64">
-                <Image src="/IMG_4746 (1).jpg" alt="Mentorship" fill className="object-cover" />
+                <Image src="/program/Mentorship and Youth empowerment/Mentorship and Youth Empowerment  2.JPG" alt="Mentorship" fill className="object-cover" />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-orange-600 mb-3">What We Offer</h3>
@@ -40,7 +40,7 @@ export default function MentorshipYouthEmpowerment() {
             
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-64">
-                <Image src="/IMG_5939 (1).jpg" alt="Impact" fill className="object-cover" />
+                <Image src="/program/Mentorship and Youth empowerment/Mentorship and Youth Empowerment  3.JPG" alt="Impact" fill className="object-cover" />
               </div>
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-orange-600 mb-3">Our Impact</h3>

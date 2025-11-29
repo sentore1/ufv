@@ -4,22 +4,37 @@ import Footer from "../components/Footer";
 
 export default function GalleryPage() {
   const galleryImages = [
-    { src: "/gallery5 (1).jpg", alt: "Community event" },
-    { src: "/gallery6 (1).jpg", alt: "Program activity" },
-    { src: "/gallery7 (1).jpg", alt: "Youth empowerment" },
-    { src: "/gallery8 (1).jpg", alt: "Education support" },
-    { src: "/IMG_5563 (1).jpg", alt: "Community work" },
-    { src: "/IMG_5564 (1).jpg", alt: "Team collaboration" },
-    { src: "/IMG_5892 (1).jpg", alt: "Justice program" },
-    { src: "/IMG_5911 (1).jpg", alt: "Youth support" },
-    { src: "/IMG_5929 (1).jpg", alt: "Mentorship" },
-    { src: "/IMG_5939 (1).jpg", alt: "Community gathering" },
-    { src: "/IMG_5963 (1).jpg", alt: "Nutrition program" },
-    { src: "/IMG_5966 (1).jpg", alt: "Impact work" },
-    { src: "/IMG_6242-1 (1).jpg", alt: "GBV prevention" },
-    { src: "/IMG_4186 (1).jpg", alt: "Field work" },
-    { src: "/IMG_4746 (1).jpg", alt: "Community outreach" },
-    { src: "/IMG_4752-scaled (1).jpg", alt: "Program implementation" },
+    // Justice Begins at Home
+    { src: "/program/Justice Begans at Home pictures/Justice Begans at Home pictures 1.jpg", alt: "Justice Begins at Home - Community Education" },
+    { src: "/program/Justice Begans at Home pictures/Justice Begans at Home pictures 2.JPG", alt: "Justice Begins at Home - Legal Awareness" },
+    { src: "/program/Justice Begans at Home pictures/Justice Begans at Home pictures 3.jpg", alt: "Justice Begins at Home - Family Mediation" },
+    { src: "/program/Justice Begans at Home pictures/Justice Begans at Home pictures 4.JPG", alt: "Justice Begins at Home - Community Leaders" },
+    
+    // Tumurere Yize Program
+    { src: "/program/Tumurere Yize Program pictures/Tumurere Yize Program 1.jpg", alt: "Tumurere Yize - Educational Support" },
+    { src: "/program/Tumurere Yize Program pictures/Tumurere Yize Program 2.JPG", alt: "Tumurere Yize - Children Learning" },
+    { src: "/program/Tumurere Yize Program pictures/Tumurere Yize Program3.JPG", alt: "Tumurere Yize - School Materials" },
+    { src: "/program/Tumurere Yize Program pictures/Tumurere Yize Program 4.JPG", alt: "Tumurere Yize - Library Activities" },
+    
+    // Mama Youth Empowerment
+    { src: "/program/Mama youth empowerment pictures/mama youth 1.JPG", alt: "Mama Youth Empowerment - Teen Mothers Support" },
+    { src: "/program/Mama youth empowerment pictures/mama youth 2.JPG", alt: "Mama Youth Empowerment - Skills Training" },
+    { src: "/program/Mama youth empowerment pictures/IMG_5928.JPG", alt: "Mama Youth Empowerment - Peer Support" },
+    
+    // Mentorship and Youth Empowerment
+    { src: "/program/Mentorship and Youth empowerment/Mentorship and Youth Empowerment  1.JPG", alt: "Mentorship - Youth Leadership" },
+    { src: "/program/Mentorship and Youth empowerment/Mentorship and Youth Empowerment  2.JPG", alt: "Mentorship - Community Service" },
+    { src: "/program/Mentorship and Youth empowerment/Mentorship and Youth Empowerment  3.JPG", alt: "Mentorship - Skills Development" },
+    
+    // Kura Neza Mwana
+    { src: "/program/Kura neza Mwana program/Kuraneza 1.JPG", alt: "Kura Neza Mwana - Nutrition Education" },
+    { src: "/program/Kura neza Mwana program/Kuraneza 2.JPG", alt: "Kura Neza Mwana - Community Health" },
+    { src: "/program/Kura neza Mwana program/Kuraneza 3.JPG", alt: "Kura Neza Mwana - Child Care" },
+    
+    // Drug Prevention
+    { src: "/program/Drug Prevention and Reintegration Program/5. Drug Prevention and Reintegration Program 1.JPG", alt: "Drug Prevention - Awareness Campaign" },
+    { src: "/program/Drug Prevention and Reintegration Program/5. Drug Prevention and Reintegration Program 2.JPG", alt: "Drug Prevention - Youth Engagement" },
+    { src: "/program/Drug Prevention and Reintegration Program/5. Drug Prevention and Reintegration Program 3.JPG", alt: "Drug Prevention - Community Outreach" },
   ];
 
   return (
@@ -38,7 +53,7 @@ export default function GalleryPage() {
       <div className="max-w-7xl mx-auto px-4 py-20">
         
         {/* Gallery Grid */}
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6">
           {galleryImages.map((image, index) => (
             <div key={index} className="relative h-96 overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group">
               <Image 

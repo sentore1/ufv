@@ -7,7 +7,7 @@ export default function TumurereYize() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <div className="relative h-96">
-        <Image src="/education (1).jpg" alt="Tumurere Yize Program" fill className="object-cover" />
+        <Image src="/program/Tumurere Yize Program pictures/Tumurere Yize Program 1.jpg" alt="Tumurere Yize Program" fill className="object-cover" />
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <h1 className="text-5xl font-bold text-white text-center px-4">Tumurere Yize Program</h1>
@@ -27,7 +27,7 @@ export default function TumurereYize() {
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-48">
-                <Image src="/education (1).jpg" alt="Educational Support" fill className="object-cover" />
+                <Image src="/program/Tumurere Yize Program pictures/Tumurere Yize Program 2.JPG" alt="Educational Support" fill className="object-cover" />
               </div>
               <div className="p-6 text-center">
                 <div className="text-4xl font-bold text-orange-600 mb-2">500+</div>
@@ -37,7 +37,7 @@ export default function TumurereYize() {
             
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-48">
-                <Image src="/IMG_6242-1.jpg" alt="Family Reunification" fill className="object-cover" />
+                <Image src="/program/Tumurere Yize Program pictures/Tumurere Yize Program3.JPG" alt="Family Reunification" fill className="object-cover" />
               </div>
               <div className="p-6 text-center">
                 <div className="text-4xl font-bold text-orange-600 mb-2">60</div>
@@ -47,7 +47,7 @@ export default function TumurereYize() {
             
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-48">
-                <Image src="/education (1).jpg" alt="Library" fill className="object-cover" />
+                <Image src="/program/Tumurere Yize Program pictures/Tumurere Yize Program 4.JPG" alt="Library" fill className="object-cover" />
               </div>
               <div className="p-6 text-center">
                 <div className="text-4xl font-bold text-orange-600 mb-2">1</div>

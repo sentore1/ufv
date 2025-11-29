@@ -7,7 +7,7 @@ export default function JusticeBeginsAtHome() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <div className="relative h-96">
-        <Image src="/IMG_5911 (1).jpg" alt="Justice Begins at Home" fill className="object-cover" />
+        <Image src="/program/Justice Begans at Home pictures/Justice Begans at Home pictures 1.jpg" alt="Justice Begins at Home" fill className="object-cover" />
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <h1 className="text-5xl font-bold text-white text-center px-4">Justice Begins at Home</h1>
@@ -24,7 +24,7 @@ export default function JusticeBeginsAtHome() {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-64">
-                <Image src="/IMG_5929 (1).jpg" alt="Challenge" fill className="object-cover" />
+                <Image src="/program/Justice Begans at Home pictures/Justice Begans at Home pictures 4.JPG" alt="Challenge" fill className="object-cover" />
               </div>
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-orange-600 mb-4">The Challenge</h2>
@@ -39,7 +39,7 @@ export default function JusticeBeginsAtHome() {
             
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-64">
-                <Image src="/IMG_5911 (1).jpg" alt="Strategies" fill className="object-cover" />
+                <Image src="/program/Justice Begans at Home pictures/Justice Begans at Home pictures 3.jpg" alt="Strategies" fill className="object-cover" />
               </div>
               <div className="p-6">
                 <h2 className="text-2xl font-bold text-orange-600 mb-4">Our Key Strategies</h2>
@@ -52,7 +52,7 @@ export default function JusticeBeginsAtHome() {
             </div>
           </div>
           
-          <div className="bg-orange-500 rounded-xl shadow-lg p-8 text-white">
+          <div className="bg-orange-500 rounded-xl shadow-lg p-8 text-white mb-8">
             <h2 className="text-3xl font-bold mb-6 text-center">Our Impact So Far</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white/10 rounded-lg p-4">
@@ -73,6 +73,7 @@ export default function JusticeBeginsAtHome() {
               </div>
             </div>
           </div>
+
           
           <div className="mt-8 text-center">
             <a href="/contact" className="inline-block bg-orange-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-orange-600 transition-colors">

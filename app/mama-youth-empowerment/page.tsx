@@ -7,7 +7,7 @@ export default function MamaYouthEmpowerment() {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <div className="relative h-96">
-        <Image src="/IMG_5564 (1).jpg" alt="Mama Youth Empowerment" fill className="object-cover" />
+        <Image src="/program/Mama youth empowerment pictures/mama youth 1.JPG" alt="Mama Youth Empowerment" fill className="object-cover" />
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <h1 className="text-5xl font-bold text-white text-center px-4">Mama Youth Empowerment</h1>
@@ -28,7 +28,7 @@ export default function MamaYouthEmpowerment() {
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-48">
-                <Image src="/IMG_5564 (1).jpg" alt="Counseling Support" fill className="object-cover" />
+                <Image src="/program/Mama youth empowerment pictures/mama youth 2.JPG" alt="Counseling Support" fill className="object-cover" />
               </div>
               <div className="p-6 text-center">
                 <div className="text-4xl font-bold text-orange-600 mb-2">45</div>
@@ -38,7 +38,7 @@ export default function MamaYouthEmpowerment() {
             
             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
               <div className="relative h-48">
-                <Image src="/education (1).jpg" alt="School Reintegration" fill className="object-cover" />
+                <Image src="/program/Mama youth empowerment pictures/IMG_5928.JPG" alt="School Reintegration" fill className="object-cover" />
               </div>
               <div className="p-6 text-center">
                 <div className="text-4xl font-bold text-orange-600 mb-2">10</div>

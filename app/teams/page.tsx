@@ -4,20 +4,19 @@ import Footer from "../components/Footer";
 
 export default function TeamsPage() {
   const teamMembers = [
-    { name: "Niyomugabo Felicien", image: "/team/niyomugabofelicien (1).jpg" },
-    { name: "Mukundane Geoffrey", image: "/team/mukundanegeoffrey (1).jpg" },
-    { name: "Irakoza Eric", image: "/team/irakozeeric (1).jpg" },
-    { name: "Nsengimana Emmanuel", image: "/team/nsengaemmanuel (1).jpeg" },
-    { name: "Nsanzimana Andre", image: "/team/nsanzimanaandre (1).jpg" },
-    { name: "Bishakwe Sarno", image: "/team/bishakwesarno (1).jpg" },
-    { name: "Niyonkuru Elysee", image: "/team/niyonkuruelysee (1).jpg" },
-    { name: "Kayumba Yvette", image: "/team/kayumbayvette (1).jpg" },
-    { name: "Mbabazi Jeanne", image: "/team/mbabazijeanne (1).jpg" },
-    { name: "Umuhoza Eduige", image: "/team/umuhozaeduige (1).jpg" },
-    { name: "Azabe Merveille", image: "/team/azabemerveille (1).jpg" },
-    { name: "Bahontaganira Winny", image: "/team/bahontaganirawinny (1).jpg" },
-    { name: "Akaliza Laullete Annely", image: "/team/akalizalaulletteannely (1).jpg" },
-    { name: "Namukasa Jamirah", image: "/team/namukasajamirah (1).jpg" },
+    { name: "Kantengwa Marie Odette", role: "Visionary of Helping Heart Family Rwanda", image: "/team/Kantengwa Marie Odette.jpeg" },
+    { name: "Rwikaza Gentil", role: "Co-Founder and Executive Director, Helping Heart Family Rwanda", image: "/team/Rwikaza Gentil.jpg" },
+    { name: "Uwamahoro Diane", role: "Deputy Executive Director, Helping Heart Family Rwanda", image: "/team/Uwamahoro Diane.jpg" },
+    { name: "Banamwana Yvonne", role: "General Secretary, Helping Heart Family Rwanda", image: "/team/Banamwana Yvonne.jpg" },
+    { name: "UMUHOZA Ana", role: "Administration & Finance Manager, Helping Heart Family Rwanda", image: "/team/UMUHOZA Ana.png" },
+    { name: "UMUHOZA Eduige", role: "Audit Committee, Helping Heart Family Rwanda", image: "/team/UMUHOZA Eduige.jpg" },
+    { name: "Geofrey MUKUNDANE", role: "Audit Committee, Helping Heart Family Rwanda", image: "/team/Geofrey MUKUNDANE.jpg" },
+    { name: "NIYOMUGABO Felicier", role: "Advisor, Helping Heart Family Rwanda", image: "/team/NIYOMUGABO Felicier.jpg" },
+    { name: "NIYONSABA Yvette", role: "Advisor, Helping Heart Family Rwanda", image: "/team/NIYONSABA Yvette.jpg" },
+    { name: "Merveille Jedidja AZABE", role: "Advisor, Helping Heart Family Rwanda", image: "/team/Merveille Jedidja AZABE.jpeg" },
+    { name: "IRAKOZE Eric", role: "Conflict Resolution Committee, Helping Heart Family Rwanda", image: "/team/IRAKOZE Eric.jpg" },
+    { name: "UWIMANA Jeannette", role: "Conflict Resolution Committee, Helping Heart Family Rwanda", image: "/team/UWIMANA Jeannette.jpg" },
+    { name: "UWAMAHORO Blandine", role: "Conflict Resolution Committee, Helping Heart Family Rwanda", image: "/team/UWAMAHORO Blandine.jpg" },
   ];
 
   return (
@@ -48,6 +47,7 @@ export default function TeamsPage() {
               </div>
               <div className="p-4 text-center">
                 <h3 className="font-bold text-lg text-gray-800">{member.name}</h3>
+                <p className="text-sm text-gray-600 mt-2">{member.role}</p>
               </div>
             </div>
           ))}
