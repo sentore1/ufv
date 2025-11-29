@@ -11,44 +11,44 @@ interface Program {
 }
 
 export default function ProgramAccordion() {
-  const [activeProgram, setActiveProgram] = useState(6);
+  const [activeProgram, setActiveProgram] = useState(1);
 
   const programs: Program[] = [
     {
       id: 1,
-      title: "Kura Neza Mwana Program",
-      description: "Community-based initiative designed to prevent and reduce child malnutrition by empowering parents and strengthening household nutrition practices.",
-      icon: "nutrition"
+      title: "Justice Begins at Home",
+      description: "Community-centered initiative to promote justice, accountability, and nonviolence within families by increasing legal awareness and peaceful dialogue.",
+      icon: "scale"
     },
     {
       id: 2,
-      title: "Drug Prevention and Reintegration",
-      description: "Protecting young people from the dangers of drug abuse while supporting those already affected to rebuild their lives through awareness and rehabilitation support.",
-      icon: "shield"
-    },
-    {
-      id: 3,
-      title: "Mentorship and Youth Empowerment",
-      description: "Equipping young people with knowledge, skills, and confidence to become leaders, changemakers, and protectors of children's rights.",
-      icon: "users"
-    },
-    {
-      id: 4,
-      title: "Mama Youth Empowerment",
-      description: "Supporting teenage mothers through counseling, skills-building, and mentorship to restore hope, dignity, and opportunity for young mothers.",
-      icon: "heart"
-    },
-    {
-      id: 5,
       title: "Tumurere Yize Program",
       description: "Educational support for children from extremely poor families, orphans, children with disabilities, and street-connected children.",
       icon: "book"
     },
     {
+      id: 3,
+      title: "Mama Youth Empowerment",
+      description: "Supporting teenage mothers through counseling, skills-building, and mentorship to restore hope, dignity, and opportunity for young mothers.",
+      icon: "heart"
+    },
+    {
+      id: 4,
+      title: "Mentorship and Youth Empowerment",
+      description: "Equipping young people with knowledge, skills, and confidence to become leaders, changemakers, and protectors of children's rights.",
+      icon: "users"
+    },
+    {
+      id: 5,
+      title: "Drug Prevention and Reintegration",
+      description: "Protecting young people from the dangers of drug abuse while supporting those already affected to rebuild their lives through awareness and rehabilitation support.",
+      icon: "shield"
+    },
+    {
       id: 6,
-      title: "Justice Begins at Home",
-      description: "Community-centered initiative to promote justice, accountability, and nonviolence within families by increasing legal awareness and peaceful dialogue.",
-      icon: "scale"
+      title: "Kura Neza Mwana Program",
+      description: "Community-based initiative designed to prevent and reduce child malnutrition by empowering parents and strengthening household nutrition practices.",
+      icon: "nutrition"
     }
   ];
 
@@ -107,7 +107,7 @@ export default function ProgramAccordion() {
     return images[id as keyof typeof images] || '/Picture6 (1).png';
   };
 
-  const activeItem = programs.find(p => p.id === activeProgram) || programs[5];
+  const activeItem = programs.find(p => p.id === activeProgram) || programs[0];
 
   return (
     <section className="py-16 bg-gray-50">
@@ -139,7 +139,7 @@ export default function ProgramAccordion() {
                   <h3 className="text-2xl font-bold">{activeItem.title}</h3>
                 </div>
                 <p className="text-lg mb-6 leading-relaxed">{activeItem.description}</p>
-                <a href="/programs" className="inline-block text-white px-6 py-2 rounded-2xl font-medium bg-orange-500/30 backdrop-blur-md border border-orange-400/50 hover:bg-orange-500/50 transition-all">
+                <a href={`/${activeItem.title.toLowerCase().replace(/ /g, '-').replace(/\(.*?\)/g, '').trim()}`} className="inline-block text-white px-6 py-2 rounded-2xl font-medium bg-orange-500/30 backdrop-blur-md border border-orange-400/50 hover:bg-orange-500/50 transition-all">
                   Read More →
                 </a>
               </div>

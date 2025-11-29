@@ -51,7 +51,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-xl mb-2 text-gray-900">Email</h3>
-                  <p className="text-gray-600 text-lg">info@helpingheartfamily.org</p>
+                  <p className="text-gray-600 text-lg">info@helpingheartfamily.org.rw</p>
                 </div>
               </div>
 

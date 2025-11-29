@@ -5,6 +5,7 @@ import { useState } from "react";
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [programsOpen, setProgramsOpen] = useState(false);
 
   return (
     <nav className="bg-white shadow-sm">
@@ -20,13 +21,27 @@ export default function Navigation() {
             />
           </Link>
           <div className="hidden md:flex space-x-8">
-            <Link href="/about" className="text-gray-700 hover:text-orange-600">About Us</Link>
-            <Link href="/programs" className="text-gray-700 hover:text-orange-600">Our Programs</Link>
-            <Link href="/impact" className="text-gray-700 hover:text-orange-600">Impact</Link>
-            <Link href="/teams" className="text-gray-700 hover:text-orange-600">Teams</Link>
-            <Link href="/blog" className="text-gray-700 hover:text-orange-600">Blog</Link>
-            <Link href="/gallery" className="text-gray-700 hover:text-orange-600">Gallery</Link>
-            <Link href="/contact" className="text-gray-700 hover:text-orange-600">Contact</Link>
+            <Link href="/about" className="text-sm text-gray-700 hover:text-orange-600">About Us</Link>
+            <div className="relative" onMouseEnter={() => setProgramsOpen(true)} onMouseLeave={() => setProgramsOpen(false)}>
+              <Link href="/programs" className="text-sm text-gray-700 hover:text-orange-600">Our Programs</Link>
+              {programsOpen && (
+                <div className="absolute top-full left-0 pt-2 w-64 z-50">
+                  <div className="bg-white shadow-lg rounded-lg py-2">
+                  <Link href="/justice-begins-at-home" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">Justice Begins at Home</Link>
+                  <Link href="/tumurere-yize" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">Tumurere Yize Program</Link>
+                  <Link href="/mama-youth-empowerment" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">Mama Youth Empowerment</Link>
+                  <Link href="/mentorship-youth-empowerment" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">Mentorship and Youth Empowerment</Link>
+                  <Link href="/drug-prevention" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">Drug Prevention and Reintegration</Link>
+                  <Link href="/kura-neza-mwana" className="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50">Kura Neza Mwana Program</Link>
+                  </div>
+                </div>
+              )}
+            </div>
+            <Link href="/impact" className="text-sm text-gray-700 hover:text-orange-600">Impact</Link>
+            <Link href="/teams" className="text-sm text-gray-700 hover:text-orange-600">Teams</Link>
+            <Link href="/blog" className="text-sm text-gray-700 hover:text-orange-600">Blog</Link>
+            <Link href="/gallery" className="text-sm text-gray-700 hover:text-orange-600">Gallery</Link>
+            <Link href="/contact" className="text-sm text-gray-700 hover:text-orange-600">Contact</Link>
           </div>
           <Link href="/donate" className="text-black px-8 py-3 rounded-full hover:opacity-90 font-semibold" style={{backgroundColor: '#fec415'}}>
             Donate Now

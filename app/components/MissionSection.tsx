@@ -21,12 +21,12 @@ export default function MissionSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
               <div className="absolute bottom-4 left-4 text-white">
                 <h4 className="text-xl font-bold">Our Mission</h4>
-                <p className="text-sm opacity-90">Justice begins at home</p>
+                <p className="text-sm opacity-90">Empowering communities through advocacy, education, and action</p>
               </div>
             </div>
             <div className="p-6">
               <p className="text-gray-700">
-                Empowering families with legal knowledge about their rights and responsibilities, encouraging peaceful conflict resolution within homes and relationships.
+                To promote and protect the rights of children, women, and families in Rwanda by empowering communities through advocacy, education, and action.
               </p>
             </div>
           </Link>
@@ -41,12 +41,12 @@ export default function MissionSection() {
               <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
               <div className="absolute bottom-4 left-4 text-white">
                 <h4 className="text-xl font-bold">Our Vision</h4>
-                <p className="text-sm opacity-90">Education for all</p>
+                <p className="text-sm opacity-90">Rights of children equally provided and respected</p>
               </div>
             </div>
             <div className="p-6">
               <p className="text-gray-700">
-                Providing educational support to children from extremely poor families, orphans, children with disabilities, and street-connected children.
+                To have a community where the rights of children are equally provided and respected.
               </p>
             </div>
           </Link>

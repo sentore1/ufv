@@ -8,19 +8,19 @@ export default function HeroSlider() {
   const [isAnimating, setIsAnimating] = useState(false);
   const slides = [
     {
-      image: '/slide1.png',
-      title: 'Justice Begins at Home',
-      subtitle: 'Empowering families with legal knowledge and peaceful conflict resolution'
+      image: '/slide/slide4.jpg',
+      title: 'Welcome to Helping Heart Family Rwanda<br />(H.H.F.R)!',
+      subtitle: ''
     },
     {
-      image: '/slide2.png', 
-      title: 'Tumurere Yize Program',
-      subtitle: 'Educational support for vulnerable children - Let us raise them to learn'
+      image: '/slide/slide5.jpg', 
+      title: 'At Helping Heart Family Rwanda',
+      subtitle: 'A youth-led, community-driven organization dedicated to promoting and protecting the rights of children, women, and families across Rwanda.'
     },
     {
-      image: '/slide3.png',
-      title: 'Mama Youth Empowerment', 
-      subtitle: 'Supporting teenage mothers with a new beginning and second chances'
+      image: '/slide/slide6.jpg',
+      title: 'Shaping the Future of Communities', 
+      subtitle: 'A future where every child grows up in dignity, every woman lives free from violence, and every family has the stability and knowledge to build a better tomorrow.'
     }
   ];
 
@@ -62,12 +62,11 @@ export default function HeroSlider() {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
       <div className="relative h-full flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h1 className={`text-3xl md:text-5xl font-bold mb-4 transition-all duration-700 ease-out ${
+          <h1 className={`text-2xl md:text-3xl font-bold mb-4 transition-all duration-700 ease-out drop-shadow-lg ${
             !isAnimating ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-          }`}>
-            {slides[currentSlide].title}
+          }`} dangerouslySetInnerHTML={{__html: slides[currentSlide].title}}>
           </h1>
-          <p className={`text-lg md:text-xl mb-6 max-w-3xl mx-auto transition-all duration-700 ease-out delay-200 ${
+          <p className={`text-sm md:text-base mb-6 max-w-3xl mx-auto transition-all duration-700 ease-out delay-200 drop-shadow-lg ${
             !isAnimating ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
           }`}>
             {slides[currentSlide].subtitle}

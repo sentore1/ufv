@@ -30,13 +30,13 @@ export default function DonatePage() {
                 <div>
                   <p className="font-semibold text-gray-800 text-lg mb-2">MTN Mobile Money</p>
                   <p className="text-3xl font-bold text-orange-600 mb-1">*182*8*1#</p>
-                  <p className="text-sm text-gray-600">Business Code: [Your Code]</p>
+                  <p className="text-sm text-gray-600">Business Code: 07857</p>
                 </div>
               </div>
               <div className="bg-orange-100 p-6 rounded-2xl">
                 <h4 className="font-bold text-gray-900 mb-2">How to Donate:</h4>
                 <ol className="text-gray-700 space-y-2 list-decimal list-inside">
-                  <li>Dial *182*8*1# on your MTN phone</li>
+                  <li>Dial *182*8*1*07857# on your MTN phone</li>
                   <li>Select "Send Money"</li>
                   <li>Enter our business number</li>
                   <li>Enter amount and confirm</li>
