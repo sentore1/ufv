@@ -5,10 +5,10 @@ export default function CTASection() {
     <section className="py-24 text-white" style={{backgroundColor: '#f54a00'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl font-bold mb-6">
-          Join Our Mission to Improve Nutrition, Health, and Wellbeing for Everyone
+          Shaping the Future of Communities
         </h2>
         <p className="text-xl mb-8 opacity-90 max-w-3xl mx-auto">
-          Together, we can create sustainable solutions and transform lives through nutrition, education, and community empowerment across Rwanda.
+          A future where every child grows up in dignity, every woman lives free from violence, and every family has the stability and knowledge to build a better tomorrow.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="/contact" className="bg-white px-8 py-3 rounded-full hover:bg-gray-100 font-semibold text-center" style={{color: '#f54a00'}}>
