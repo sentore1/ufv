@@ -89,10 +89,7 @@ export default function HeroSlider() {
                 </a>
                 <a 
                   href="/donate"
-                  className="border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white font-semibold transition-colors flex items-center justify-center gap-2"
-                  style={{'--hover-text-color': '#1f4f3f'}}
-                  onMouseEnter={(e) => e.target.style.color = '#1f4f3f'}
-                  onMouseLeave={(e) => e.target.style.color = 'white'}
+                  className="border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-[#1f4f3f] font-semibold transition-colors flex items-center justify-center gap-2"
                 >
                   {t('donateNow')}
                 </a>
