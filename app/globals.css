@@ -3,10 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary-orange: #f76e2f;
-  --primary-yellow: #fec415;
-  --secondary-orange: #e55a1f;
-  --secondary-yellow: #f0b90b;
+  --primary-orange: #1e3a8a;
+  --primary-yellow: #1e40af;
+  --secondary-orange: #1e40af;
+  --secondary-yellow: #3b82f6;
 }
 
 @theme inline {
@@ -61,63 +61,63 @@ html {
 
 /* Custom color classes */
 .bg-custom-orange {
-  background-color: #f76e2f;
+  background-color: #1e3a8a;
 }
 
 .bg-custom-orange-600 {
-  background-color: #f76e2f;
+  background-color: #1e3a8a;
 }
 
 .bg-custom-orange-700 {
-  background-color: #e55a1f;
+  background-color: #1e40af;
 }
 
 .bg-custom-orange-800 {
-  background-color: #d14d0f;
+  background-color: #1d4ed8;
 }
 
 .bg-custom-yellow {
-  background-color: #fec415;
+  background-color: #1e40af;
 }
 
 .bg-custom-yellow-500 {
-  background-color: #fec415;
+  background-color: #1e40af;
 }
 
 .bg-custom-yellow-600 {
-  background-color: #f0b90b;
+  background-color: #3b82f6;
 }
 
 .text-custom-orange {
-  color: #f76e2f;
+  color: #1e3a8a;
 }
 
 .text-custom-yellow {
-  color: #fec415;
+  color: #1e40af;
 }
 
 .hover\:bg-custom-orange:hover {
-  background-color: #e55a1f;
+  background-color: #1e40af;
 }
 
 .hover\:bg-custom-yellow:hover {
-  background-color: #f0b90b;
+  background-color: #3b82f6;
 }
 
 .hover\:text-custom-orange:hover {
-  color: #e55a1f;
+  color: #1e40af;
 }
 
 .hover\:text-custom-yellow:hover {
-  color: #f0b90b;
+  color: #3b82f6;
 }
 
 .border-custom-orange {
-  border-color: #f76e2f;
+  border-color: #1e3a8a;
 }
 
 .ring-custom-orange {
-  --tw-ring-color: #f76e2f;
+  --tw-ring-color: #1e3a8a;
 }
 
 /* Hero Slider Styles */
@@ -152,4 +152,23 @@ html {
 
 .slide-animation {
   animation: slideIn 1s ease-in-out;
+}
+
+/* Hide Google Translate banner and elements */
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.skiptranslate iframe {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+.goog-logo-link {
+  display: none !important;
+}
+
+.goog-te-gadget {
+  color: transparent !important;
 }
