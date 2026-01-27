@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export default function AdminLogin() {
