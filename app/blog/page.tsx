@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+
+export const dynamic = 'force-dynamic';
 import { supabase } from "@/lib/supabase";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
