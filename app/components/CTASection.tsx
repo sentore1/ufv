@@ -16,7 +16,7 @@ export default function CTASection() {
           <a href="/contact" className="bg-white px-8 py-3 rounded-full hover:bg-gray-100 font-semibold text-center" style={{color: '#1f4f3f'}}>
             {t('becomeVolunteer')}
           </a>
-          <a href="/donate" className="border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white font-semibold flex items-center justify-center gap-2 transition-colors" style={{'--hover-color': '#1f4f3f'}} onMouseEnter={(e) => e.target.style.color = '#1f4f3f'} onMouseLeave={(e) => e.target.style.color = 'white'}>
+          <a href="/donate" className="border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white font-semibold flex items-center justify-center gap-2 transition-colors hover:text-[#1f4f3f]">
             {t('supportMission')}
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/>
