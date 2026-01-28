@@ -161,9 +161,7 @@
     "empowermentDesc": "Équiper les communautés avec des connaissances et des outils",
     "ourPartners": "Nos Partenaires",
     "partnersDesc": "Nous collaborons avec ces organisations extraordinaires pour créer un impact durable dans les communautés à travers le Rwanda."
-  }
-}
-,
+  },
   "impactPage": {
     "hero": "Notre Impact",
     "heroDesc": "Résultats réels de nos programmes à travers le Rwanda",
@@ -204,4 +202,24 @@
     "joinUs": "Rejoignez-nous pour Faire la Différence",
     "joinUsDesc": "Ensemble, nous pouvons créer un changement durable dans les communautés à travers le Rwanda. Votre soutien nous aide à étendre notre portée et à approfondir notre impact.",
     "getInvolved": "S'impliquer"
+  },
+  "contactPage": {
+    "hero": "Contactez-nous",
+    "heroDesc": "Travaillons ensemble pour créer un changement durable",
+    "getInTouch": "Entrer en Contact",
+    "getInTouchDesc": "Vous avez des questions ou souhaitez vous impliquer? Nous serions ravis de vous entendre.",
+    "officeLocation": "Emplacement du Bureau",
+    "email": "Email",
+    "website": "Site Web",
+    "followUs": "Suivez-nous",
+    "sendMessage": "Envoyez-nous un Message",
+    "name": "Nom",
+    "subject": "Sujet",
+    "message": "Message",
+    "sendButton": "Envoyer le Message",
+    "sending": "Envoi en cours...",
+    "successMessage": "Merci pour votre message! Nous vous répondrons bientôt.",
+    "errorMessage": "Échec de l'envoi du message. Veuillez réessayer.",
+    "generalError": "Une erreur s'est produite. Veuillez réessayer."
   }
+}

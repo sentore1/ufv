@@ -9,6 +9,7 @@ import TestimonialsSection from "../components/TestimonialsSection";
 import ContactSection from "../components/ContactSection";
 import NewsletterSection from "../components/NewsletterSection";
 import AboutUsSection from "../components/AboutUsSection";
+import MapSection from "../components/MapSection";
 import Footer from "../components/Footer";
 import WhatsAppButton from "../components/WhatsAppButton";
 
@@ -22,6 +23,7 @@ export default function Home() {
       <ProgramAccordion />
       <CTASection />
       <ContactSection />
+      <MapSection />
       <AboutUsSection />
       <Footer />
       <ScrollToTop />

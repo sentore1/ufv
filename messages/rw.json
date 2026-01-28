@@ -90,6 +90,25 @@
     "sendButton": "Ohereza Ubutumwa",
     "sending": "Irohereza..."
   },
+  "contactPage": {
+    "hero": "Twandikire",
+    "heroDesc": "Reka dukorane kugira ngo dukore impinduka zirambye",
+    "getInTouch": "Twandikire",
+    "getInTouchDesc": "Ufite ibibazo cyangwa ushaka kwitabira? Twishimira kukumva.",
+    "officeLocation": "Aho Ibiro Biri",
+    "email": "Imeri",
+    "website": "Urubuga",
+    "followUs": "Dukurikire",
+    "sendMessage": "Twoherereze Ubutumwa",
+    "name": "Izina",
+    "subject": "Ingingo",
+    "message": "Ubutumwa",
+    "sendButton": "Ohereza Ubutumwa",
+    "sending": "Irohereza...",
+    "successMessage": "Murakoze ku butumwa bwanyu! Tuzabasubiza vuba.",
+    "errorMessage": "Ntibyashobotse kohereza ubutumwa. Nyamuneka ongera ugerageze.",
+    "generalError": "Habaye ikosa. Nyamuneka ongera ugerageze."
+  },
   "aboutUs": {
     "title": "Inkunga Yacu Umbrella for Vulnerable?",
     "description": "Kuko tuzi ko n'ubwo gahunda nziza ari nziza gusa nk'abantu bayikorera. Niyo mpamvu dutanga inkunga yuzuye, guha imbaraga abaturage, n'ibisubizo birambye bikora ingaruka zirambye mu miryango yoroshye yo mu Rwanda.",
@@ -161,9 +180,7 @@
     "empowermentDesc": "Guha abaturage ubumenyi n'ibikoresho",
     "ourPartners": "Abafatanyabikorwa Bacu",
     "partnersDesc": "Dufatanije n'imiryango itangaje kugira ngo dukore ingaruka zirambye mu miryango yo mu Rwanda."
-  }
-}
-,
+  },
   "impactPage": {
     "hero": "Ingaruka Zacu",
     "heroDesc": "Ibisubizo nyabyo biva muri gahunda zacu zo mu Rwanda",
@@ -205,3 +222,4 @@
     "joinUsDesc": "Hamwe, turashobora gukora impinduka zirambye mu miryango yo mu Rwanda. Inkunga yawe iradufasha kwagura uruhare rwacu no kongera ingaruka zacu.",
     "getInvolved": "Kwitabira"
   }
+}

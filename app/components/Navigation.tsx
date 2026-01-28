@@ -61,9 +61,9 @@ export default function Navigation() {
               {programsOpen && (
                 <div className="absolute top-full left-0 pt-2 w-64 z-50">
                   <div className="bg-white/95 backdrop-blur-md shadow-lg rounded-lg py-2">
-                  <Link href="/programs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">All Programs</Link>
-                  <Link href="/about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">About Our Work</Link>
-                  <Link href="/impact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">Our Impact</Link>
+                  <Link href="/programs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('programs')}</Link>
+                  <Link href="/about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('about')}</Link>
+                  <Link href="/impact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('impact')}</Link>
                   </div>
                 </div>
               )}
@@ -74,9 +74,6 @@ export default function Navigation() {
             <Link href="/blog" className={`text-sm hover:text-green-700 ${
               isScrolled ? 'text-gray-700' : 'text-white'
             }`}>{t('blog')}</Link>
-            <Link href="/report" className={`text-sm hover:text-green-700 ${
-              isScrolled ? 'text-gray-700' : 'text-white'
-            }`}>{t('report')}</Link>
             <Link href="/gallery" className={`text-sm hover:text-green-700 ${
               isScrolled ? 'text-gray-700' : 'text-white'
             }`}>{t('gallery')}</Link>
@@ -139,13 +136,13 @@ export default function Navigation() {
                 <div className="pl-4">
                   <Link href="/programs" className={`block px-4 py-2 text-sm hover:bg-green-50 ${
                     isScrolled ? 'text-gray-600' : 'text-white/90'
-                  }`}>All Programs</Link>
+                  }`}>{t('programs')}</Link>
                   <Link href="/about" className={`block px-4 py-2 text-sm hover:bg-green-50 ${
                     isScrolled ? 'text-gray-600' : 'text-white/90'
-                  }`}>About Our Work</Link>
+                  }`}>{t('about')}</Link>
                   <Link href="/impact" className={`block px-4 py-2 text-sm hover:bg-green-50 ${
                     isScrolled ? 'text-gray-600' : 'text-white/90'
-                  }`}>Our Impact</Link>
+                  }`}>{t('impact')}</Link>
                 </div>
               )}
             </div>
@@ -155,9 +152,6 @@ export default function Navigation() {
             <Link href="/blog" className={`block px-4 py-2 hover:bg-green-50 ${
               isScrolled ? 'text-gray-700' : 'text-white'
             }`}>{t('blog')}</Link>
-            <Link href="/report" className={`block px-4 py-2 hover:bg-green-50 ${
-              isScrolled ? 'text-gray-700' : 'text-white'
-            }`}>{t('report')}</Link>
             <Link href="/gallery" className={`block px-4 py-2 hover:bg-green-50 ${
               isScrolled ? 'text-gray-700' : 'text-white'
             }`}>{t('gallery')}</Link>

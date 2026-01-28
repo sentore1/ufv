@@ -161,9 +161,7 @@
     "empowermentDesc": "Equipping communities with knowledge and tools",
     "ourPartners": "Our Partners",
     "partnersDesc": "We collaborate with these amazing organizations to create lasting impact in communities across Rwanda."
-  }
-}
-,
+  },
   "contactPage": {
     "hero": "Contact Us",
     "heroDesc": "Let's work together to create lasting change",
@@ -251,3 +249,4 @@
     "joinUsDesc": "Together, we can create lasting change in communities across Rwanda. Your support helps us expand our reach and deepen our impact.",
     "getInvolved": "Get Involved"
   }
+}
