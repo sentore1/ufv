@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import Navigation from "../../../components/Navigation";
-import Footer from "../../../components/Footer";
+import Navigation from "@/app/components/Navigation";
+import Footer from "@/app/components/Footer";
 
 export default function ReportDetailPage() {
   const params = useParams();
