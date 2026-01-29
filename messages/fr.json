@@ -221,5 +221,40 @@
     "successMessage": "Merci pour votre message! Nous vous répondrons bientôt.",
     "errorMessage": "Échec de l'envoi du message. Veuillez réessayer.",
     "generalError": "Une erreur s'est produite. Veuillez réessayer."
+  },
+  "donatePage": {
+    "hero": "Soutenez Notre Mission",
+    "heroDesc": "Votre don aide à transformer des vies à travers le Rwanda",
+    "mobileMoney": "Argent Mobile (Rwanda)",
+    "mtnMobileMoney": "MTN Mobile Money",
+    "howToDonate": "Comment Faire un Don:",
+    "dialMtn": "Composez *182*8*1*1111111# sur votre téléphone MTN",
+    "enterAmount": "Entrez le montant et confirmez",
+    "bankTransfer": "Virement Bancaire",
+    "bankName": "Nom de la Banque",
+    "accountName": "Nom du Compte",
+    "accountNumber": "Numéro de Compte",
+    "yourImpact": "Votre Impact",
+    "schoolMaterials": "Fournit du matériel scolaire pour 5 enfants",
+    "familyCounseling": "Soutient des séances de conseil familial",
+    "kitchenGarden": "Établit un jardin potager pour la nutrition",
+    "whySupport": "Pourquoi Votre Soutien Compte",
+    "directImpact": "Impact Direct",
+    "directImpactDesc": "100% de votre don va directement aux programmes qui transforment des vies",
+    "transparency": "Transparence",
+    "transparencyDesc": "Mises à jour régulières sur la façon dont votre contribution fait la différence",
+    "communityLed": "Dirigé par la Communauté",
+    "communityLedDesc": "Soutenir des solutions locales qui créent un changement durable",
+    "togetherTitle": "Ensemble, Nous Construisons des Communautés Plus Fortes",
+    "togetherDesc": "Chaque contribution, quelle que soit sa taille, nous aide à créer un changement durable dans la vie des familles à travers le Rwanda.",
+    "thankYou": "Merci pour votre générosité et votre soutien!"
+  },
+  "mapSection": {
+    "title": "Notre Soutien Umbrella for Vulnerable",
+    "description": "Umbrella for Vulnerable est profondément reconnaissant envers les organisations et les individus qui nous soutiennent.",
+    "learnMore": "EN SAVOIR PLUS",
+    "joinUsNow": "REJOIGNEZ-NOUS",
+    "communityTitle": "Nous croyons au pouvoir de l'engagement communautaire pour générer un changement positif. 🇷🇼",
+    "communityDescription": "C'est pourquoi nous travaillons en étroite collaboration avec les leaders locaux, les prestataires de soins de santé et les membres de la communauté pour nous assurer que nos programmes répondent aux besoins des personnes que nous servons."
   }
 }

@@ -248,5 +248,41 @@
     "joinUs": "Join Us in Making a Difference",
     "joinUsDesc": "Together, we can create lasting change in communities across Rwanda. Your support helps us expand our reach and deepen our impact.",
     "getInvolved": "Get Involved"
+  },
+  "mapSection": {
+    "title": "Our Support Umbrella for Vulnerable",
+    "description": "Umbrella for Vulnerable is deeply grateful for the organizations and individuals who stand with us.",
+    "learnMore": "LEARN MORE",
+    "joinUsNow": "JOIN US NOW",
+    "communityTitle": "We believe in the power of community engagement to drive positive change. 🇷🇼",
+    "communityDescription": "That's why we work closely with local leaders, healthcare providers, and community members to ensure that our programs are responsive to the needs of the people we serve."
   }
 }
+  },
+  "donatePage": {
+    "hero": "Support Our Mission",
+    "heroDesc": "Your donation helps transform lives across Rwanda",
+    "mobileMoney": "Mobile Money (Rwanda)",
+    "mtnMobileMoney": "MTN Mobile Money",
+    "howToDonate": "How to Donate:",
+    "dialMtn": "Dial *182*8*1*1111111# on your MTN phone",
+    "enterAmount": "Enter amount and confirm",
+    "bankTransfer": "Bank Transfer",
+    "bankName": "Bank Name",
+    "accountName": "Account Name",
+    "accountNumber": "Account Number",
+    "yourImpact": "Your Impact",
+    "schoolMaterials": "Provides school materials for 5 children",
+    "familyCounseling": "Supports family counseling sessions",
+    "kitchenGarden": "Establishes a kitchen garden for nutrition",
+    "whySupport": "Why Your Support Matters",
+    "directImpact": "Direct Impact",
+    "directImpactDesc": "100% of your donation goes directly to programs that transform lives",
+    "transparency": "Transparency",
+    "transparencyDesc": "Regular updates on how your contribution is making a difference",
+    "communityLed": "Community-Led",
+    "communityLedDesc": "Supporting local solutions that create sustainable change",
+    "togetherTitle": "Together, We Build Stronger Communities",
+    "togetherDesc": "Every contribution, no matter the size, helps us create lasting change in the lives of families across Rwanda.",
+    "thankYou": "Thank you for your generosity and support!"
+  }

@@ -221,5 +221,40 @@
     "joinUs": "Dufatanye mu Guhindura",
     "joinUsDesc": "Hamwe, turashobora gukora impinduka zirambye mu miryango yo mu Rwanda. Inkunga yawe iradufasha kwagura uruhare rwacu no kongera ingaruka zacu.",
     "getInvolved": "Kwitabira"
+  },
+  "donatePage": {
+    "hero": "Shyigikira Intego Yacu",
+    "heroDesc": "Impano yawe ifasha guhindura ubuzima mu Rwanda",
+    "mobileMoney": "Amafaranga ya Telefone (Rwanda)",
+    "mtnMobileMoney": "MTN Mobile Money",
+    "howToDonate": "Uburyo bwo Gutanga:",
+    "dialMtn": "Kanda *182*8*1*1111111# kuri telefone yawe ya MTN",
+    "enterAmount": "Injiza amafaranga hanyuma wemeze",
+    "bankTransfer": "Kohereza Amafaranga kuri Banki",
+    "bankName": "Izina rya Banki",
+    "accountName": "Izina rya Konti",
+    "accountNumber": "Nimero ya Konti",
+    "yourImpact": "Ingaruka Zawe",
+    "schoolMaterials": "Itanga ibikoresho by'ishuri ku bana 5",
+    "familyCounseling": "Ishyigikira ibiganiro by'inama ku miryango",
+    "kitchenGarden": "Ishyiraho ubusitani bw'intungamubiri",
+    "whySupport": "Kuki Inkunga Yawe Ari Ngombwa",
+    "directImpact": "Ingaruka Zitaziguye",
+    "directImpactDesc": "100% y'impano yawe ijya mu gahunda zihindura ubuzima",
+    "transparency": "Gusobanura",
+    "transparencyDesc": "Amakuru ahorwa ku buryo uruhare rwawe rugira ingaruka",
+    "communityLed": "Buyobowe n'Abaturage",
+    "communityLedDesc": "Gushyigikira ibisubizo by'aho kugira ngo habeho impinduka zirambye",
+    "togetherTitle": "Hamwe, Turubaka Imiryango Ikomeye",
+    "togetherDesc": "Buri ruhare, nubwo ruto, rudufasha gukora impinduka zirambye mu buzima bw'imiryango yo mu Rwanda.",
+    "thankYou": "Murakoze ku buntu bwanyu no kudushyigikira!"
+  },
+  "mapSection": {
+    "title": "Inkunga Yacu Umbrella for Vulnerable",
+    "description": "Kuko tuzi ko n'ubwo gahunda nziza ari nziza gusa nk'abantu bayikorera. Niyo mpamvu dutanga inkunga yuzuye, guha imbaraga abaturage, n'ibisubizo birambye bikora ingaruka zirambye mu miryango yoroshye yo mu Rwanda.",
+    "learnMore": "MENYA BYINSHI",
+    "joinUsNow": "DUFATANYE UBU",
+    "communityTitle": "Twizera ko imbaraga zo kwitabira abaturage zituma habaho impinduka nziza. 🇷🇼",
+    "communityDescription": "Niyo mpamvu dukorana cyane n'abayobozi b'ibanze, abatanga serivisi z'ubuzima, n'abaturage kugira ngo gahunda zacu zihuze n'ibikenewe by'abantu dukorera."
   }
 }
