@@ -1,8 +1,11 @@
+'use client';
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
 
 export default function GalleryPage() {
+  const t = useTranslations('galleryPage');
   const galleryImages = [
     { src: "/ufvimages/3.jpg", alt: "Community Impact" },
     { src: "/ufvimages/4.jpg", alt: "Youth Empowerment" },
@@ -128,8 +131,8 @@ export default function GalleryPage() {
       <div className="relative h-[400px] bg-gradient-to-br from-green-800 via-green-900 to-green-950 overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
-          <h1 className="text-7xl font-bold text-white mb-6">Gallery</h1>
-          <p className="text-2xl text-white/95 max-w-3xl">Capturing moments of transformation and hope across Rwanda</p>
+          <h1 className="text-7xl font-bold text-white mb-6">{t('hero')}</h1>
+          <p className="text-2xl text-white/95 max-w-3xl">{t('heroDesc')}</p>
         </div>
       </div>
 

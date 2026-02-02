@@ -1,10 +1,28 @@
+'use client';
+
 import Image from "next/image";
+import { useEffect, useState } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { supabase } from '@/lib/supabase';
 import Navigation from "../../components/Navigation";
 import Footer from "../../components/Footer";
-import {useTranslations} from 'next-intl';
 
 export default function DonatePage() {
+  const locale = useLocale();
   const t = useTranslations('donatePage');
+  const [mtn, setMtn] = useState<any>(null);
+  const [bank, setBank] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await supabase.from('content_sections').select('*').in('section_key', ['donate_mtn', 'donate_bank']);
+      if (data) {
+        setMtn(data.find(s => s.section_key === 'donate_mtn'));
+        setBank(data.find(s => s.section_key === 'donate_bank'));
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
@@ -25,41 +43,28 @@ export default function DonatePage() {
           
           {/* Mobile Money */}
           <div className="bg-gray-50 p-12 rounded-3xl shadow-xl">
-            <h3 className="text-3xl font-bold mb-8 text-gray-900">{t('mobileMoney')}</h3>
+            <h3 className="text-3xl font-bold mb-8 text-gray-900">{mtn?.title?.[locale] || t('mobileMoney')}</h3>
             <div className="space-y-8">
               <div className="flex items-center gap-6 bg-white p-6 rounded-2xl shadow-sm">
-                <Image src="/MTN-Rwanda-MoMo-Logo-2 (1).jpg" alt="MTN Mobile Money" width={80} height={80} className="rounded-xl" />
+                <Image src={mtn?.media_urls?.[0] || '/MTN-Rwanda-MoMo-Logo-2 (1).jpg'} alt="MTN" width={80} height={80} className="rounded-xl" />
                 <div>
                   <p className="font-semibold text-gray-800 text-lg mb-2">{t('mtnMobileMoney')}</p>
-                  <p className="text-3xl font-bold text-green-600 mb-1">*182*8*1*1111111#</p>
+                  <p className="text-3xl font-bold text-green-600 mb-1">{mtn?.content?.[locale] || '*182*8*1*1111111#'}</p>
                 </div>
-              </div>
-              <div className="bg-green-100 p-6 rounded-2xl">
-                <h4 className="font-bold text-gray-900 mb-2">{t('howToDonate')}</h4>
-                <ol className="text-gray-700 space-y-2 list-decimal list-inside">
-                  <li>{t('dialMtn')}</li>
-                  <li>{t('enterAmount')}</li>
-                </ol>
               </div>
             </div>
           </div>
 
           {/* Bank Transfer */}
           <div className="bg-gray-50 p-12 rounded-3xl shadow-xl">
-            <h3 className="text-3xl font-bold mb-8 text-gray-900">{t('bankTransfer')}</h3>
+            <h3 className="text-3xl font-bold mb-8 text-gray-900">{bank?.title?.[locale] || t('bankTransfer')}</h3>
             <div className="space-y-6 bg-white p-8 rounded-2xl shadow-sm">
-              <div>
-                <p className="text-sm text-gray-600 mb-1">{t('bankName')}</p>
-                <p className="font-bold text-xl text-gray-900">EQTY Bank</p>
-              </div>
-              <div className="border-t border-gray-200 pt-6">
-                <p className="text-sm text-gray-600 mb-1">{t('accountName')}</p>
-                <p className="font-bold text-xl text-gray-900">UVF Rwanda</p>
-              </div>
-              <div className="border-t border-gray-200 pt-6">
-                <p className="text-sm text-gray-600 mb-1">{t('accountNumber')}</p>
-                <p className="font-bold text-xl text-gray-900">****200088126</p>
-              </div>
+              {bank?.content?.[locale]?.split('|').map((item: string, i: number) => (
+                <div key={i} className={i > 0 ? 'border-t border-gray-200 pt-6' : ''}>
+                  <p className="text-sm text-gray-600 mb-1">{[t('bankName'), t('accountName'), t('accountNumber')][i]}</p>
+                  <p className="font-bold text-xl text-gray-900">{item}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

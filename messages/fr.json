@@ -256,5 +256,17 @@
     "joinUsNow": "REJOIGNEZ-NOUS",
     "communityTitle": "Nous croyons au pouvoir de l'engagement communautaire pour générer un changement positif. 🇷🇼",
     "communityDescription": "C'est pourquoi nous travaillons en étroite collaboration avec les leaders locaux, les prestataires de soins de santé et les membres de la communauté pour nous assurer que nos programmes répondent aux besoins des personnes que nous servons."
+  },
+  "galleryPage": {
+    "hero": "Galerie",
+    "heroDesc": "Capturer des moments de transformation et d'espoir à travers le Rwanda"
+  },
+  "teamsPage": {
+    "hero": "Notre Équipe",
+    "heroDesc": "Rencontrez Notre Équipe Dévouée",
+    "subtitle": "Des individus passionnés travaillant ensemble pour transformer les communautés",
+    "joinTeam": "Rejoignez Notre Équipe",
+    "joinTeamDesc": "Nous recherchons toujours des personnes passionnées qui veulent faire une différence dans les communautés à travers le Rwanda.",
+    "viewOpportunities": "Voir les Opportunités"
   }
 }

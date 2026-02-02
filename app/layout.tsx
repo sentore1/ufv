@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,15 +11,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Umbrella for Vulnerable - Supporting Vulnerable Communities",
-  description: "Umbrella for Vulnerable implements social protection, emergency relief, education, faith-based, women & youth empowerment, and family protection programs.",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return children;
+  return (
+    <html suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+        {children}
+      </body>
+    </html>
+  );
 }

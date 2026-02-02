@@ -2,7 +2,7 @@
   "nav": {
     "about": "Abo Turi",
     "programs": "Gahunda Zacu",
-    "impact": "Ingaruka",
+    "impact": "Ibikorwa",
     "blog": "Blog",
     "report": "Raporo",
     "gallery": "Amafoto",
@@ -10,18 +10,18 @@
     "donate": "Tanga"
   },
   "home": {
-    "whoWeAre": "ABO TURI",
-    "transforming": "Guhindura Ibitekerezo mu Bikorwa",
+    "whoWeAre": "ABO TURI BO",
+    "transforming": "Gushyira mungiro Ibitekerezo mu Bikorwa",
     "ourMission": "Intego Yacu",
     "missionDesc": "Guha imbaraga abaturage binyuze mu buvugizi, uburezi n'ibikorwa",
     "missionText": "Gufasha imiryango yoroshye, imfubyi, abapfakazi, n'imiryango ibangamiwe binyuze muri gahunda zuzuye zigarura icyubahiro, zitanga ubufasha bwihutirwa, ziteza imbere uburezi, zikomeretsa indangagaciro, kandi ziha imbaraga abaturage kugira ngo bigenere.",
     "ourVision": "Icyerekezo Cyacu",
     "visionDesc": "Uburenganzira bw'abana butangwa kandi bukubahirizwa",
     "visionText": "Umuryango aho imiryango yoroshye igira uburyo bwo kurindwa n'imibereho, ubufasha bwihutirwa, uburezi bwiza, ubuyobozi bw'umwuka, n'amahirwe yo kwigenera kugira ngo iterambere rirambe.",
-    "ourImpact": "Ingaruka Zacu",
+    "ourImpact": "Ibikorwa",
     "impactIntro": "Binyuze muri gahunda zacu z'ingenzi - kurinda imibereho, ubufasha bwihutirwa, uburezi, ibikorwa bishingiye ku idini, guha imbaraga abagore n'urubyiruko, no kurinda imiryango - tugira uruhare runini mu miryango yo mu Rwanda.",
     "studentsSupported": "Abanyeshuri mu Ishuri rya Bugesera Buri Mwaka",
-    "familiesSupported": "Imiryango Yoroshye Ifashwa",
+    "familiesSupported": "Imiryango Ifashwa",
     "womenEmpowered": "Abagore Bahawe Imbaraga Binyuze mu Mahugurwa",
     "mediationServices": "Imiryango Yakiriye Serivisi zo Guhuza",
     "emergencyRelief": "Ibisubizo by'Ubufasha bwihutirwa",
@@ -43,7 +43,7 @@
   },
   "programs": {
     "title": "Gahunda Zacu",
-    "subtitle": "Binyuze muri gahunda zacu zitandukanye, dukemura ibibazo byinshi, umutungo, n'amahirwe yo gukora ingaruka zirambye mu miryango.",
+    "subtitle": "Binyuze muri gahunda zacu zitandukanye, dukirikirana tukana kemura ibibazo byinshi bitandukanye harimo, gushoboza, akazi n'amahirwe yo gukora ibikorwa birambye mu miryango.",
     "socialProtection": "Gahunda zo Kurinda Imibereho",
     "socialProtectionDesc": "Gufasha imiryango yoroshye, imfubyi, abapfakazi, n'imiryango ibangamiwe kugira ngo hagarurwe icyubahiro n'umutekano binyuze mu bufasha buzuye n'inkunga y'abaturage.",
     "emergencyRelief": "Gahunda z'Ubufasha bwihutirwa",
@@ -59,7 +59,7 @@
     "readMore": "Soma Byinshi"
   },
   "footer": {
-    "description": "Umbrella for Vulnerable ishyira mu bikorwa gahunda zo kurinda imibereho, ubufasha bwihutirwa, uburezi, ibikorwa bishingiye ku idini, guha imbaraga abagore n'urubyiruko, no kurinda imiryango kugira ngo dufashe imiryango yoroshye n'abaturage.",
+    "description": "Umbrella for Vulnerable ishyira mu bikorwa gahunda zo kurinda imibereho, ubufasha bwihutirwa, uburezi, ibikorwa bishingiye ku idini rya Islam, guha imbaraga abagore n'urubyiruko, no kurinda imiryango kugira ngo dufashe imiryango yoroshye n'abaturage.",
     "quickLinks": "Ihuza Ryihuse",
     "aboutUs": "Abo Turi",
     "ourPrograms": "Gahunda Zacu",
@@ -193,11 +193,11 @@
     "familyProtection": "Kurinda Imiryango",
     "familyProtectionDesc": "Gukomeza imiryango binyuze mu buhuza n'inama",
     "educationImpact": "Ingaruka z'Uburezi",
-    "comprehensiveEducation": "Uburezi Buzuye",
+    "comprehensiveEducation": "Uburezi Bwuzuye",
     "comprehensiveEducationDesc": "Kurera abanyeshuri mu muryango w'ishuri rya Bugesera",
     "learningResources": "Ibikoresho byo Kwiga",
     "learningResourcesDesc": "Gutanga ibikoresho n'ibikoresho by'ingenzi kugira ngo utsinde",
-    "skillsDevelopment": "Iterambere ry'Ubushobozi",
+    "skillsDevelopment": "Iterambere ry'imyigishire",
     "skillsDevelopmentDesc": "Amahugurwa y'umwuga na gahunda z'ubuzima",
     "womenYouthEmpowerment": "Guha Imbaraga Abagore n'Urubyiruko",
     "womenTraining": "Amahugurwa y'Abagore",
@@ -256,5 +256,17 @@
     "joinUsNow": "DUFATANYE UBU",
     "communityTitle": "Twizera ko imbaraga zo kwitabira abaturage zituma habaho impinduka nziza. 🇷🇼",
     "communityDescription": "Niyo mpamvu dukorana cyane n'abayobozi b'ibanze, abatanga serivisi z'ubuzima, n'abaturage kugira ngo gahunda zacu zihuze n'ibikenewe by'abantu dukorera."
+  },
+  "galleryPage": {
+    "hero": "Amafoto",
+    "heroDesc": "Gufata ibihe by'impinduka n'ibyiringiro mu Rwanda"
+  },
+  "teamsPage": {
+    "hero": "Itsinda Ryacu",
+    "heroDesc": "Hura n'Itsinda Ryacu Ryiyemeje",
+    "subtitle": "Abantu bafite ishyaka bakorana kugira ngo bahindure imiryango",
+    "joinTeam": "Injira mu Itsinda Ryacu",
+    "joinTeamDesc": "Duhora dushakisha abantu bafite ishyaka bashaka guhindura imiryango yo mu Rwanda.",
+    "viewOpportunities": "Reba Amahirwe"
   }
 }

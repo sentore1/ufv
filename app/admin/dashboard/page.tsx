@@ -130,6 +130,12 @@ export default function AdminDashboard() {
             <button onClick={() => setType("report")} className={`px-4 py-2 rounded ${type === "report" ? "bg-orange-600 text-white" : "bg-gray-200"}`}>
               Report
             </button>
+            <button onClick={() => router.push('/admin/content')} className="px-4 py-2 rounded bg-green-800 text-white">
+              CMS
+            </button>
+            <button onClick={() => router.push('/admin/pages')} className="px-4 py-2 rounded bg-blue-600 text-white">
+              Pages
+            </button>
           </div>
 
           <form onSubmit={handlePublish} className="space-y-4">

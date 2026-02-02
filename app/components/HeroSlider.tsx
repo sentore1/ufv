@@ -2,31 +2,37 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import {useTranslations} from 'next-intl';
+import { useLocale } from 'next-intl';
+import { supabase } from '@/lib/supabase';
 
 export default function HeroSlider() {
-  const t = useTranslations('hero');
+  const locale = useLocale();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const slides = [
-    {
-      image: '/slide/slide4.jpg',
-      title: t('slide1Title'),
-      subtitle: t('slide1Subtitle')
-    },
-    {
-      image: '/slide/slide5.jpg', 
-      title: t('slide2Title'),
-      subtitle: t('slide2Subtitle')
-    },
-    {
-      image: '/slide/slide6.jpg',
-      title: t('slide3Title'), 
-      subtitle: t('slide3Subtitle')
-    }
-  ];
+  const [slides, setSlides] = useState<any[]>([]);
 
   useEffect(() => {
+    const fetchSlides = async () => {
+      const { data } = await supabase
+        .from('hero_slides')
+        .select('*')
+        .eq('is_active', true)
+        .order('order_index');
+      
+      if (data) {
+        setSlides(data.map(slide => ({
+          image: slide.media_url,
+          title: slide.title[locale] || slide.title.en,
+          subtitle: slide.subtitle[locale] || slide.subtitle.en,
+          mediaType: slide.media_type
+        })));
+      }
+    };
+    fetchSlides();
+  }, [locale]);
+
+  useEffect(() => {
+    if (slides.length === 0) return;
     const interval = setInterval(() => {
       setIsAnimating(true);
       setTimeout(() => {
@@ -37,6 +43,8 @@ export default function HeroSlider() {
 
     return () => clearInterval(interval);
   }, [slides.length]);
+
+  if (slides.length === 0) return null;
 
   return (
     <section className="relative h-[700px] md:h-[800px] overflow-hidden -mt-20">
@@ -49,18 +57,37 @@ export default function HeroSlider() {
                 index === currentSlide ? 'active' : ''
               }`}
             >
-              <Image
-                src={slide.image}
-                alt={slide.title}
-                fill
-                className="object-cover object-[center_center]"
-                priority={index === 0}
-              />
+              {slide.mediaType === 'video' ? (
+                slide.image.includes('youtube.com') || slide.image.includes('youtu.be') ? (
+                  <iframe
+                    src={`${slide.image.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}?autoplay=1&mute=1&loop=1&controls=0`}
+                    className="w-full h-full"
+                    allow="autoplay; encrypted-media"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video
+                    src={slide.image}
+                    autoPlay
+                    muted
+                    loop
+                    className="w-full h-full object-cover"
+                  />
+                )
+              ) : (
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  fill
+                  className="object-cover object-[center_center]"
+                  priority={index === 0}
+                />
+              )}
             </div>
           ))}
         </div>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/40"></div>
       <div className="relative h-full flex items-end justify-end">
         <div className="pr-4 sm:pr-6 lg:pr-8 pb-16">
           <div className="max-w-2xl">
@@ -82,7 +109,7 @@ export default function HeroSlider() {
                   className="px-6 py-3 rounded-full font-semibold transition-colors flex items-center justify-center gap-2"
                   style={{backgroundColor: '#1f4f3f', color: 'white'}}
                 >
-                  {t('getInvolved')}
+                  Get Involved
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
                   </svg>
@@ -91,7 +118,7 @@ export default function HeroSlider() {
                   href="/donate"
                   className="border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-[#1f4f3f] font-semibold transition-colors flex items-center justify-center gap-2"
                 >
-                  {t('donateNow')}
+                  Donate Now
                 </a>
               </div>
             </div>
