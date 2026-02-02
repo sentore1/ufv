@@ -136,6 +136,9 @@ export default function AdminDashboard() {
             <button onClick={() => router.push('/admin/pages')} className="px-4 py-2 rounded bg-blue-600 text-white">
               Pages
             </button>
+            <button onClick={() => router.push('/admin/translations')} className="px-4 py-2 rounded bg-purple-600 text-white">
+              Translations
+            </button>
           </div>
 
           <form onSubmit={handlePublish} className="space-y-4">
