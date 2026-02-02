@@ -113,34 +113,14 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <button onClick={() => { localStorage.removeItem("adminAuth"); router.push("/admin"); }} className="bg-red-600 text-white px-4 py-2 rounded">
-            Logout
-          </button>
-        </div>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+      <div className="flex gap-4 mb-6">
+        <button onClick={() => setType("blog")} className={`px-4 py-2 rounded ${type === "blog" ? "bg-orange-600 text-white" : "bg-gray-200"}`}>Blog</button>
+        <button onClick={() => setType("report")} className={`px-4 py-2 rounded ${type === "report" ? "bg-orange-600 text-white" : "bg-gray-200"}`}>Report</button>
+      </div>
 
-        <div className="bg-white p-6 rounded-lg shadow mb-8">
-          <div className="flex gap-4 mb-6">
-            <button onClick={() => setType("blog")} className={`px-4 py-2 rounded ${type === "blog" ? "bg-orange-600 text-white" : "bg-gray-200"}`}>
-              Blog
-            </button>
-            <button onClick={() => setType("report")} className={`px-4 py-2 rounded ${type === "report" ? "bg-orange-600 text-white" : "bg-gray-200"}`}>
-              Report
-            </button>
-            <button onClick={() => router.push('/admin/content')} className="px-4 py-2 rounded bg-green-800 text-white">
-              CMS
-            </button>
-            <button onClick={() => router.push('/admin/pages')} className="px-4 py-2 rounded bg-blue-600 text-white">
-              Pages
-            </button>
-            <button onClick={() => router.push('/admin/translations')} className="px-4 py-2 rounded bg-purple-600 text-white">
-              Translations
-            </button>
-          </div>
-
+      <div className="bg-white p-6 rounded-lg shadow mb-8">
           <form onSubmit={handlePublish} className="space-y-4">
             <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full p-2 border rounded" required />
             <input type="text" placeholder="Author" value={author} onChange={(e) => setAuthor(e.target.value)} className="w-full p-2 border rounded" required />
@@ -205,7 +185,6 @@ export default function AdminDashboard() {
             ))}
           </div>
         </div>
-      </div>
     </div>
   );
 }
