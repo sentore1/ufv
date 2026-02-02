@@ -43,7 +43,7 @@ export default function AdminLogin() {
             className="w-full p-2 border rounded mb-4"
           />
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-          <button type="submit" className="w-full bg-orange-600 text-white p-2 rounded hover:bg-orange-700">
+          <button type="submit" className="w-full bg-green-800 text-white p-2 rounded hover:bg-green-700">
             Login
           </button>
         </form>
