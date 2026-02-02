@@ -76,25 +76,25 @@ export default function ContactSection() {
 
   return (
     <>
-      <section className="py-26 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-          <h2 className="text-6xl font-bold text-gray-900">{t('impactStories')}</h2>
+      <section className="py-12 md:py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 md:mb-8">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900">{t('impactStories')}</h2>
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden px-4 md:px-0">
           <div 
-            className="flex gap-6 transition-transform duration-500 ease-in-out"
+            className="flex gap-4 md:gap-6 transition-transform duration-500 ease-in-out"
             style={{ 
-              transform: `translateX(calc(-${currentCarousel + 1} * (50% + 12px) + 25%))`,
-              paddingLeft: '12.5%',
-              paddingRight: '12.5%',
+              transform: `translateX(calc(-${currentCarousel + 1} * (80% + 16px) + 10%))`,
+              paddingLeft: '10%',
+              paddingRight: '10%',
               transition: currentCarousel === 0 && currentCarousel !== carouselSlides.length ? 'none' : 'transform 0.5s ease-in-out'
             }}
           >
             {[...carouselSlides.slice(-1), ...carouselSlides, ...carouselSlides].map((slide, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 h-96 relative rounded-2xl overflow-hidden cursor-pointer hover:scale-105 transition-transform"
-                style={{ width: '50%', minWidth: '50%' }}
+                className="flex-shrink-0 h-64 sm:h-80 md:h-96 relative rounded-xl md:rounded-2xl overflow-hidden cursor-pointer hover:scale-105 transition-transform"
+                style={{ width: '80%', minWidth: '80%' }}
               >
                 <Image src={slide.image} alt={slide.title} fill className="object-cover" />
               </div>
@@ -114,7 +114,7 @@ export default function ContactSection() {
         </div>
         
         <div className="grid lg:grid-cols-2 gap-8">
-          <div className="text-white rounded-2xl overflow-hidden relative min-h-[600px] flex flex-col justify-end" style={{backgroundColor: '#1f4f3f'}}>
+          <div className="text-white rounded-2xl overflow-hidden relative min-h-[500px] md:min-h-[600px] flex flex-col justify-end" style={{backgroundColor: '#1f4f3f'}}>
             {contactImages.map((image, index) => (
               <Image
                 key={index}
@@ -128,33 +128,33 @@ export default function ContactSection() {
             ))}
             <div className="absolute inset-0 bg-gradient-to-t from-green-800/90 via-green-700/50 to-transparent"></div>
             
-            <div className="relative p-8 space-y-4 z-10">
+            <div className="relative p-6 md:p-8 space-y-3 md:space-y-4 z-10">
               <div className="flex items-start">
-                <svg className="w-5 h-5 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 mr-3 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                 </svg>
-                <div>
+                <div className="text-sm md:text-base">
                   <p>{t('address')}</p>
                   <p>{t('addressLine2')}</p>
                 </div>
               </div>
               <div className="flex items-center">
-                <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                 </svg>
-                <span>info@uf-v.org</span>
+                <span className="text-sm md:text-base break-all">info@uf-v.org</span>
               </div>
               <div className="flex items-center">
-                <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
                 </svg>
-                <span>+250782009432</span>
+                <span className="text-sm md:text-base">+250782009432</span>
               </div>
               
-              <div className="bg-white/20 rounded-2xl p-6 mt-6 border border-white/30 backdrop-blur-md">
-                <h3 className="text-lg font-semibold mb-3 text-white">{t('officeHours')}</h3>
-                <div className="space-y-1 text-sm text-white/90">
+              <div className="bg-white/20 rounded-2xl p-4 md:p-6 mt-4 md:mt-6 border border-white/30 backdrop-blur-md">
+                <h3 className="text-base md:text-lg font-semibold mb-2 md:mb-3 text-white">{t('officeHours')}</h3>
+                <div className="space-y-1 text-xs md:text-sm text-white/90">
                   <p>{t('mondayFriday')}</p>
                   <p>{t('weekend')}</p>
                 </div>
@@ -162,8 +162,8 @@ export default function ContactSection() {
             </div>
           </div>
           
-          <div className="bg-white p-8 rounded-2xl shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-black">{t('sendMessage')}</h2>
+          <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6 text-black">{t('sendMessage')}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"

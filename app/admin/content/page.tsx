@@ -18,6 +18,7 @@ export default function ContentAdmin() {
   const fetchData = async () => {
     const { data: slides } = await supabase.from('hero_slides').select('*').order('order_index');
     const { data: secs } = await supabase.from('content_sections').select('*');
+    console.log('Fetched sections:', secs);
     setHeroSlides(slides || []);
     setSections(secs || []);
   };
@@ -35,11 +36,22 @@ export default function ContentAdmin() {
     return null;
   };
 
-  const saveSlide = async (id: string) => {
-    await supabase.from('hero_slides').update(editingItem).eq('id', id);
-    alert('Saved!');
-    fetchData();
-    setEditingItem(null);
+  const saveSlide = async (slide: any) => {
+    const dataToSave = editingItem?.id === slide.id ? editingItem : slide;
+    const { error } = await supabase.from('hero_slides').update({
+      title: dataToSave.title,
+      subtitle: dataToSave.subtitle,
+      media_url: dataToSave.media_url,
+      media_type: dataToSave.media_type,
+      is_active: dataToSave.is_active
+    }).eq('id', slide.id);
+    if (error) {
+      alert('Error saving: ' + error.message);
+    } else {
+      alert('Saved!');
+      fetchData();
+      setEditingItem(null);
+    }
   };
 
   const deleteSlide = async (id: string) => {
@@ -62,11 +74,20 @@ export default function ContentAdmin() {
     fetchData();
   };
 
-  const saveSection = async (id: string) => {
-    await supabase.from('content_sections').update({ ...editingItem, updated_at: new Date() }).eq('id', id);
-    alert('Saved!');
-    fetchData();
-    setEditingItem(null);
+  const saveSection = async (section: any) => {
+    const dataToSave = editingItem?.id === section.id ? editingItem : section;
+    const { error } = await supabase.from('content_sections').update({
+      title: dataToSave.title,
+      content: dataToSave.content,
+      updated_at: new Date().toISOString()
+    }).eq('id', section.id);
+    if (error) {
+      alert('Error saving: ' + error.message);
+    } else {
+      alert('Saved!');
+      fetchData();
+      setEditingItem(null);
+    }
   };
 
   return (
@@ -136,7 +157,7 @@ export default function ContentAdmin() {
                       Active
                     </label>
                   </div>
-                  <button onClick={() => saveSlide(slide.id)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700" disabled={uploading}>
+                  <button onClick={() => saveSlide(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700" disabled={uploading}>
                     {uploading ? 'Uploading...' : 'Save Changes'}
                   </button>
                   <button onClick={() => deleteSlide(slide.id)} className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">
@@ -175,7 +196,7 @@ export default function ContentAdmin() {
                       />
                     </div>
                   ))}
-                  <button onClick={() => saveSection(section.id)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                  <button onClick={() => saveSection(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
                     Save Changes
                   </button>
                 </div>
@@ -210,7 +231,7 @@ export default function ContentAdmin() {
                       />
                     </div>
                   ))}
-                  <button onClick={() => saveSection(section.id)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                  <button onClick={() => saveSection(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
                     Save Changes
                   </button>
                 </div>

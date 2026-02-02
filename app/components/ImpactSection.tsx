@@ -13,24 +13,24 @@ export default function ImpactSection() {
             {t('impactIntro')}
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center hover:bg-white/20 transition-all transform hover:scale-105">
-            <div className="text-sm text-white/90">{t('studentsSupported')}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 md:gap-6">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center hover:bg-white/20 transition-all transform hover:scale-105">
+            <div className="text-xs sm:text-sm text-white/90">{t('studentsSupported')}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center hover:bg-white/20 transition-all transform hover:scale-105">
-            <div className="text-sm text-white/90">{t('familiesSupported')}</div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center hover:bg-white/20 transition-all transform hover:scale-105">
+            <div className="text-xs sm:text-sm text-white/90">{t('familiesSupported')}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center hover:bg-white/20 transition-all transform hover:scale-105">
-            <div className="text-sm text-white/90">{t('womenEmpowered')}</div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center hover:bg-white/20 transition-all transform hover:scale-105">
+            <div className="text-xs sm:text-sm text-white/90">{t('womenEmpowered')}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center hover:bg-white/20 transition-all transform hover:scale-105">
-            <div className="text-sm text-white/90">{t('mediationServices')}</div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center hover:bg-white/20 transition-all transform hover:scale-105">
+            <div className="text-xs sm:text-sm text-white/90">{t('mediationServices')}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center hover:bg-white/20 transition-all transform hover:scale-105">
-            <div className="text-sm text-white/90">{t('emergencyRelief')}</div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center hover:bg-white/20 transition-all transform hover:scale-105">
+            <div className="text-xs sm:text-sm text-white/90">{t('emergencyRelief')}</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 text-center hover:bg-white/20 transition-all transform hover:scale-105">
-            <div className="text-sm text-white/90">{t('youthSupported')}</div>
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 md:p-6 text-center hover:bg-white/20 transition-all transform hover:scale-105">
+            <div className="text-xs sm:text-sm text-white/90">{t('youthSupported')}</div>
           </div>
         </div>
       </div>

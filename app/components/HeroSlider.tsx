@@ -88,15 +88,15 @@ export default function HeroSlider() {
         </div>
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/40"></div>
-      <div className="relative h-full flex items-end justify-end">
-        <div className="pr-4 sm:pr-6 lg:pr-8 pb-16">
-          <div className="max-w-2xl">
-            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 md:p-8">
-              <h1 className={`text-2xl md:text-4xl font-bold mb-4 transition-all duration-700 ease-out text-white ${
+      <div className="relative h-full flex items-end justify-center md:justify-end px-4">
+        <div className="w-full md:max-w-2xl pb-12 md:pb-16">
+          <div className="w-full">
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4 sm:p-6 md:p-8">
+              <h1 className={`text-xl sm:text-2xl md:text-4xl font-bold mb-3 md:mb-4 transition-all duration-700 ease-out text-white ${
                 !isAnimating ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
               }`} dangerouslySetInnerHTML={{__html: slides[currentSlide].title}}>
               </h1>
-              <p className={`text-sm md:text-lg mb-6 transition-all duration-700 ease-out delay-200 text-gray-200 ${
+              <p className={`text-sm md:text-lg mb-4 md:mb-6 transition-all duration-700 ease-out delay-200 text-gray-200 ${
                 !isAnimating ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
               }`}>
                 {slides[currentSlide].subtitle}
@@ -106,17 +106,17 @@ export default function HeroSlider() {
               }`}>
                 <a 
                   href="/contact"
-                  className="px-6 py-3 rounded-full font-semibold transition-colors flex items-center justify-center gap-2"
+                  className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-full font-semibold transition-colors flex items-center justify-center gap-2"
                   style={{backgroundColor: '#1f4f3f', color: 'white'}}
                 >
                   Get Involved
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
                   </svg>
                 </a>
                 <a 
                   href="/donate"
-                  className="border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-[#1f4f3f] font-semibold transition-colors flex items-center justify-center gap-2"
+                  className="border-2 border-white text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-full hover:bg-white hover:text-[#1f4f3f] font-semibold transition-colors flex items-center justify-center gap-2"
                 >
                   Donate Now
                 </a>

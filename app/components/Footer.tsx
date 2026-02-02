@@ -7,23 +7,23 @@ export default function Footer() {
   const t = useTranslations('footer');
   const nav = useTranslations('nav');
   return (
-    <footer className="text-white pt-48 pb-32" style={{backgroundColor: '#1f4f3f'}}>
+    <footer className="text-white pt-16 md:pt-32 lg:pt-48 pb-12 md:pb-20 lg:pb-32" style={{backgroundColor: '#1f4f3f'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-16">
           <div>
             <Image
               src="/ufvimages/logo white v2.png"
               alt="Umbrella for Vulnerable"
               width={150}
               height={27}
-              className="mb-4"
+              className="mb-4 w-32 sm:w-40 md:w-auto"
             />
             <p className="text-white mb-4">
               {t('description')}
             </p>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-6 text-white">{t('quickLinks')}</h3>
+            <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 text-white">{t('quickLinks')}</h3>
             <ul className="space-y-3 text-white">
               <li><Link href="/about" className="hover:opacity-80 text-base">{t('aboutUs')}</Link></li>
               <li><Link href="/programs" className="hover:opacity-80 text-base">{t('ourPrograms')}</Link></li>
@@ -32,7 +32,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-6 text-white">{t('resources')}</h3>
+            <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 text-white">{t('resources')}</h3>
             <ul className="space-y-3 text-white">
               <li><Link href="/contact" className="hover:opacity-80 text-base">{t('contactUs')}</Link></li>
               <li><Link href="/blog" className="hover:opacity-80 text-base">{t('blog')}</Link></li>
@@ -40,8 +40,8 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="text-xl font-semibold mb-6 text-white">{t('connectWithUs')}</h3>
-            <p className="text-white mb-6 leading-relaxed">
+            <h3 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 text-white">{t('connectWithUs')}</h3>
+            <p className="text-white mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
               {t('socialMediaText')}
             </p>
             <div className="flex space-x-4">
@@ -54,7 +54,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="border-t border-white border-opacity-20 mt-16 pt-12 text-center text-white">
+        <div className="border-t border-white border-opacity-20 mt-8 md:mt-12 lg:mt-16 pt-6 md:pt-8 lg:pt-12 text-center text-white">
           <p className="text-base">{t('copyright')}</p>
         </div>
       </div>

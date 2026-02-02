@@ -84,16 +84,16 @@ export default function ProgramAccordion() {
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('title')}</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4">{t('title')}</h2>
+          <p className="text-base md:text-xl text-gray-600 max-w-3xl mx-auto">
             {t('subtitle')}
           </p>
         </div>
         
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-8">
           <div className="order-2 lg:order-1">
-            <div className="h-[500px] w-full rounded-2xl overflow-hidden relative">
+            <div className="h-[350px] sm:h-[450px] md:h-[500px] w-full rounded-2xl overflow-hidden relative">
               <Image
                 src={getImageForProgram(activeItem.id)}
                 alt={t(activeItem.titleKey)}
@@ -101,20 +101,20 @@ export default function ProgramAccordion() {
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-              <div className="absolute bottom-0 left-0 right-0 p-8 text-white z-10">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="w-12 h-12 bg-green-700/30 backdrop-blur-md border border-green-600/50 rounded-full flex items-center justify-center">
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 text-white z-10">
+                <div className="mb-3 md:mb-4 flex items-center gap-2 md:gap-3">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-green-700/30 backdrop-blur-md border border-green-600/50 rounded-full flex items-center justify-center">
                     <span className="text-white">{getIcon(activeItem.icon)}</span>
                   </div>
-                  <h3 className="text-2xl font-bold">{t(activeItem.titleKey)}</h3>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold">{t(activeItem.titleKey)}</h3>
                 </div>
-                <p className="text-lg mb-6 leading-relaxed">{t(activeItem.descKey)}</p>
-                <a href="/programs" className="inline-block text-white px-6 py-2 rounded-2xl font-medium bg-green-700/30 backdrop-blur-md border border-green-600/50 hover:bg-green-700/50 transition-all">
+                <p className="text-sm sm:text-base md:text-lg mb-4 md:mb-6 leading-relaxed line-clamp-3 md:line-clamp-none">{t(activeItem.descKey)}</p>
+                <a href="/programs" className="inline-block text-white px-4 md:px-6 py-2 text-sm md:text-base rounded-2xl font-medium bg-green-700/30 backdrop-blur-md border border-green-600/50 hover:bg-green-700/50 transition-all">
                   {t('readMore')} →
                 </a>
               </div>
             </div>
-            <div className="flex justify-center gap-2 mt-4">
+            <div className="flex justify-center gap-2 mt-3 md:mt-4">
               {programs.map((program) => (
                 <button
                   key={program.id}
@@ -127,26 +127,26 @@ export default function ProgramAccordion() {
             </div>
           </div>
           
-          <div className="order-1 lg:order-2 space-y-3">
+          <div className="order-1 lg:order-2 space-y-2 md:space-y-3">
             {programs.map((program) => (
               <div 
                 key={program.id} 
-                className={`rounded-2xl p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all cursor-pointer flex items-center justify-between ${
+                className={`rounded-xl md:rounded-2xl p-3 md:p-4 shadow-sm border border-gray-200 hover:shadow-md transition-all cursor-pointer flex items-center justify-between ${
                   activeProgram === program.id ? 'bg-green-900 text-white' : 'bg-white hover:bg-gray-50'
                 }`}
                 onClick={() => setActiveProgram(program.id)}
               >
                 <div className="flex items-center">
-                  <div className="w-10 h-10 bg-green-900 bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-green-900 bg-opacity-20 rounded-full flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
                     <span className="text-white">{getIcon(program.icon)}</span>
                   </div>
-                  <h3 className={`text-lg font-medium ${
+                  <h3 className={`text-sm sm:text-base md:text-lg font-medium ${
                     activeProgram === program.id ? 'text-white' : 'text-gray-900'
                   }`}>
                     {t(program.titleKey)}
                   </h3>
                 </div>
-                <span className={`text-xl ${
+                <span className={`text-lg md:text-xl ${
                   activeProgram === program.id ? 'text-white' : 'text-gray-400'
                 }`}>
                   ›
