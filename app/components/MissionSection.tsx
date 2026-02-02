@@ -61,7 +61,7 @@ export default function MissionSection() {
         <div className="grid md:grid-cols-2 gap-8">
           <Link href="/about" className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
             <div className="h-64 relative overflow-hidden">
-              {missionImages.map((image, index) => (
+              {missionImages.map((image: string, index: number) => (
                 <Image
                   key={index}
                   src={image}
@@ -86,7 +86,7 @@ export default function MissionSection() {
           </Link>
           <Link href="/about" className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
             <div className="h-64 relative overflow-hidden">
-              {visionImages.map((image, index) => (
+              {visionImages.map((image: string, index: number) => (
                 <Image
                   key={index}
                   src={image}
