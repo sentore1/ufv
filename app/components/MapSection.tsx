@@ -1,13 +1,32 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {Link} from '@/i18n/routing';
-import {useTranslations} from 'next-intl';
+import { useLocale } from 'next-intl';
+import { supabase } from '@/lib/supabase';
 
 export default function MapSection() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
-  const t = useTranslations('mapSection');
+  const locale = useLocale();
+  const [section, setSection] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSection = async () => {
+      const { data } = await supabase
+        .from('content_sections')
+        .select('*')
+        .eq('section_key', 'map_section')
+        .single();
+      
+      if (data) setSection(data);
+    };
+    fetchSection();
+  }, []);
+
+  if (!section) return null;
+
+  const [description, communityTitle, communityDesc] = (section.content[locale] || section.content.en || '||').split('|');
 
   const locations = [
     { id: 1, name: "Rwanda", x: "60%", y: "52%", info: "Our operational area in Rwanda" },
@@ -19,17 +38,17 @@ export default function MapSection() {
         <div className="grid lg:grid-cols-[1fr_auto_1fr] gap-8 items-center">
           <div className="bg-[#1f4f3f] text-white p-10 rounded-3xl space-y-6">
             <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
-              {t('title')}
+              {section.title[locale] || section.title.en}
             </h2>
             <p className="text-base lg:text-lg leading-relaxed">
-              {t('description')}
+              {description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link href="/about" className="bg-white text-[#1f4f3f] px-5 py-2 rounded-full font-semibold hover:bg-gray-100 transition text-sm text-center">
-                {t('learnMore')}
+                LEARN MORE
               </Link>
               <Link href="/donate" className="border-2 border-white text-white px-5 py-2 rounded-full font-semibold hover:bg-white hover:text-[#1f4f3f] transition text-sm text-center">
-                {t('joinUsNow')}
+                JOIN US NOW
               </Link>
             </div>
           </div>
@@ -71,10 +90,10 @@ export default function MapSection() {
 
           <div className="bg-white border-2 border-gray-200 rounded-3xl p-10 shadow-lg">
             <h3 className="text-2xl lg:text-3xl font-bold mb-4">
-              {t('communityTitle')}
+              {communityTitle}
             </h3>
             <p className="text-gray-700 text-base lg:text-lg leading-relaxed">
-              {t('communityDescription')}
+              {communityDesc}
             </p>
           </div>
         </div>

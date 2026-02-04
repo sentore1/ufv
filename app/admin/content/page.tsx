@@ -97,7 +97,13 @@ export default function ContentAdmin() {
         
         <div className="flex gap-4 mb-6">
           <button onClick={() => setActiveTab('hero')} className={`px-6 py-2 rounded ${activeTab === 'hero' ? 'bg-green-800 text-white' : 'bg-white'}`}>Hero</button>
-          <button onClick={() => setActiveTab('sections')} className={`px-6 py-2 rounded ${activeTab === 'sections' ? 'bg-green-800 text-white' : 'bg-white'}`}>Sections</button>
+          <button onClick={() => setActiveTab('sections')} className={`px-6 py-2 rounded ${activeTab === 'sections' ? 'bg-green-800 text-white' : 'bg-white'}`}>Mission/Vision</button>
+          <button onClick={() => setActiveTab('impact')} className={`px-6 py-2 rounded ${activeTab === 'impact' ? 'bg-green-800 text-white' : 'bg-white'}`}>Impact</button>
+          <button onClick={() => setActiveTab('cta')} className={`px-6 py-2 rounded ${activeTab === 'cta' ? 'bg-green-800 text-white' : 'bg-white'}`}>CTA</button>
+          <button onClick={() => setActiveTab('testimonials')} className={`px-6 py-2 rounded ${activeTab === 'testimonials' ? 'bg-green-800 text-white' : 'bg-white'}`}>Testimonials</button>
+          <button onClick={() => setActiveTab('about')} className={`px-6 py-2 rounded ${activeTab === 'about' ? 'bg-green-800 text-white' : 'bg-white'}`}>About</button>
+          <button onClick={() => setActiveTab('map')} className={`px-6 py-2 rounded ${activeTab === 'map' ? 'bg-green-800 text-white' : 'bg-white'}`}>Map</button>
+          <button onClick={() => setActiveTab('newsletter')} className={`px-6 py-2 rounded ${activeTab === 'newsletter' ? 'bg-green-800 text-white' : 'bg-white'}`}>Newsletter</button>
           <button onClick={() => setActiveTab('donate')} className={`px-6 py-2 rounded ${activeTab === 'donate' ? 'bg-green-800 text-white' : 'bg-white'}`}>Donate</button>
           <button onClick={() => setActiveTab('contact')} className={`px-6 py-2 rounded ${activeTab === 'contact' ? 'bg-green-800 text-white' : 'bg-white'}`}>Contact</button>
         </div>
@@ -171,7 +177,7 @@ export default function ContentAdmin() {
 
         {activeTab === 'sections' && (
           <div className="space-y-6">
-            {sections.filter(s => !s.section_key.startsWith('donate') && !s.section_key.startsWith('contact')).map((section) => {
+            {sections.filter(s => ['mission', 'vision'].includes(s.section_key)).map((section) => {
               const isEditing = editingItem?.id === section.id;
               const current = isEditing ? editingItem : section;
               return (
@@ -190,6 +196,286 @@ export default function ContentAdmin() {
                       />
                       <textarea 
                         placeholder={`Content (${lang})`}
+                        value={current.content?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded h-24" 
+                      />
+                    </div>
+                  ))}
+                  <button onClick={() => saveSection(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            )})}
+          </div>
+        )}
+
+        {activeTab === 'impact' && (
+          <div className="space-y-6">
+            <button onClick={async () => {
+              const newKey = prompt('Enter section key (e.g., impact_newmetric):');
+              if (!newKey) return;
+              await supabase.from('content_sections').insert([{
+                section_key: newKey,
+                title: { en: 'New Metric', fr: 'Nouvelle Métrique', rw: 'Igipimo Gishya', ar: 'مقياس جديد' },
+                content: { en: 'Description', fr: 'Description', rw: 'Ibisobanuro', ar: 'وصف' },
+                media_urls: []
+              }]);
+              fetchData();
+            }} className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
+              + Add New Impact Metric
+            </button>
+            {sections.filter(s => s.section_key.startsWith('impact_')).map((section) => {
+              const isEditing = editingItem?.id === section.id;
+              const current = isEditing ? editingItem : section;
+              return (
+              <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="font-bold mb-4 capitalize">{section.section_key.replace('impact_', '')}</h3>
+                <div className="space-y-4">
+                  {languages.map(lang => (
+                    <div key={lang} className="border-l-4 border-green-800 pl-4">
+                      <p className="text-xs text-gray-500 uppercase mb-2">{lang}</p>
+                      <input 
+                        type="text" 
+                        placeholder={`Title (${lang})`}
+                        value={current.title?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, title: {...current.title, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded mb-2" 
+                      />
+                      <textarea 
+                        placeholder={`Content (${lang})`}
+                        value={current.content?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded h-24" 
+                      />
+                    </div>
+                  ))}
+                  <button onClick={() => saveSection(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                    Save Changes
+                  </button>
+                  <button onClick={async () => {
+                    if (confirm('Delete this metric?')) {
+                      await supabase.from('content_sections').delete().eq('id', section.id);
+                      fetchData();
+                    }
+                  }} className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            )})}
+          </div>
+        )}
+
+        {activeTab === 'cta' && (
+          <div className="space-y-6">
+            {sections.filter(s => s.section_key === 'cta_section').map((section) => {
+              const isEditing = editingItem?.id === section.id;
+              const current = isEditing ? editingItem : section;
+              return (
+              <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="font-bold mb-4">Call to Action Section</h3>
+                <div className="space-y-4">
+                  {languages.map(lang => (
+                    <div key={lang} className="border-l-4 border-green-800 pl-4">
+                      <p className="text-xs text-gray-500 uppercase mb-2">{lang}</p>
+                      <input 
+                        type="text" 
+                        placeholder={`Title (${lang})`}
+                        value={current.title?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, title: {...current.title, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded mb-2" 
+                      />
+                      <textarea 
+                        placeholder={`Content (${lang})`}
+                        value={current.content?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded h-24" 
+                      />
+                    </div>
+                  ))}
+                  <button onClick={() => saveSection(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            )})}
+          </div>
+        )}
+
+        {activeTab === 'testimonials' && (
+          <div className="space-y-6">
+            <button onClick={async () => {
+              const count = sections.filter(s => s.section_key.startsWith('testimonial_')).length;
+              await supabase.from('content_sections').insert([{
+                section_key: `testimonial_${count + 1}`,
+                title: { en: 'Person Name', fr: 'Nom de la Personne', rw: 'Izina', ar: 'الاسم' },
+                content: { en: 'Quote text|Location', fr: 'Citation|Lieu', rw: 'Amagambo|Ahantu', ar: 'اقتباس|موقع' },
+                media_urls: []
+              }]);
+              fetchData();
+            }} className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
+              + Add New Testimonial
+            </button>
+            {sections.filter(s => s.section_key.startsWith('testimonial')).map((section) => {
+              const isEditing = editingItem?.id === section.id;
+              const current = isEditing ? editingItem : section;
+              return (
+              <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="font-bold mb-4 capitalize">{section.section_key.replace('_', ' ')}</h3>
+                <div className="space-y-4">
+                  {languages.map(lang => (
+                    <div key={lang} className="border-l-4 border-green-800 pl-4">
+                      <p className="text-xs text-gray-500 uppercase mb-2">{lang}</p>
+                      <input 
+                        type="text" 
+                        placeholder={`Title (${lang})`}
+                        value={current.title?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, title: {...current.title, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded mb-2" 
+                      />
+                      <textarea 
+                        placeholder={`Content (${lang}) - Format: "Quote text|Location"`}
+                        value={current.content?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded h-24" 
+                      />
+                    </div>
+                  ))}
+                  <button onClick={() => saveSection(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                    Save Changes
+                  </button>
+                  {!section.section_key.includes('header') && (
+                    <button onClick={async () => {
+                      if (confirm('Delete this testimonial?')) {
+                        await supabase.from('content_sections').delete().eq('id', section.id);
+                        fetchData();
+                      }
+                    }} className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">
+                      Delete
+                    </button>
+                  )}
+                </div>
+              </div>
+            )})}
+          </div>
+        )}
+
+        {activeTab === 'about' && (
+          <div className="space-y-6">
+            {sections.filter(s => s.section_key === 'about_us').map((section) => {
+              const isEditing = editingItem?.id === section.id;
+              const current = isEditing ? editingItem : section;
+              return (
+              <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="font-bold mb-4">About Us Section</h3>
+                <div className="space-y-4">
+                  <div className="mb-4">
+                    <label className="block font-semibold mb-2">Section Image</label>
+                    <input type="file" accept="image/*" onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const url = await uploadImage(file);
+                        if (url) setEditingItem({...current, media_urls: [url]});
+                      }
+                    }} className="w-full border p-2 rounded mb-2" disabled={uploading} />
+                    <input type="text" placeholder="Or paste image URL" value={current.media_urls?.[0] || ''} onChange={(e) => setEditingItem({...current, media_urls: [e.target.value]})} className="w-full border p-2 rounded" />
+                    {current.media_urls?.[0] && <img src={current.media_urls[0]} alt="Preview" className="mt-2 w-full h-48 object-cover rounded" />}
+                  </div>
+                  {languages.map(lang => (
+                    <div key={lang} className="border-l-4 border-green-800 pl-4">
+                      <p className="text-xs text-gray-500 uppercase mb-2">{lang}</p>
+                      <input 
+                        type="text" 
+                        placeholder={`Title (${lang})`}
+                        value={current.title?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, title: {...current.title, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded mb-2" 
+                      />
+                      <textarea 
+                        placeholder={`Content (${lang})`}
+                        value={current.content?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded h-24" 
+                      />
+                    </div>
+                  ))}
+                  <button onClick={async () => {
+                    const { error } = await supabase.from('content_sections').update({
+                      title: current.title,
+                      content: current.content,
+                      media_urls: current.media_urls,
+                      updated_at: new Date().toISOString()
+                    }).eq('id', section.id);
+                    if (error) alert('Error: ' + error.message);
+                    else { alert('Saved!'); fetchData(); setEditingItem(null); }
+                  }} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700" disabled={uploading}>
+                    {uploading ? 'Uploading...' : 'Save Changes'}
+                  </button>
+                </div>
+              </div>
+            )})}
+          </div>
+        )}
+
+        {activeTab === 'map' && (
+          <div className="space-y-6">
+            {sections.filter(s => s.section_key === 'map_section').map((section) => {
+              const isEditing = editingItem?.id === section.id;
+              const current = isEditing ? editingItem : section;
+              return (
+              <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="font-bold mb-4">Map Section</h3>
+                <div className="space-y-4">
+                  {languages.map(lang => (
+                    <div key={lang} className="border-l-4 border-green-800 pl-4">
+                      <p className="text-xs text-gray-500 uppercase mb-2">{lang}</p>
+                      <input 
+                        type="text" 
+                        placeholder={`Title (${lang})`}
+                        value={current.title?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, title: {...current.title, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded mb-2" 
+                      />
+                      <textarea 
+                        placeholder={`Content (${lang}) - Format: "Description|Community Title|Community Description"`}
+                        value={current.content?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded h-32" 
+                      />
+                    </div>
+                  ))}
+                  <button onClick={() => saveSection(current)} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            )})}
+          </div>
+        )}
+
+        {activeTab === 'newsletter' && (
+          <div className="space-y-6">
+            {sections.filter(s => s.section_key === 'newsletter_section').map((section) => {
+              const isEditing = editingItem?.id === section.id;
+              const current = isEditing ? editingItem : section;
+              return (
+              <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="font-bold mb-4">Newsletter Section</h3>
+                <div className="space-y-4">
+                  {languages.map(lang => (
+                    <div key={lang} className="border-l-4 border-green-800 pl-4">
+                      <p className="text-xs text-gray-500 uppercase mb-2">{lang}</p>
+                      <input 
+                        type="text" 
+                        placeholder={`Title (${lang})`}
+                        value={current.title?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, title: {...current.title, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded mb-2" 
+                      />
+                      <textarea 
+                        placeholder={`Content (${lang}) - Format: "Description|Placeholder|Button Text"`}
                         value={current.content?.[lang] || ''} 
                         onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
                         className="w-full p-2 border rounded h-24" 

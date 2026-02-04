@@ -1,10 +1,29 @@
 'use client';
 
 import Image from 'next/image';
-import {useTranslations} from 'next-intl';
+import { useEffect, useState } from 'react';
+import { useLocale } from 'next-intl';
+import { supabase } from '@/lib/supabase';
 
 export default function AboutUsSection() {
-  const t = useTranslations('aboutUs');
+  const locale = useLocale();
+  const [section, setSection] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchSection = async () => {
+      const { data } = await supabase
+        .from('content_sections')
+        .select('*')
+        .eq('section_key', 'about_us')
+        .single();
+      
+      if (data) setSection(data);
+    };
+    fetchSection();
+  }, []);
+
+  if (!section) return null;
+
   return (
     <section className="py-16" style={{backgroundColor: '#538A71'}}>
       <div className="w-full px-8 sm:px-12 lg:px-16">
@@ -16,7 +35,7 @@ export default function AboutUsSection() {
             </div>
             <div className="h-80 w-80 mx-auto relative rounded-2xl overflow-hidden">
               <Image
-                src="/ufvimages/42.jpg"
+                src={section.media_urls?.[0] || '/ufvimages/42.jpg'}
                 alt="UVF Community Work"
                 fill
                 className="object-cover"
@@ -37,10 +56,10 @@ export default function AboutUsSection() {
                 <span className="text-xs font-medium text-white/80">Umbrella for Vulnerable</span>
               </div>
               <h2 className="text-2xl font-bold text-white mb-4">
-                {t('title')}
+                {section.title[locale] || section.title.en}
               </h2>
               <p className="text-sm text-white/90 leading-relaxed">
-                {t('description')}
+                {section.content[locale] || section.content.en}
               </p>
             </div>
             
@@ -48,7 +67,7 @@ export default function AboutUsSection() {
               href="/about"
               className="inline-flex items-center px-4 py-2 border border-white/30 rounded-lg text-white text-sm font-medium hover:bg-white/10 transition-colors"
             >
-              {t('learnMore')}
+              Learn More
             </a>
           </div>
         </div>
