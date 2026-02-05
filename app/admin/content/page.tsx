@@ -95,9 +95,10 @@ export default function ContentAdmin() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Content Management</h1>
         
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-4 mb-6 flex-wrap">
           <button onClick={() => setActiveTab('hero')} className={`px-6 py-2 rounded ${activeTab === 'hero' ? 'bg-green-800 text-white' : 'bg-white'}`}>Hero</button>
           <button onClick={() => setActiveTab('sections')} className={`px-6 py-2 rounded ${activeTab === 'sections' ? 'bg-green-800 text-white' : 'bg-white'}`}>Mission/Vision</button>
+          <button onClick={() => setActiveTab('programs')} className={`px-6 py-2 rounded ${activeTab === 'programs' ? 'bg-green-800 text-white' : 'bg-white'}`}>Programs</button>
           <button onClick={() => setActiveTab('impact')} className={`px-6 py-2 rounded ${activeTab === 'impact' ? 'bg-green-800 text-white' : 'bg-white'}`}>Impact</button>
           <button onClick={() => setActiveTab('cta')} className={`px-6 py-2 rounded ${activeTab === 'cta' ? 'bg-green-800 text-white' : 'bg-white'}`}>CTA</button>
           <button onClick={() => setActiveTab('testimonials')} className={`px-6 py-2 rounded ${activeTab === 'testimonials' ? 'bg-green-800 text-white' : 'bg-white'}`}>Testimonials</button>
@@ -169,6 +170,85 @@ export default function ContentAdmin() {
                   <button onClick={() => deleteSlide(slide.id)} className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">
                     Delete Slide
                   </button>
+                </div>
+              </div>
+            )})}
+          </div>
+        )}
+
+        {activeTab === 'programs' && (
+          <div className="space-y-6">
+            <button onClick={async () => {
+              const count = sections.filter(s => s.section_key.startsWith('program_')).length;
+              await supabase.from('content_sections').insert([{
+                section_key: `program_custom_${count + 1}`,
+                title: { en: 'New Program', fr: 'Nouveau Programme', rw: 'Gahunda Nshya', ar: 'برنامج جديد' },
+                content: { en: 'Program description', fr: 'Description du programme', rw: 'Ibisobanuro', ar: 'وصف البرنامج' },
+                media_urls: ['/programs/social-protection/social-protection-1.jpg']
+              }]);
+              fetchData();
+            }} className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 font-semibold">
+              + Add New Program
+            </button>
+            {sections.filter(s => s.section_key.startsWith('program')).map((section) => {
+              const isEditing = editingItem?.id === section.id;
+              const current = isEditing ? editingItem : section;
+              return (
+              <div key={section.id} className="bg-white p-6 rounded-lg shadow">
+                <h3 className="font-bold mb-4 capitalize">{section.section_key.replace('program_', '').replace('_', ' ')}</h3>
+                <div className="space-y-4">
+                  <div className="mb-4">
+                    <label className="block font-semibold mb-2">Program Image</label>
+                    <input type="file" accept="image/*" onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const url = await uploadImage(file);
+                        if (url) setEditingItem({...current, media_urls: [url]});
+                      }
+                    }} className="w-full border p-2 rounded mb-2" disabled={uploading} />
+                    <input type="text" placeholder="Or paste image URL" value={current.media_urls?.[0] || ''} onChange={(e) => setEditingItem({...current, media_urls: [e.target.value]})} className="w-full border p-2 rounded" />
+                    {current.media_urls?.[0] && <img src={current.media_urls[0]} alt="Preview" className="mt-2 w-full h-48 object-cover rounded" />}
+                  </div>
+                  {languages.map(lang => (
+                    <div key={lang} className="border-l-4 border-green-800 pl-4">
+                      <p className="text-xs text-gray-500 uppercase mb-2">{lang}</p>
+                      <input 
+                        type="text" 
+                        placeholder={`Title (${lang})`}
+                        value={current.title?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, title: {...current.title, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded mb-2" 
+                      />
+                      <textarea 
+                        placeholder={`Description (${lang})`}
+                        value={current.content?.[lang] || ''} 
+                        onChange={(e) => setEditingItem({...current, content: {...current.content, [lang]: e.target.value}})} 
+                        className="w-full p-2 border rounded h-24" 
+                      />
+                    </div>
+                  ))}
+                  <button onClick={async () => {
+                    const { error } = await supabase.from('content_sections').update({
+                      title: current.title,
+                      content: current.content,
+                      media_urls: current.media_urls,
+                      updated_at: new Date().toISOString()
+                    }).eq('id', section.id);
+                    if (error) alert('Error: ' + error.message);
+                    else { alert('Saved!'); fetchData(); setEditingItem(null); }
+                  }} className="w-full bg-green-800 text-white py-2 rounded hover:bg-green-700" disabled={uploading}>
+                    {uploading ? 'Uploading...' : 'Save Changes'}
+                  </button>
+                  {section.section_key.includes('custom') && (
+                    <button onClick={async () => {
+                      if (confirm('Delete this program?')) {
+                        await supabase.from('content_sections').delete().eq('id', section.id);
+                        fetchData();
+                      }
+                    }} className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             )})}
