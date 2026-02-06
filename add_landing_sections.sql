@@ -8,7 +8,7 @@ INSERT INTO content_sections (section_key, title, content, media_urls) VALUES
 
 ('impact_students', 
 '{"en": "Students Supported", "fr": "Étudiants Soutenus", "rw": "Abanyeshuri Bafashijwe", "ar": "الطلاب المدعومون"}',
-'{"en": "Students in Bugesera School Each Year", "fr": "Étudiants à l''école de Bugesera chaque année", "rw": "Abanyeshuri bo mu ishuri rya Bugesera buri mwaka", "ar": "الطلاب في مدرسة بوجيسيرا كل عام"}',
+'{"en": "Students in Rwamagana School Each Year", "fr": "Étudiants à l''école de Rwamagana chaque année", "rw": "Abanyeshuri bo mu ishuri rya Rwamagana buri mwaka", "ar": "الطلاب في مدرسة بوجيسيرا كل عام"}',
 '[]'),
 
 ('impact_families', 
@@ -60,13 +60,13 @@ INSERT INTO content_sections (section_key, title, content, media_urls) VALUES
 
 -- About Us Section
 ('about_us', 
-'{"en": "Our Support Umbrella for Vulnerable?", "fr": "Notre Parapluie de Soutien pour les Vulnérables?", "rw": "Umutaka Wacu wo Gufasha Abafite Ibibazo?", "ar": "مظلتنا الداعمة للضعفاء؟"}',
+'{"en": "Support Umbrella for Vulnerable?", "fr": "Notre Parapluie de Soutien pour les Vulnérables?", "rw": "Umutaka Wacu wo Gufasha Abafite Ibibazo?", "ar": "مظلتنا الداعمة للضعفاء؟"}',
 '{"en": "Because we know that even the best programs are only as good as the people behind them. That''s why we offer comprehensive support, community empowerment, and sustainable solutions that create lasting impact in vulnerable communities across Rwanda.", "fr": "Parce que nous savons que même les meilleurs programmes ne valent que par les personnes qui les soutiennent. C''est pourquoi nous offrons un soutien complet, l''autonomisation communautaire et des solutions durables qui créent un impact durable dans les communautés vulnérables du Rwanda.", "rw": "Kuko tuzi ko n''ibikorwa byiza cyane bigira agaciro gusa kubera abantu babikora. Ni yo mpamvu dutanga ubufasha busesuye, guha imbaraga abaturage, n''ibisubizo birambye bikora ingaruka zihoraho mu miryango ifite ibibazo mu Rwanda.", "ar": "لأننا نعلم أن أفضل البرامج لا تكون جيدة إلا بقدر الأشخاص الذين يقفون وراءها. لهذا السبب نقدم الدعم الشامل وتمكين المجتمع والحلول المستدامة التي تخلق تأثيرًا دائمًا في المجتمعات الضعيفة في جميع أنحاء رواندا."}',
 '["/ufvimages/42.jpg"]'),
 
 -- Map Section
 ('map_section', 
-'{"en": "Our Support Umbrella for Vulnerable", "fr": "Notre Parapluie de Soutien pour les Vulnérables", "rw": "Umutaka Wacu wo Gufasha Abafite Ibibazo", "ar": "مظلتنا الداعمة للضعفاء"}',
+'{"en": "Support Umbrella for Vulnerable", "fr": "Notre Parapluie de Soutien pour les Vulnérables", "rw": "Umutaka Wacu wo Gufasha Abafite Ibibazo", "ar": "مظلتنا الداعمة للضعفاء"}',
 '{"en": "Umbrella for Vulnerable is deeply grateful for the organizations and individuals who stand with us.|We believe in the power of community engagement to drive positive change. 🇷🇼|That''s why we work closely with local leaders, healthcare providers, and community members to ensure that our programs are responsive to the needs of the people we serve.", "fr": "Umbrella for Vulnerable est profondément reconnaissant envers les organisations et les individus qui nous soutiennent.|Nous croyons au pouvoir de l''engagement communautaire pour conduire un changement positif. 🇷🇼|C''est pourquoi nous travaillons en étroite collaboration avec les dirigeants locaux, les prestataires de soins de santé et les membres de la communauté pour nous assurer que nos programmes répondent aux besoins des personnes que nous servons.", "rw": "Umbrella for Vulnerable ishimira cyane imiryango n''abantu badufasha.|Twizera imbaraga zo kugira uruhare mu miryango mu gutera imbere impinduka nziza. 🇷🇼|Ni yo mpamvu dukorana hafi n''abayobozi b''ibanze, abatanga serivisi z''ubuzima, n''abaturage kugira ngo tugenzure ko gahunda zacu zihuza n''ibikenewe by''abantu dukorera.", "ar": "مظلة الضعفاء ممتنة بعمق للمنظمات والأفراد الذين يقفون معنا.|نؤمن بقوة المشاركة المجتمعية لدفع التغيير الإيجابي. 🇷🇼|لهذا السبب نعمل بشكل وثيق مع القادة المحليين ومقدمي الرعاية الصحية وأفراد المجتمع لضمان أن برامجنا تستجيب لاحتياجات الأشخاص الذين نخدمهم."}',
 '[]'),
 

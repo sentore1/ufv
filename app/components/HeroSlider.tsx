@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 import { supabase } from '@/lib/supabase';
 
 export default function HeroSlider() {
   const locale = useLocale();
+  const t = useTranslations('hero');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [slides, setSlides] = useState<any[]>([]);
@@ -104,22 +106,22 @@ export default function HeroSlider() {
               <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-700 ease-out delay-400 ${
                 !isAnimating ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
               }`}>
-                <a 
+                <Link 
                   href="/contact"
                   className="px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-full font-semibold transition-colors flex items-center justify-center gap-2"
                   style={{backgroundColor: '#1f4f3f', color: 'white'}}
                 >
-                  Get Involved
+                  {t('getInvolved')}
                   <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"/>
                   </svg>
-                </a>
-                <a 
+                </Link>
+                <Link 
                   href="/donate"
                   className="border-2 border-white text-white px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base rounded-full hover:bg-white hover:text-[#1f4f3f] font-semibold transition-colors flex items-center justify-center gap-2"
                 >
-                  Donate Now
-                </a>
+                  {t('donateNow')}
+                </Link>
               </div>
             </div>
           </div>

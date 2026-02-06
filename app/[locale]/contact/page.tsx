@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 export default function ContactPage() {
   const locale = useLocale();
   const t = useTranslations('contactPage');
-  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "", country: "" });
   const [loading, setLoading] = useState(false);
   const [contactInfo, setContactInfo] = useState<any>(null);
 
@@ -34,7 +34,7 @@ export default function ContactPage() {
       
       if (response.ok) {
         alert(t('successMessage'));
-        setFormData({ name: "", email: "", subject: "", message: "" });
+        setFormData({ name: "", email: "", subject: "", message: "", country: "" });
       } else {
         alert(t('errorMessage'));
       }
@@ -96,7 +96,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-xl mb-2 text-gray-900">{t('website')}</h3>
-                  <a href={info[3]} target="_blank" rel="noopener noreferrer" className="text-gray-600 text-lg hover:text-green-600 transition-colors">{info[3]}</a>
+                  <a href="https://uf-v.org" target="_blank" rel="noopener noreferrer" className="text-gray-600 text-lg hover:text-green-600 transition-colors">https://uf-v.org</a>
                 </div>
               </div>
             </div>
@@ -146,6 +146,16 @@ export default function ContactPage() {
                   className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-600 transition-colors"
                   value={formData.subject}
                   onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-3 font-semibold text-lg">Country</label>
+                <input 
+                  type="text" 
+                  required
+                  className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-600 transition-colors"
+                  value={formData.country}
+                  onChange={(e) => setFormData({...formData, country: e.target.value})}
                 />
               </div>
               <div>

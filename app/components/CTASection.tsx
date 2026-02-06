@@ -1,10 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 import { supabase } from '@/lib/supabase';
 
 export default function CTASection() {
   const locale = useLocale();
+  const t = useTranslations('home');
   const [section, setSection] = useState<any>(null);
 
   useEffect(() => {
@@ -32,15 +34,15 @@ export default function CTASection() {
           {section.content[locale] || section.content.en}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/contact" className="bg-white px-8 py-3 rounded-full hover:bg-gray-100 font-semibold text-center" style={{color: '#1f4f3f'}}>
-            Become a Volunteer
-          </a>
-          <a href="/donate" className="border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white font-semibold flex items-center justify-center gap-2 transition-colors hover:text-[#1f4f3f]">
-            Support Our Mission
+          <Link href="/contact" className="bg-white px-8 py-3 rounded-full hover:bg-gray-100 font-semibold text-center" style={{color: '#1f4f3f'}}>
+            {t('becomeVolunteer')}
+          </Link>
+          <Link href="/donate" className="border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white font-semibold flex items-center justify-center gap-2 transition-colors hover:text-[#1f4f3f]">
+            {t('supportMission')}
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/>
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

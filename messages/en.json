@@ -1,7 +1,7 @@
 {
   "nav": {
     "about": "About Us",
-    "programs": "Our Programs",
+    "programs": "What we do",
     "impact": "Impact",
     "blog": "Blog",
     "report": "Report",
@@ -11,7 +11,7 @@
   },
   "home": {
     "whoWeAre": "WHO WE ARE",
-    "transforming": "Transforming Ideas into Reality",
+    "transforming": "Transforming Lives",
     "ourMission": "Our Mission",
     "missionDesc": "Empowering communities through advocacy, education, and action",
     "missionText": "To support vulnerable families, orphans, widows, and disadvantaged households through comprehensive programs that restore dignity, provide emergency relief, promote education, strengthen moral values, and empower communities for self-reliance.",
@@ -20,7 +20,7 @@
     "visionText": "A community where vulnerable families have access to social protection, emergency relief, quality education, spiritual guidance, and empowerment opportunities for sustainable development.",
     "ourImpact": "Our Impact",
     "impactIntro": "Through our core programs - social protection, emergency relief, education, faith-based initiatives, women & youth empowerment, and family protection - we're making a significant impact in communities across Rwanda.",
-    "studentsSupported": "Students in Bugesera School Each Year",
+    "studentsSupported": "Students in Rwamagana School Each Year",
     "familiesSupported": "Vulnerable Families Supported",
     "womenEmpowered": "Women Empowered Through Skills Training",
     "mediationServices": "Families Receiving Mediation Services",
@@ -42,7 +42,7 @@
     "donateNow": "Donate Now"
   },
   "programs": {
-    "title": "Our Programs",
+    "title": "What we do",
     "subtitle": "Through our diverse range of programs, we address countless challenges, resources, and opportunities to create lasting impact in communities.",
     "socialProtection": "Social Protection Programs",
     "socialProtectionDesc": "Supporting vulnerable families, orphans, widows, and disadvantaged households to restore dignity and stability through comprehensive assistance and community support.",
@@ -91,7 +91,7 @@
     "sending": "Sending..."
   },
   "aboutUs": {
-    "title": "Our Support Umbrella for Vulnerable?",
+    "title": "Support Umbrella for Vulnerable?",
     "description": "Because we know that even the best programs are only as good as the people behind them. That's why we offer comprehensive support, community empowerment, and sustainable solutions that create lasting impact in vulnerable communities across Rwanda.",
     "learnMore": "Learn More"
   },
@@ -221,7 +221,7 @@
     "familyProtectionDesc": "Strengthening families through mediation and counseling",
     "educationImpact": "Education Impact",
     "comprehensiveEducation": "Comprehensive Education",
-    "comprehensiveEducationDesc": "Nurturing students in our Bugesera school community",
+    "comprehensiveEducationDesc": "Nurturing students in our Rwamagana school community",
     "learningResources": "Learning Resources",
     "learningResourcesDesc": "Providing essential tools and materials for success",
     "skillsDevelopment": "Skills Development",
@@ -250,7 +250,7 @@
     "getInvolved": "Get Involved"
   },
   "mapSection": {
-    "title": "Our Support Umbrella for Vulnerable",
+    "title": "Support Umbrella for Vulnerable",
     "description": "Umbrella for Vulnerable is deeply grateful for the organizations and individuals who stand with us.",
     "learnMore": "LEARN MORE",
     "joinUsNow": "JOIN US NOW",

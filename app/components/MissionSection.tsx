@@ -3,11 +3,12 @@
 import Image from "next/image";
 import {Link} from '@/i18n/routing';
 import { useState, useEffect } from 'react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { supabase } from '@/lib/supabase';
 
 export default function MissionSection() {
   const locale = useLocale();
+  const t = useTranslations('home');
   const [currentMissionImage, setCurrentMissionImage] = useState(0);
   const [currentVisionImage, setCurrentVisionImage] = useState(0);
   const [mission, setMission] = useState<any>(null);
@@ -55,8 +56,8 @@ export default function MissionSection() {
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-sm text-gray-500 uppercase tracking-wide mb-2">Who We Are</h2>
-          <h3 className="text-3xl font-bold text-gray-900 mb-8">Transforming Lives</h3>
+          <h2 className="text-sm text-gray-500 uppercase tracking-wide mb-2">{t('whoWeAre')}</h2>
+          <h3 className="text-3xl font-bold text-gray-900 mb-8">{t('transforming')}</h3>
         </div>
         <div className="grid md:grid-cols-2 gap-8">
           <Link href="/about" className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
