@@ -10,134 +10,244 @@ import Footer from "../../components/Footer";
 export default function DonatePage() {
   const locale = useLocale();
   const t = useTranslations('donatePage');
-  const [mtn, setMtn] = useState<any>(null);
-  const [bank, setBank] = useState<any>(null);
+  const [categories, setCategories] = useState<any>(null);
+  const [step, setStep] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
+  const [donorType, setDonorType] = useState<string>('personal');
+  const [needReceipt, setNeedReceipt] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    additionalNote: ''
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await supabase.from('content_sections').select('*').in('section_key', ['donate_mtn', 'donate_bank']);
-      if (data) {
-        setMtn(data.find(s => s.section_key === 'donate_mtn'));
-        setBank(data.find(s => s.section_key === 'donate_bank'));
-      }
+      const { data } = await supabase.from('content_sections').select('*').eq('section_key', 'donation_categories').single();
+      if (data) setCategories(data);
     };
     fetchData();
   }, []);
+
+  const categoryList = categories?.content[locale]?.split('|') || [];
+
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
       
-      {/* Hero Section */}
-      <div className="relative h-[300px] sm:h-[350px] md:h-[400px] bg-gradient-to-br from-green-800 via-green-700 to-green-600 overflow-hidden">
+      <div className="relative h-[300px] bg-gradient-to-br from-green-800 via-green-700 to-green-600">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-4 md:mb-6">{t('hero')}</h1>
-          <p className="text-base sm:text-xl md:text-2xl text-white/95 max-w-3xl">{t('heroDesc')}</p>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">{t('hero')}</h1>
+          <p className="text-xl md:text-2xl text-white/95 max-w-3xl">{t('heroDesc')}</p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-12 md:py-16 lg:py-20">
+      <div className="max-w-4xl mx-auto px-4 py-12">
         
-        {/* Donation Methods */}
-        <div className="grid md:grid-cols-2 gap-6 md:gap-10 mb-16 md:mb-24 lg:mb-32">
-          
-          {/* Mobile Money */}
-          <div className="bg-gray-50 p-6 sm:p-8 md:p-12 rounded-2xl md:rounded-3xl shadow-xl">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-900">{mtn?.title?.[locale] || t('mobileMoney')}</h3>
-            <div className="space-y-6 md:space-y-8">
-              <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 bg-white p-4 sm:p-6 rounded-xl md:rounded-2xl shadow-sm">
-                <Image src={mtn?.media_urls?.[0] || '/MTN-Rwanda-MoMo-Logo-2 (1).jpg'} alt="MTN" width={80} height={80} className="rounded-xl w-16 h-16 sm:w-20 sm:h-20" />
-                <div className="text-center sm:text-left">
-                  <p className="font-semibold text-gray-800 text-base sm:text-lg mb-2">{t('mtnMobileMoney')}</p>
-                  <p className="text-xl sm:text-2xl md:text-3xl font-bold text-green-600 mb-1 break-all">{mtn?.content?.[locale] || '*182*8*1*1111111#'}</p>
-                </div>
-              </div>
+        {/* Progress Bar */}
+        <div className="mb-12">
+          <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${step >= 1 ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-500'}`}>1</div>
+              <span className={`ml-2 font-semibold ${step >= 1 ? 'text-green-700' : 'text-gray-400'}`}>
+                {locale === 'en' ? 'Category' : locale === 'fr' ? 'Catégorie' : locale === 'rw' ? 'Icyiciro' : 'الفئة'}
+              </span>
             </div>
-          </div>
-
-          {/* Bank Transfer */}
-          <div className="bg-gray-50 p-6 sm:p-8 md:p-12 rounded-2xl md:rounded-3xl shadow-xl">
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-900">{bank?.title?.[locale] || t('bankTransfer')}</h3>
-            <div className="space-y-4 md:space-y-6 bg-white p-6 md:p-8 rounded-xl md:rounded-2xl shadow-sm">
-              {bank?.content?.[locale]?.split('|').map((item: string, i: number) => (
-                <div key={i} className={i > 0 ? 'border-t border-gray-200 pt-4 md:pt-6' : ''}>
-                  <p className="text-xs sm:text-sm text-gray-600 mb-1">{[t('bankName'), t('accountName'), t('accountNumber')][i]}</p>
-                  <p className="font-bold text-base sm:text-lg md:text-xl text-gray-900 break-all">{item}</p>
-                </div>
-              ))}
+            <div className={`h-1 w-16 ${step >= 2 ? 'bg-green-700' : 'bg-gray-200'}`}></div>
+            <div className="flex items-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${step >= 2 ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-500'}`}>2</div>
+              <span className={`ml-2 font-semibold ${step >= 2 ? 'text-green-700' : 'text-gray-400'}`}>
+                {locale === 'en' ? 'Your Info' : locale === 'fr' ? 'Vos infos' : locale === 'rw' ? 'Amakuru yawe' : 'معلوماتك'}
+              </span>
+            </div>
+            <div className={`h-1 w-16 ${step >= 3 ? 'bg-green-700' : 'bg-gray-200'}`}></div>
+            <div className="flex items-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${step >= 3 ? 'bg-green-700 text-white' : 'bg-gray-200 text-gray-500'}`}>3</div>
+              <span className={`ml-2 font-semibold ${step >= 3 ? 'text-green-700' : 'text-gray-400'}`}>
+                {locale === 'en' ? 'Payment' : locale === 'fr' ? 'Paiement' : locale === 'rw' ? 'Kwishyura' : 'الدفع'}
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Impact Section */}
-        <div className="mb-16 md:mb-24 lg:mb-32">
-          <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 md:mb-12 text-center text-gray-900">{t('yourImpact')}</h3>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-            <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 sm:p-8 md:p-10 rounded-2xl md:rounded-3xl text-center shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
-              </div>
-              <p className="font-bold text-3xl md:text-4xl mb-2 md:mb-3 text-green-600">$50</p>
-              <p className="text-gray-700 text-base md:text-lg">{t('schoolMaterials')}</p>
+        {/* Step 1: Category Selection */}
+        {step === 1 && (
+          <div className="bg-white p-8 rounded-2xl shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">
+              {locale === 'en' ? 'Please select the purpose and enter the amount of your donation.' : 
+               locale === 'fr' ? 'Veuillez sélectionner l\'objectif et entrer le montant de votre don.' :
+               locale === 'rw' ? 'Nyamuneka hitamo intego kandi wandike amafaranga y\'impano yawe.' :
+               'يرجى تحديد الغرض وإدخال مبلغ التبرع الخاص بك.'}
+            </h2>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">
+                {locale === 'en' ? 'Select Category' : locale === 'fr' ? 'Sélectionner la catégorie' : locale === 'rw' ? 'Hitamo icyiciro' : 'اختر الفئة'}
+              </label>
+              <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="w-full p-3 border-2 border-gray-300 rounded-lg">
+                <option value="">{locale === 'en' ? 'Choose...' : locale === 'fr' ? 'Choisir...' : locale === 'rw' ? 'Hitamo...' : 'اختر...'}</option>
+                {categoryList.map((cat: string, i: number) => (
+                  <option key={i} value={cat}>{cat}</option>
+                ))}
+              </select>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 sm:p-8 md:p-10 rounded-2xl md:rounded-3xl text-center shadow-lg hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd"/></svg>
+            {selectedCategory && (
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">
+                  {locale === 'en' ? 'Amount ($)' : locale === 'fr' ? 'Montant ($)' : locale === 'rw' ? 'Amafaranga ($)' : 'المبلغ ($)'}
+                </label>
+                <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0.00" className="w-full p-3 border-2 border-gray-300 rounded-lg text-lg" />
               </div>
-              <p className="font-bold text-3xl md:text-4xl mb-2 md:mb-3 text-green-600">$100</p>
-              <p className="text-gray-700 text-base md:text-lg">{t('familyCounseling')}</p>
+            )}
+            <div className="mt-8 flex justify-between items-center p-4 bg-gray-100 rounded-lg">
+              <span className="text-xl font-bold">Total donation</span>
+              <span className="text-2xl font-bold text-green-700">${amount || '0.00'}</span>
             </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 sm:p-8 md:p-10 rounded-2xl md:rounded-3xl text-center shadow-lg hover:shadow-xl transition-shadow sm:col-span-2 md:col-span-1">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd"/></svg>
-              </div>
-              <p className="font-bold text-3xl md:text-4xl mb-2 md:mb-3 text-green-600">$200</p>
-              <p className="text-gray-700 text-base md:text-lg">{t('kitchenGarden')}</p>
-            </div>
+            <button onClick={() => amount && setStep(2)} disabled={!amount || !selectedCategory} className="w-full mt-6 bg-green-700 text-white py-4 rounded-lg font-bold text-lg hover:bg-green-800 disabled:bg-gray-300 disabled:cursor-not-allowed">
+              NEXT →
+            </button>
           </div>
-        </div>
+        )}
 
-        {/* Why Donate Section */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center mb-16 md:mb-24 lg:mb-32">
-          <div className="relative h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl order-2 md:order-1">
-            <Image src="/ufvimages/20.jpg" alt="Community impact" fill className="object-cover" />
-          </div>
-          <div className="order-1 md:order-2">
-            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 md:mb-8 text-gray-900">{t('whySupport')}</h3>
-            <div className="space-y-4 md:space-y-6">
-              <div className="flex items-start gap-3 md:gap-4">
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-green-500 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
-                <div>
-                  <h4 className="font-bold text-lg md:text-xl text-gray-900 mb-1 md:mb-2">{t('directImpact')}</h4>
-                  <p className="text-gray-600 text-sm sm:text-base md:text-lg">{t('directImpactDesc')}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 md:gap-4">
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-green-500 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
-                <div>
-                  <h4 className="font-bold text-lg md:text-xl text-gray-900 mb-1 md:mb-2">{t('transparency')}</h4>
-                  <p className="text-gray-600 text-sm sm:text-base md:text-lg">{t('transparencyDesc')}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 md:gap-4">
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-green-500 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
-                <div>
-                  <h4 className="font-bold text-lg md:text-xl text-gray-900 mb-1 md:mb-2">{t('communityLed')}</h4>
-                  <p className="text-gray-600 text-sm sm:text-base md:text-lg">{t('communityLedDesc')}</p>
-                </div>
+        {/* Step 2: Donor Information */}
+        {step === 2 && (
+          <div className="bg-white p-8 rounded-2xl shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">
+              {locale === 'en' ? 'Your Information' : locale === 'fr' ? 'Vos informations' : locale === 'rw' ? 'Amakuru yawe' : 'معلوماتك'}
+            </h2>
+            
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">
+                {locale === 'en' ? 'Donor Type' : locale === 'fr' ? 'Type de donateur' : locale === 'rw' ? 'Ubwoko bw\'uwatanze' : 'نوع المتبرع'}
+              </label>
+              <div className="flex gap-4">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="personal" checked={donorType === 'personal'} onChange={(e) => setDonorType(e.target.value)} className="w-4 h-4" />
+                  <span>{locale === 'en' ? 'Personal' : locale === 'fr' ? 'Personnel' : locale === 'rw' ? 'Umuntu ku giti cye' : 'شخصي'}</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="company" checked={donorType === 'company'} onChange={(e) => setDonorType(e.target.value)} className="w-4 h-4" />
+                  <span>{locale === 'en' ? 'Company' : locale === 'fr' ? 'Entreprise' : locale === 'rw' ? 'Isosiyete' : 'شركة'}</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" value="ngo" checked={donorType === 'ngo'} onChange={(e) => setDonorType(e.target.value)} className="w-4 h-4" />
+                  <span>{locale === 'en' ? 'NGO' : locale === 'fr' ? 'ONG' : locale === 'rw' ? 'Umuryango' : 'منظمة'}</span>
+                </label>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* CTA Section */}
-        <div className="bg-gradient-to-br from-green-700 to-green-600 rounded-2xl md:rounded-3xl p-8 sm:p-12 md:p-16 text-center text-white shadow-2xl">
-          <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 md:mb-6">{t('togetherTitle')}</h3>
-          <p className="text-base sm:text-lg md:text-2xl mb-6 md:mb-8 max-w-3xl mx-auto">
-            {t('togetherDesc')}
-          </p>
-          <p className="text-lg md:text-xl italic">{t('thankYou')}</p>
-        </div>
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-sm font-medium mb-2">{locale === 'en' ? 'Full Name' : locale === 'fr' ? 'Nom complet' : locale === 'rw' ? 'Amazina yose' : 'الاسم الكامل'} *</label>
+                <input type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-lg" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">{locale === 'en' ? 'Email' : locale === 'fr' ? 'Email' : locale === 'rw' ? 'Imeri' : 'البريد الإلكتروني'} *</label>
+                <input type="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-lg" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">{locale === 'en' ? 'Phone' : locale === 'fr' ? 'Téléphone' : locale === 'rw' ? 'Telefone' : 'الهاتف'}</label>
+                <input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-lg" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">{locale === 'en' ? 'Address' : locale === 'fr' ? 'Adresse' : locale === 'rw' ? 'Aderesi' : 'العنوان'}</label>
+                <input type="text" value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} className="w-full p-3 border-2 border-gray-300 rounded-lg" />
+              </div>
+            </div>
+
+            <div className="mb-6 space-y-3">
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input type="checkbox" checked={needReceipt} onChange={(e) => setNeedReceipt(e.target.checked)} className="w-5 h-5 mt-1" />
+                <span>{locale === 'en' ? 'I need a donation receipt' : locale === 'fr' ? 'J\'ai besoin d\'un reçu de don' : locale === 'rw' ? 'Nkeneye inyemezabwishyu' : 'أحتاج إيصال تبرع'}</span>
+              </label>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">{locale === 'en' ? 'Additional Note' : locale === 'fr' ? 'Note supplémentaire' : locale === 'rw' ? 'Inyongera' : 'ملاحظة إضافية'}</label>
+              <textarea value={formData.additionalNote} onChange={(e) => setFormData({...formData, additionalNote: e.target.value})} rows={3} className="w-full p-3 border-2 border-gray-300 rounded-lg"></textarea>
+            </div>
+
+            <div className="flex gap-4">
+              <button onClick={() => setStep(1)} className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-300">
+                ← BACK
+              </button>
+              <button onClick={() => setStep(3)} disabled={!formData.name || !formData.email} className="flex-1 bg-green-700 text-white py-3 rounded-lg font-bold hover:bg-green-800 disabled:bg-gray-300 disabled:cursor-not-allowed">
+                NEXT →
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Payment Method */}
+        {step === 3 && (
+          <div className="bg-white p-8 rounded-2xl shadow-lg">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">
+              {locale === 'en' ? 'Choose Payment Method' : locale === 'fr' ? 'Choisir la méthode de paiement' : locale === 'rw' ? 'Hitamo uburyo bwo kwishyura' : 'اختر طريقة الدفع'}
+            </h2>
+            <div className="space-y-4 mb-6">
+              <div className="p-6 border-2 border-gray-200 rounded-lg">
+                <h3 className="font-bold text-lg mb-2">MTN Mobile Money</h3>
+                <p className="text-2xl font-bold text-green-600">*182*8*1*1111111#</p>
+              </div>
+              <div className="p-6 border-2 border-gray-200 rounded-lg">
+                <h3 className="font-bold text-lg mb-2">Bank Transfer</h3>
+                <p className="text-sm text-gray-600">Contact us for bank details</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <button onClick={() => setStep(2)} className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-300">
+                ← BACK
+              </button>
+              <button onClick={async () => {
+                await fetch('/api/donations', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    category: selectedCategory,
+                    amount,
+                    donorType,
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: formData.address,
+                    needReceipt,
+                    additionalNote: formData.additionalNote
+                  })
+                });
+                setShowSuccess(true);
+              }} className="flex-1 bg-green-700 text-white py-3 rounded-lg font-bold hover:bg-green-800">
+                COMPLETE DONATION
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Success Message */}
+        {showSuccess && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/></svg>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                {locale === 'en' ? 'Thank You!' : locale === 'fr' ? 'Merci!' : locale === 'rw' ? 'Murakoze!' : 'شكراً لك!'}
+              </h2>
+              <p className="text-lg text-gray-600 mb-6">
+                {locale === 'en' ? 'Your donation has been received. We will contact you shortly with payment instructions.' : 
+                 locale === 'fr' ? 'Votre don a été reçu. Nous vous contacterons bientôt avec les instructions de paiement.' :
+                 locale === 'rw' ? 'Impano yawe yakirijwe. Tuzakumenyesha vuba amabwiriza yo kwishyura.' :
+                 'تم استلام تبرعك. سنتواصل معك قريباً بتعليمات الدفع.'}
+              </p>
+              <button onClick={() => { setShowSuccess(false); setStep(1); setSelectedCategory(''); setAmount(''); setFormData({name: '', email: '', phone: '', address: '', additionalNote: ''}); }} className="bg-green-700 text-white px-8 py-3 rounded-lg font-bold hover:bg-green-800">
+                {locale === 'en' ? 'Close' : locale === 'fr' ? 'Fermer' : locale === 'rw' ? 'Funga' : 'إغلاق'}
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
       
