@@ -1,7 +1,7 @@
 {
   "nav": {
     "about": "Abo Turibo",
-    "programs": "Gahunda Zacu",
+    "programs": "Ibyodukora",
     "impact": "Ibikorwa",
     "blog": "Blog",
     "report": "Raporo",
@@ -74,14 +74,14 @@
     "copyright": "© 2026 Umbrella for Vulnerable. Uburenganzira bwose burarinzwe."
   },
   "contact": {
-    "impactStories": "Inkuru z'Ingaruka Zacu",
+    "impactStories": "Ibikorwa",
     "getInTouch": "Twandikire",
     "getInTouchDesc": "Turi hano kugira ngo duguhe ubufasha kandi tusubize ibibazo byose ushobora kugira. Twiteguye kukumva!",
     "address": "KIGALI, GASABO, KIMIHURURA, RUGANDO, GASASA",
     "addressLine2": "UMUHANDA: KG 652, Kigali, Rwanda, 3047",
     "officeHours": "Amasaha y'Akazi",
     "mondayFriday": "Kuwa mbere - Kuwa gatanu: 9:00 - 17:00",
-    "weekend": "Kuwa gatandatu-Cyumweru: Birafunze",
+    "weekend": "Kuwa gatandatu-Cyumweru: Ntidukora",
     "sendMessage": "Twoherereze Ubutumwa",
     "name": "Izina",
     "email": "Imeri",
@@ -250,12 +250,12 @@
     "thankYou": "Murakoze ku buntu bwanyu no kudushyigikira!"
   },
   "mapSection": {
-    "title": "Inkunga Yacu Umbrella for Vulnerable",
-    "description": "Kuko tuzi ko n'ubwo gahunda nziza ari nziza gusa nk'abantu bayikorera. Niyo mpamvu dutanga inkunga yuzuye, guha imbaraga abaturage, n'ibisubizo birambye bikora ingaruka zirambye mu miryango yoroshye yo mu Rwanda.",
+    "title": "Shyigikira Umbrella for Vulnerable",
+    "description": "Umbrella for Vulnerable ishimira cyane imiryango n'abantu badufasha.",
     "learnMore": "MENYA BYINSHI",
     "joinUsNow": "DUFATANYE UBU",
-    "communityTitle": "Twizera ko imbaraga zo kwitabira abaturage zituma habaho impinduka nziza. 🇷🇼",
-    "communityDescription": "Niyo mpamvu dukorana cyane n'abayobozi b'ibanze, abatanga serivisi z'ubuzima, n'abaturage kugira ngo gahunda zacu zihuze n'ibikenewe by'abantu dukorera."
+    "communityTitle": "Twizera imbaraga zo kugira uruhare mu miryango mu gutera imbere impinduka nziza. 🇷🇼",
+    "communityDescription": "Ni yo mpamvu dukorana hafi n'abayobozi b'ibanze, abatanga serivisi z'ubuzima, n'abaturage kugira ngo tugenzure ko gahunda zacu zihuza n'ibikenewe by'abantu dukorera."
   },
   "galleryPage": {
     "hero": "Amafoto",

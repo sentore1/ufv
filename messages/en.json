@@ -1,6 +1,6 @@
 {
   "nav": {
-    "about": "About Us",
+    "about": "Who we are",
     "programs": "What we do",
     "impact": "Impact",
     "blog": "Blog",
@@ -74,7 +74,7 @@
     "copyright": "© 2026 Umbrella for Vulnerable. All rights reserved."
   },
   "contact": {
-    "impactStories": "Our Impact Stories",
+    "impactStories": "Activities",
     "getInTouch": "Get in Touch",
     "getInTouchDesc": "We're here to help and answer any question you might have. We look forward to hearing from you!",
     "address": "KIGALI, GASABO, KIMIHURURA, RUGANDO, GASASA",

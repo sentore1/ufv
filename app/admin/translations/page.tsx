@@ -157,10 +157,13 @@ export default function TranslationsAdmin() {
             <div className="text-sm text-gray-600">
               Languages: {languages.map(l => <span key={l} className="inline-block bg-gray-200 px-2 py-1 rounded mr-2">{l}</span>)}
             </div>
-            <button onClick={saveTranslations} className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-700 font-semibold">
-              Save All Translations
-            </button>
           </div>
+        </div>
+
+        <div className="mb-6 flex justify-end">
+          <button onClick={saveTranslations} className="bg-green-800 text-white px-8 py-3 rounded-lg hover:bg-green-700 font-bold text-lg shadow-lg">
+            💾 Save All Translations
+          </button>
         </div>
 
         <div className="space-y-4">

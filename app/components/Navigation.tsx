@@ -55,22 +55,18 @@ export default function Navigation() {
               isScrolled ? 'text-gray-700' : 'text-white'
             }`}>{t('about')}</Link>
             <div className="relative" onMouseEnter={() => setProgramsOpen(true)} onMouseLeave={() => setProgramsOpen(false)}>
-              <Link href="/programs" className={`text-sm hover:text-green-700 ${
+              <button className={`text-sm hover:text-green-700 ${
                 isScrolled ? 'text-gray-700' : 'text-white'
-              }`}>{t('programs')}</Link>
+              }`}>{t('programs')}</button>
               {programsOpen && (
-                <div className="absolute top-full left-0 pt-2 w-64 z-50">
+                <div className="absolute top-full left-0 pt-2 w-48 z-50">
                   <div className="bg-white/95 backdrop-blur-md shadow-lg rounded-lg py-2">
-                  <Link href="/programs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('programs')}</Link>
-                  <Link href="/about" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('about')}</Link>
-                  <Link href="/impact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('impact')}</Link>
+                    <Link href="/programs" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('programs')}</Link>
+                    <Link href="/impact" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50">{t('impact')}</Link>
                   </div>
                 </div>
               )}
             </div>
-            <Link href="/impact" className={`text-sm hover:text-green-700 ${
-              isScrolled ? 'text-gray-700' : 'text-white'
-            }`}>{t('impact')}</Link>
             <Link href="/blog" className={`text-sm hover:text-green-700 ${
               isScrolled ? 'text-gray-700' : 'text-white'
             }`}>{t('blog')}</Link>
@@ -137,18 +133,12 @@ export default function Navigation() {
                   <Link href="/programs" className={`block px-4 py-2 text-sm hover:bg-green-50 ${
                     isScrolled ? 'text-gray-600' : 'text-white/90'
                   }`}>{t('programs')}</Link>
-                  <Link href="/about" className={`block px-4 py-2 text-sm hover:bg-green-50 ${
-                    isScrolled ? 'text-gray-600' : 'text-white/90'
-                  }`}>{t('about')}</Link>
                   <Link href="/impact" className={`block px-4 py-2 text-sm hover:bg-green-50 ${
                     isScrolled ? 'text-gray-600' : 'text-white/90'
                   }`}>{t('impact')}</Link>
                 </div>
               )}
             </div>
-            <Link href="/impact" className={`block px-4 py-2 hover:bg-green-50 ${
-              isScrolled ? 'text-gray-700' : 'text-white'
-            }`}>{t('impact')}</Link>
             <Link href="/blog" className={`block px-4 py-2 hover:bg-green-50 ${
               isScrolled ? 'text-gray-700' : 'text-white'
             }`}>{t('blog')}</Link>
