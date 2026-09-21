@@ -36,7 +36,6 @@ interface WorkshopRegistration {
 interface CertificateData {
   participantName: string;
   certificateNumber: string;
-  qrCodeDataUrl: string;
   verificationUrl: string;
   directors: Array<{
     full_name: string;

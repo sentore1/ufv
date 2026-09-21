@@ -368,7 +368,7 @@ export default function CertificateDirectorsAdmin() {
 
       {/* Certificate Preview Info */}
       <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h3 className="text-lg font-bold text-blue-900 mb-2">ℹ️ Certificate Layout</h3>
+        <h3 className="text-lg font-bold text-blue-900 mb-2">Certificate Layout</h3>
         <p className="text-sm text-blue-800 mb-4">
           Director signatures will appear at the bottom of the certificate in three positions:
         </p>
@@ -395,8 +395,8 @@ export default function CertificateDirectorsAdmin() {
             </div>
           </div>
         </div>
-        <p className="text-xs text-blue-700 mt-4">
-          💡 Tip: Only active directors will appear on generated certificates. Use "Display Order" to control the order within each position.
+        <p className="text-xs bg-blue-100 text-blue-800 mt-4 p-3 rounded">
+          Tip: Only active directors will appear on generated certificates. Use "Display Order" to control the order within each position.
         </p>
       </div>
     </div>

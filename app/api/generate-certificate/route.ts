@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import QRCode from "qrcode";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 interface CertificateDirector {
@@ -80,16 +78,8 @@ export async function POST(request: NextRequest) {
       console.error("Error fetching directors:", dirError);
     }
 
-    // Generate QR code for verification
+    // Generate verification URL for QR code (client will generate QR)
     const verificationUrl = `${request.nextUrl.origin}/verify-certificate?code=${certificateNumber}`;
-    const qrCodeDataUrl = await QRCode.toDataURL(verificationUrl, {
-      width: 200,
-      margin: 1,
-      color: {
-        dark: "#000000",
-        light: "#ffffff",
-      },
-    });
 
     // Return certificate data for client-side rendering
     return NextResponse.json({
@@ -97,7 +87,6 @@ export async function POST(request: NextRequest) {
       certificateData: {
         participantName: registration.full_name,
         certificateNumber: certificateNumber,
-        qrCodeDataUrl: qrCodeDataUrl,
         verificationUrl: verificationUrl,
         directors: (directors || []) as CertificateDirector[],
         issueDate: registration.certificate_generated_at || new Date().toISOString(),
