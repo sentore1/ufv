@@ -43,6 +43,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button onClick={() => router.push('/admin/workshop-settings')} className={`w-full text-left px-4 py-3 rounded ${pathname === '/admin/workshop-settings' ? 'bg-purple-600 text-white' : 'hover:bg-gray-100'}`}>
               Workshop Settings
             </button>
+            <button onClick={() => router.push('/admin/certificate-directors')} className={`w-full text-left px-4 py-3 rounded ${pathname === '/admin/certificate-directors' ? 'bg-teal-600 text-white' : 'hover:bg-gray-100'}`}>
+              Certificate Directors
+            </button>
             <button onClick={() => { localStorage.removeItem('adminAuth'); router.push('/admin'); }} className="w-full text-left px-4 py-3 rounded text-red-600 hover:bg-red-50 mt-4">
               Logout
             </button>

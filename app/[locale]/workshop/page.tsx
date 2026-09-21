@@ -119,29 +119,18 @@ export default function WorkshopRegistration() {
     phone: "",
     emergency_contact: "",
 
-    // Section D: Travel & Accommodation
+    // Section D: Travel (removed accommodation and dates)
     country_of_departure: "",
-    arrival_date: "",
-    departure_date: "",
-    accommodation_required: false,
-    airport_pickup_required: false,
 
     // Section E: Language & Participation
     preferred_languages: [] as string[],
     interpretation_required: false,
 
-    // Section F: Dietary & Special Needs
+    // Section F: Dietary Requirements (removed allergies and special needs)
     dietary_requirements: "",
-    allergies_conditions: "",
-    special_needs: "",
 
-    // Section G: Expectations
-    expectations: "",
+    // Section G: Capacity Building (removed expectations)
     capacity_building_areas: [] as string[],
-
-    // Section H: Declaration
-    signature_name: "",
-    signature_date: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -479,10 +468,10 @@ export default function WorkshopRegistration() {
             </div>
           </div>
 
-          {/* Section D: Travel & Accommodation */}
+          {/* Section D: Travel Information */}
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h3 className="text-xl font-bold text-gray-800 mb-6">{t('sectionD')}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">{t('countryOfDeparture')}</label>
                 <input
@@ -492,82 +481,6 @@ export default function WorkshopRegistration() {
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('arrivalDate')}</label>
-                <input
-                  type="date"
-                  name="arrival_date"
-                  value={formData.arrival_date}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('departureDate')}</label>
-                <input
-                  type="date"
-                  name="departure_date"
-                  value={formData.departure_date}
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div className="md:col-span-2 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('accommodationRequired')}</label>
-                  <div className="flex gap-6">
-                    <label className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        name="accommodation_required"
-                        value="true"
-                        checked={formData.accommodation_required === true}
-                        onChange={(e) => setFormData(prev => ({ ...prev, accommodation_required: true }))}
-                        className="text-green-600 focus:ring-green-500"
-                      />
-                      <span className="text-sm">{t('yes')}</span>
-                    </label>
-                    <label className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        name="accommodation_required"
-                        value="false"
-                        checked={formData.accommodation_required === false}
-                        onChange={(e) => setFormData(prev => ({ ...prev, accommodation_required: false }))}
-                        className="text-green-600 focus:ring-green-500"
-                      />
-                      <span className="text-sm">{t('no')}</span>
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('airportPickupRequired')}</label>
-                  <div className="flex gap-6">
-                    <label className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        name="airport_pickup_required"
-                        value="true"
-                        checked={formData.airport_pickup_required === true}
-                        onChange={(e) => setFormData(prev => ({ ...prev, airport_pickup_required: true }))}
-                        className="text-green-600 focus:ring-green-500"
-                      />
-                      <span className="text-sm">{t('yes')}</span>
-                    </label>
-                    <label className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        name="airport_pickup_required"
-                        value="false"
-                        checked={formData.airport_pickup_required === false}
-                        onChange={(e) => setFormData(prev => ({ ...prev, airport_pickup_required: false }))}
-                        className="text-green-600 focus:ring-green-500"
-                      />
-                      <span className="text-sm">{t('no')}</span>
-                    </label>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -628,7 +541,7 @@ export default function WorkshopRegistration() {
             </div>
           </div>
 
-          {/* Section F: Dietary & Special Needs */}
+          {/* Section F: Dietary Requirements */}
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h3 className="text-xl font-bold text-gray-800 mb-6">{t('sectionF')}</h3>
             <div className="space-y-6">
@@ -654,43 +567,13 @@ export default function WorkshopRegistration() {
                   ))}
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('allergiesConditions')}</label>
-                <textarea
-                  name="allergies_conditions"
-                  value={formData.allergies_conditions}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('specialNeeds')}</label>
-                <textarea
-                  name="special_needs"
-                  value={formData.special_needs}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
             </div>
           </div>
 
-          {/* Section G: Expectations */}
+          {/* Section G: Capacity Building */}
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h3 className="text-xl font-bold text-gray-800 mb-6">{t('sectionG')}</h3>
             <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('expectations')}</label>
-                <textarea
-                  name="expectations"
-                  value={formData.expectations}
-                  onChange={handleChange}
-                  rows={5}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-3">{t('capacityBuildingAreas')}</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -713,38 +596,6 @@ export default function WorkshopRegistration() {
                     </label>
                   ))}
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Section H: Declaration */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-xl font-bold text-gray-800 mb-6">{t('sectionH')}</h3>
-            <p className="text-sm text-gray-700 mb-6 italic">
-              {t('declarationText')}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('name')} *</label>
-                <input
-                  type="text"
-                  name="signature_name"
-                  value={formData.signature_name}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">{t('date')} *</label>
-                <input
-                  type="date"
-                  name="signature_date"
-                  value={formData.signature_date}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
               </div>
             </div>
           </div>
