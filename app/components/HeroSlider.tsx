@@ -89,7 +89,7 @@ export default function HeroSlider() {
           ))}
         </div>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-black/20"></div>
       <div className="relative h-full flex items-end justify-center md:justify-end px-4">
         <div className="w-full md:max-w-2xl pb-12 md:pb-16">
           <div className="w-full">

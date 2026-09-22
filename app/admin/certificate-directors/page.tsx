@@ -14,6 +14,10 @@ interface CertificateDirector {
   signature_position: number;
   is_active: boolean;
   display_order: number;
+  position_x: number;
+  position_y: number;
+  font_size_name: number;
+  font_size_role: number;
   created_at: string;
   updated_at: string;
 }
@@ -30,6 +34,10 @@ export default function CertificateDirectorsAdmin() {
     signature_position: 1,
     is_active: true,
     display_order: 1,
+    position_x: 500,
+    position_y: 2210,
+    font_size_name: 42,
+    font_size_role: 38,
   });
 
   useEffect(() => {
@@ -63,12 +71,17 @@ export default function CertificateDirectorsAdmin() {
   const handleAdd = () => {
     setIsAddingNew(true);
     setEditingDirector(null);
+    const defaultX = directors.length === 0 ? 500 : directors.length === 1 ? 1754 : 2600;
     setFormData({
       full_name: "",
       role: "",
-      signature_position: 1,
+      signature_position: directors.length + 1,
       is_active: true,
       display_order: directors.length + 1,
+      position_x: defaultX,
+      position_y: 2210,
+      font_size_name: 42,
+      font_size_role: 38,
     });
   };
 
@@ -81,6 +94,10 @@ export default function CertificateDirectorsAdmin() {
       signature_position: director.signature_position,
       is_active: director.is_active,
       display_order: director.display_order,
+      position_x: director.position_x || 500,
+      position_y: director.position_y || 2210,
+      font_size_name: director.font_size_name || 42,
+      font_size_role: director.font_size_role || 38,
     });
   };
 
@@ -93,6 +110,10 @@ export default function CertificateDirectorsAdmin() {
       signature_position: 1,
       is_active: true,
       display_order: 1,
+      position_x: 500,
+      position_y: 2210,
+      font_size_name: 42,
+      font_size_role: 38,
     });
   };
 
@@ -251,6 +272,76 @@ export default function CertificateDirectorsAdmin() {
                 onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
+            </div>
+
+            <div className="md:col-span-2">
+              <h3 className="text-md font-semibold text-gray-700 mb-3 mt-4">Position on Certificate</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    X Position (Horizontal)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="3508"
+                    step="10"
+                    value={formData.position_x}
+                    onChange={(e) => setFormData({ ...formData, position_x: parseInt(e.target.value) })}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">0-3508 pixels (canvas width)</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Y Position (Vertical)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="2480"
+                    step="10"
+                    value={formData.position_y}
+                    onChange={(e) => setFormData({ ...formData, position_y: parseInt(e.target.value) })}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">0-2480 pixels (canvas height)</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="md:col-span-2">
+              <h3 className="text-md font-semibold text-gray-700 mb-3 mt-4">Font Sizes</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Name Font Size
+                  </label>
+                  <input
+                    type="number"
+                    min="20"
+                    max="100"
+                    value={formData.font_size_name}
+                    onChange={(e) => setFormData({ ...formData, font_size_name: parseInt(e.target.value) })}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Default: 42px</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Role Font Size
+                  </label>
+                  <input
+                    type="number"
+                    min="20"
+                    max="100"
+                    value={formData.font_size_role}
+                    onChange={(e) => setFormData({ ...formData, font_size_role: parseInt(e.target.value) })}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Default: 38px</p>
+                </div>
+              </div>
             </div>
 
             <div className="md:col-span-2">

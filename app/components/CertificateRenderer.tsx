@@ -8,6 +8,10 @@ interface Director {
   role: string;
   signature_position: number;
   display_order: number;
+  position_x?: number;
+  position_y?: number;
+  font_size_name?: number;
+  font_size_role?: number;
 }
 
 interface CertificateData {
@@ -69,24 +73,19 @@ export default function CertificateRenderer({
           ctx.textAlign = "center";
           ctx.fillStyle = "#000000";
 
-          // Draw participant name (lowercase, with handwritten script font like Amsterdam)
-          // Moved up more
-          const participantNameLower = certificateData.participantName.toLowerCase();
-          ctx.font = "italic 130px 'Brush Script MT', 'Lucida Handwriting', 'Segoe Script', cursive";
+          // Draw participant name (capitalize first letter of each word, rest lowercase)
+          // Increased size and moved down
+          const participantName = certificateData.participantName
+            .toLowerCase()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+          ctx.font = "italic 200px 'Brush Script MT', 'Lucida Handwriting', 'Segoe Script', cursive";
           ctx.fillText(
-            participantNameLower,
+            participantName,
             canvas.width / 2,
-            canvas.height / 2 - 150 // Moved up from -50 to -150 (100px more up)
+            canvas.height / 2 - 80 // Moved down from -150 to -80
           );
-
-          // Draw decorative line under name
-          ctx.strokeStyle = "#16a34a";
-          ctx.lineWidth = 5;
-          ctx.beginPath();
-          const lineY = canvas.height / 2 - 100; // Adjusted to follow name
-          ctx.moveTo(canvas.width / 2 - 500, lineY);
-          ctx.lineTo(canvas.width / 2 + 500, lineY);
-          ctx.stroke();
 
           // Generate QR code with custom color
           const qrCodeDataUrlColored = await QRCode.toDataURL(certificateData.verificationUrl, {
@@ -98,94 +97,55 @@ export default function CertificateRenderer({
             },
           });
 
-          // Load and draw QR code (bottom right, moved left more)
+          // Load and draw QR code (bottom right, moved left more and increased size)
           const qrImg = new Image();
           qrImg.onload = () => {
-            const qrSize = 200;
-            const qrX = canvas.width - qrSize - 400; // Moved more left from 250 to 400
+            const qrSize = 320; // Increased from 280 to 320
+            const qrX = canvas.width - qrSize - 500; // Moved more left from 400 to 500
             const qrY = canvas.height - qrSize - 350;
 
             // Draw QR code
             ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
             // Draw certificate number below QR code
-            ctx.font = "bold 35px Arial";
+            ctx.font = "bold 40px Arial"; // Increased font size
             ctx.textAlign = "center";
             ctx.fillStyle = "#000000";
             ctx.fillText(
               certificateData.certificateNumber,
               qrX + qrSize / 2,
-              qrY + qrSize + 40
+              qrY + qrSize + 50
             );
           };
           qrImg.src = qrCodeDataUrlColored;
 
-          // Draw director signatures on the three horizontal lines at bottom
-          // Adjusted to match the horizontal lines, moved up, and increased size
-          const signatureY = 2180; // Moved up from 2205 to 2180
-          const lineWidth = 440;
-
-          // Group directors by position
-          const leftDirectors = certificateData.directors.filter(
-            (d) => d.signature_position === 1
-          );
-          const centerDirectors = certificateData.directors.filter(
-            (d) => d.signature_position === 2
-          );
-          const rightDirectors = certificateData.directors.filter(
-            (d) => d.signature_position === 3
-          );
-
+          // Draw director signatures using their stored positions
           ctx.fillStyle = "#000000";
+          ctx.strokeStyle = "#000000";
 
-          // Calculate spacing to distribute directors more evenly
-          const totalWidth = 2400; // Total width for all three positions
-          const startX = (canvas.width - totalWidth) / 2; // Center the group
-          const spacing = totalWidth / 2; // Space between positions
+          // Draw all directors using their custom positions
+          certificateData.directors.forEach((director, index) => {
+            const x = director.position_x || 1754; // Default to center if not set
+            const y = director.position_y || 2210; // Default Y position
+            const fontSizeName = director.font_size_name || 42;
+            const fontSizeRole = director.font_size_role || 38;
+            const lineWidth = 500; // Increased width of the horizontal line
 
-          // Draw left signatures (closer spacing)
-          leftDirectors.forEach((director, index) => {
-            const x = startX + 300; // First position
-            const y = signatureY + index * 50;
+            // Draw horizontal line above the director name (100px above)
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(x - lineWidth / 2, y - 100); // Line at 100px above
+            ctx.lineTo(x + lineWidth / 2, y - 100);
+            ctx.stroke();
 
-            // Draw name (above the line) - increased size
+            // Draw director name (below the line)
             ctx.textAlign = "center";
-            ctx.font = "bold 42px Arial";
-            ctx.fillText(director.full_name, x, y - 15);
+            ctx.font = `bold ${fontSizeName}px 'Open Sans', Arial, sans-serif`;
+            ctx.fillText(director.full_name, x, y - 10); // Name below the line
 
-            // Draw role (below the line) - increased size
-            ctx.font = "38px Arial";
-            ctx.fillText(director.role, x, y + 25);
-          });
-
-          // Draw center signatures
-          centerDirectors.forEach((director, index) => {
-            const x = startX + 300 + spacing; // Second position (middle)
-            const y = signatureY + index * 50;
-
-            // Draw name (above the line) - increased size
-            ctx.textAlign = "center";
-            ctx.font = "bold 42px Arial";
-            ctx.fillText(director.full_name, x, y - 15);
-
-            // Draw role (below the line) - increased size
-            ctx.font = "38px Arial";
-            ctx.fillText(director.role, x, y + 25);
-          });
-
-          // Draw right signatures
-          rightDirectors.forEach((director, index) => {
-            const x = startX + 300 + spacing * 2; // Third position (right)
-            const y = signatureY + index * 50;
-
-            // Draw name (above the line) - increased size
-            ctx.textAlign = "center";
-            ctx.font = "bold 42px Arial";
-            ctx.fillText(director.full_name, x, y - 15);
-
-            // Draw role (below the line) - increased size
-            ctx.font = "38px Arial";
-            ctx.fillText(director.role, x, y + 25);
+            // Draw role (below the name with more space)
+            ctx.font = `${fontSizeRole}px 'Open Sans', Arial, sans-serif`;
+            ctx.fillText(director.role, x, y + 45); // Increased from 30 to 45 for more space
           });
 
           setIsLoading(false);

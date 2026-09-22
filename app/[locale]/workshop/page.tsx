@@ -161,20 +161,51 @@ export default function WorkshopRegistration() {
     setSubmitting(true);
 
     try {
-      const { error } = await supabase
+      // Prepare data with only the fields that exist in the current table
+      const submissionData = {
+        full_name: formData.full_name,
+        gender: formData.gender || null,
+        date_of_birth: formData.date_of_birth || null,
+        nationality: formData.nationality || null,
+        country_of_residence: formData.country_of_residence || null,
+        passport_number: formData.passport_number || null,
+        organization_name: formData.organization_name,
+        organization_type: formData.organization_type || null,
+        position_title: formData.position_title || null,
+        years_experience: formData.years_experience || null,
+        email: formData.email,
+        phone: formData.phone,
+        emergency_contact: formData.emergency_contact || null,
+        country_of_departure: formData.country_of_departure || null,
+        preferred_languages: formData.preferred_languages,
+        interpretation_required: formData.interpretation_required,
+        dietary_requirements: formData.dietary_requirements || null,
+        capacity_building_areas: formData.capacity_building_areas,
+      };
+
+      console.log("Submitting registration data:", submissionData);
+
+      const { data, error } = await supabase
         .from("workshop_registrations")
-        .insert([formData]);
+        .insert([submissionData])
+        .select();
 
       if (error) {
         console.error("Error submitting registration:", error);
-        alert("Failed to submit registration. Please try again.");
+        console.error("Error details:", {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+        alert(`Failed to submit registration: ${error.message || 'Please try again.'}`);
       } else {
+        console.log("Registration successful:", data);
         setSubmitted(true);
-        alert("Registration submitted successfully!");
       }
     } catch (err) {
       console.error("Unexpected error:", err);
-      alert("An unexpected error occurred. Please try again.");
+      alert("An unexpected error occurred. Please check your internet connection and try again.");
     } finally {
       setSubmitting(false);
     }

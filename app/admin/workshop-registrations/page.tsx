@@ -87,8 +87,13 @@ export default function WorkshopRegistrationsAdmin() {
   };
 
   const handleGenerateCertificate = async (registration: WorkshopRegistration) => {
+    console.log("=== Generate Certificate Clicked ===");
+    console.log("Registration ID:", registration.id);
+    console.log("Registration Name:", registration.full_name);
+    
     setGeneratingCertificate(true);
     try {
+      console.log("Calling API...");
       const response = await fetch("/api/generate-certificate", {
         method: "POST",
         headers: {
@@ -97,22 +102,30 @@ export default function WorkshopRegistrationsAdmin() {
         body: JSON.stringify({ registrationId: registration.id }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to generate certificate");
-      }
-
+      console.log("API Response Status:", response.status);
       const data = await response.json();
+      console.log("API Response Data:", data);
+
+      if (!response.ok) {
+        console.error("API Error:", data);
+        throw new Error(data.error || "Failed to generate certificate");
+      }
       
       if (data.success) {
+        console.log("✅ Certificate generated successfully!");
+        console.log("Certificate Number:", data.certificateData.certificateNumber);
+        
         setCertificateData(data.certificateData);
         setShowCertificateModal(true);
         
         // Refresh registrations to show updated certificate_number
+        console.log("Refreshing registrations list...");
         await fetchRegistrations();
         
         // Update selected registration
         const updatedReg = registrations.find(r => r.id === registration.id);
         if (updatedReg) {
+          console.log("Updating selected registration with certificate number");
           setSelectedRegistration({
             ...updatedReg,
             certificate_number: data.certificateData.certificateNumber,
@@ -120,13 +133,15 @@ export default function WorkshopRegistrationsAdmin() {
           });
         }
       } else {
+        console.error("❌ API returned success=false");
         alert("Failed to generate certificate");
       }
     } catch (error) {
-      console.error("Error generating certificate:", error);
-      alert("Failed to generate certificate. Please try again.");
+      console.error("❌ Error generating certificate:", error);
+      alert(`Failed to generate certificate. Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setGeneratingCertificate(false);
+      console.log("=== Generate Certificate Complete ===");
     }
   };
 
@@ -179,33 +194,79 @@ export default function WorkshopRegistrationsAdmin() {
 
   const exportToCSV = () => {
     const headers = [
-      "Full Name", "Email", "Phone", "Organization", "Organization Type", "Position",
-      "Gender", "Nationality", "Country of Residence", "Passport Number", "Date of Birth",
-      "Years Experience", "Emergency Contact", "Country of Departure",
-      "Preferred Languages", "Interpretation Required", "Dietary Requirements",
-      "Capacity Building Areas", "Registration Date"
+      // Section A: Personal Information
+      "Full Name",
+      "Gender",
+      "Date of Birth",
+      "Nationality",
+      "Country of Residence",
+      "Passport/ID Number",
+      
+      // Section B: Organization Details
+      "Organization Name",
+      "Organization Type",
+      "Position Title",
+      "Years of Experience",
+      
+      // Section C: Contact Information
+      "Email Address",
+      "Phone Number",
+      "Emergency Contact",
+      
+      // Section D: Travel Information
+      "Country of Departure",
+      
+      // Section E: Language & Participation
+      "Preferred Languages",
+      "Interpretation Required",
+      
+      // Section F: Dietary Requirements
+      "Dietary Requirements",
+      
+      // Section G: Capacity Building
+      "Capacity Building Areas",
+      
+      // Metadata
+      "Registration Date",
+      "Certificate Number"
     ];
 
     const rows = registrations.map(reg => [
+      // Section A: Personal Information
       reg.full_name,
-      reg.email,
-      reg.phone,
-      reg.organization_name,
-      reg.organization_type || "",
-      reg.position_title || "",
       reg.gender || "",
+      reg.date_of_birth || "",
       reg.nationality || "",
       reg.country_of_residence || "",
       reg.passport_number || "",
-      reg.date_of_birth || "",
+      
+      // Section B: Organization Details
+      reg.organization_name,
+      reg.organization_type || "",
+      reg.position_title || "",
       reg.years_experience || "",
+      
+      // Section C: Contact Information
+      reg.email,
+      reg.phone,
       reg.emergency_contact || "",
+      
+      // Section D: Travel Information
       reg.country_of_departure || "",
+      
+      // Section E: Language & Participation
       reg.preferred_languages?.join("; ") || "",
       reg.interpretation_required ? "Yes" : "No",
+      
+      // Section F: Dietary Requirements
       reg.dietary_requirements || "",
+      
+      // Section G: Capacity Building
       reg.capacity_building_areas?.join("; ") || "",
-      new Date(reg.created_at).toLocaleString()
+      
+      // Metadata
+      new Date(reg.created_at).toLocaleString(),
+      reg.certificate_number || ""
     ]);
 
     const csvContent = [
@@ -222,6 +283,272 @@ export default function WorkshopRegistrationsAdmin() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const generateAttendanceSheet = (format: 'landscape' | 'portrait' = 'landscape') => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('Please allow popups to generate attendance sheet');
+      return;
+    }
+
+    // Get absolute URLs for logos
+    const baseUrl = window.location.origin;
+    const ufvLogo = `${baseUrl}/partners/UFV.png`;
+    const isdbLogo = `${baseUrl}/partners/isDB.JPG`;
+    const sifLogo = `${baseUrl}/partners/SIF.png`;
+
+    const isLandscape = format === 'landscape';
+    
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Workshop Attendance Sheet - ${isLandscape ? 'Landscape' : 'A4 Portrait'}</title>
+        <style>
+          @media print {
+            body { margin: 0; }
+            @page { size: ${isLandscape ? 'landscape' : 'A4 portrait'}; margin: 15mm; }
+            .no-print { display: none; }
+          }
+          body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: white;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #16a34a;
+            padding-bottom: 15px;
+          }
+          .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: ${isLandscape ? '50px' : '30px'};
+            margin-bottom: 15px;
+          }
+          .logos img {
+            height: ${isLandscape ? '70px' : '50px'};
+            max-width: ${isLandscape ? '150px' : '100px'};
+            object-fit: contain;
+          }
+          h1 {
+            color: #16a34a;
+            font-size: ${isLandscape ? '24px' : '20px'};
+            margin: 10px 0;
+          }
+          .info-section {
+            display: grid;
+            grid-template-columns: ${isLandscape ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)'};
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+          }
+          .info-item {
+            font-size: ${isLandscape ? '11px' : '10px'};
+          }
+          .info-label {
+            font-weight: bold;
+            color: #16a34a;
+            margin-bottom: 3px;
+          }
+          .info-value {
+            color: #333;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: ${isLandscape ? '10px' : '9px'};
+          }
+          th, td {
+            border: 1px solid #000;
+            padding: ${isLandscape ? '6px 4px' : '5px 3px'};
+            text-align: left;
+          }
+          th {
+            background: #16a34a;
+            color: white;
+            font-weight: bold;
+            font-size: ${isLandscape ? '10px' : '9px'};
+          }
+          .signature-col {
+            width: ${isLandscape ? '120px' : '100px'};
+          }
+          .no-col {
+            width: 35px;
+            text-align: center;
+          }
+          .name-col {
+            width: ${isLandscape ? '160px' : '140px'};
+          }
+          .org-col {
+            width: ${isLandscape ? '140px' : '120px'};
+          }
+          .position-col {
+            width: ${isLandscape ? '120px' : '100px'};
+          }
+          .country-col {
+            width: ${isLandscape ? '80px' : '70px'};
+          }
+          .phone-col {
+            width: ${isLandscape ? '100px' : '90px'};
+          }
+          tr:nth-child(even) {
+            background: #f9f9f9;
+          }
+          .footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #16a34a;
+            font-size: ${isLandscape ? '11px' : '10px'};
+          }
+          .signature-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 30px;
+          }
+          .signature-box {
+            text-align: center;
+          }
+          .signature-line {
+            border-top: 2px solid #000;
+            margin-top: 40px;
+            padding-top: 5px;
+          }
+          .print-button {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 20px auto;
+            display: block;
+          }
+          .print-button:hover {
+            background: #15803d;
+          }
+        </style>
+      </head>
+      <body>
+        <button class="print-button no-print" onclick="window.print()">Print Attendance Sheet (${isLandscape ? 'Landscape' : 'A4 Portrait'})</button>
+
+        <div class="header">
+          <div class="logos">
+            <img src="${ufvLogo}" alt="UFV" crossorigin="anonymous">
+            <img src="${isdbLogo}" alt="IsDB" crossorigin="anonymous">
+            <img src="${sifLogo}" alt="SIF" crossorigin="anonymous">
+          </div>
+          <h1>WORKSHOP ATTENDANCE SHEET</h1>
+          <p style="margin: 5px 0; color: #666; font-size: ${isLandscape ? '13px' : '11px'};">
+            Regional Capacity Building Project for Local NGOs Dealing with Muslim Communities in Africa
+          </p>
+        </div>
+
+        <div class="info-section">
+          <div class="info-item">
+            <div class="info-label">Workshop Date:</div>
+            <div class="info-value">${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Location:</div>
+            <div class="info-value">Kigali, Rwanda</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Total Participants:</div>
+            <div class="info-value">${registrations.length} Registered</div>
+          </div>
+          ${isLandscape ? `
+          <div class="info-item">
+            <div class="info-label">Sheet Generated:</div>
+            <div class="info-value">${new Date().toLocaleString()}</div>
+          </div>
+          ` : ''}
+          <div class="info-item">
+            <div class="info-label">Session:</div>
+            <div class="info-value">☐ Morning  ☐ Afternoon  ☐ Full Day</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Facilitator:</div>
+            <div class="info-value">_____________________</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th class="no-col">No.</th>
+              <th class="name-col">Full Name</th>
+              <th class="org-col">Organization</th>
+              ${isLandscape ? '<th class="position-col">Position</th>' : ''}
+              <th class="country-col">Country</th>
+              ${isLandscape ? '<th class="phone-col">Phone</th>' : ''}
+              <th class="signature-col">Signature</th>
+              <th style="width: ${isLandscape ? '60px' : '50px'};">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${registrations.map((reg, index) => `
+              <tr>
+                <td class="no-col">${index + 1}</td>
+                <td>${reg.full_name}</td>
+                <td style="font-size: ${isLandscape ? '9px' : '8px'};">${reg.organization_name}</td>
+                ${isLandscape ? `<td style="font-size: 9px;">${reg.position_title || 'N/A'}</td>` : ''}
+                <td>${reg.country_of_residence || reg.nationality || 'N/A'}</td>
+                ${isLandscape ? `<td style="font-size: 9px;">${reg.phone}</td>` : ''}
+                <td class="signature-col"></td>
+                <td></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="footer">
+          <p style="margin-bottom: 10px;">
+            <strong>Instructions for Participants:</strong>
+          </p>
+          <ul style="margin: 5px 0; padding-left: 20px; line-height: 1.6;">
+            <li>Please sign in the <strong>Signature</strong> column upon arrival</li>
+            <li>Write your arrival time in the <strong>Time</strong> column</li>
+            <li>Ensure your information is correct</li>
+          </ul>
+
+          <div class="signature-section">
+            <div class="signature-box">
+              <div class="signature-line">
+                <strong>Workshop Coordinator</strong><br>
+                <span style="font-size: 10px;">Name & Signature</span>
+              </div>
+            </div>
+            <div class="signature-box">
+              <div class="signature-line">
+                <strong>Workshop Facilitator</strong><br>
+                <span style="font-size: 10px;">Name & Signature</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="text-align: center; margin-top: 15px; color: #666; font-size: 10px;">
+            This document is for official workshop attendance tracking purposes.<br>
+            For inquiries, please contact the workshop organizers.
+          </p>
+        </div>
+
+        <button class="print-button no-print" onclick="window.print()">Print Attendance Sheet (${isLandscape ? 'Landscape' : 'A4 Portrait'})</button>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
   };
 
   const generatePDF = (registration: WorkshopRegistration) => {
@@ -549,6 +876,24 @@ export default function WorkshopRegistrationsAdmin() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Export to Excel
+          </button>
+          <button
+            onClick={() => generateAttendanceSheet('landscape')}
+            className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Attendance (Landscape)
+          </button>
+          <button
+            onClick={() => generateAttendanceSheet('portrait')}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Attendance (A4)
           </button>
           <button
             onClick={fetchRegistrations}
@@ -950,12 +1295,12 @@ export default function WorkshopRegistrationsAdmin() {
                 </button>
               </div>
 
-              <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="mt-4 bg-gray-700 border border-gray-800 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-white mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <div className="text-sm text-blue-800">
+                  <div className="text-sm text-white">
                     <p className="font-semibold mb-1">QR Code Verification</p>
                     <p>The QR code on the certificate links to: <span className="font-mono text-xs break-all">{certificateData.verificationUrl}</span></p>
                   </div>

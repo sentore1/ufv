@@ -31,14 +31,25 @@ function VerificationContent() {
       }
 
       try {
+        console.log("Verifying certificate:", code);
+        
         // Fetch certificate from database
         const { data, error: dbError } = await supabase
           .from("workshop_registrations")
           .select("*")
           .eq("certificate_number", code)
-          .single();
+          .maybeSingle();
 
-        if (dbError || !data) {
+        console.log("Database response:", { data, error: dbError });
+
+        if (dbError) {
+          console.error("Database error:", dbError);
+          setError(`Database error: ${dbError.message}`);
+          setLoading(false);
+          return;
+        }
+
+        if (!data) {
           setError("Certificate not found or invalid");
           setLoading(false);
           return;
@@ -49,7 +60,7 @@ function VerificationContent() {
           .from("workshop_settings")
           .select("title_en, start_date, end_date")
           .eq("is_active", true)
-          .single();
+          .maybeSingle();
 
         setResult({
           valid: true,
@@ -129,11 +140,11 @@ function VerificationContent() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 p-4">
       <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-blue-600 p-8 text-center">
+        <div className="bg-blue-600 p-8 text-center">
           <div className="mb-4">
             <div className="mx-auto w-20 h-20 bg-white rounded-full flex items-center justify-center">
               <svg
-                className="w-10 h-10 text-green-600"
+                className="w-10 h-10 text-blue-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -150,7 +161,7 @@ function VerificationContent() {
           <h1 className="text-3xl font-bold text-white mb-2">
             ✓ Certificate Verified
           </h1>
-          <p className="text-green-100">
+          <p className="text-white">
             This certificate is authentic and valid
           </p>
         </div>
@@ -207,10 +218,10 @@ function VerificationContent() {
           </div>
 
           {/* Additional Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue-600 border border-blue-700 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <svg
-                className="w-6 h-6 text-blue-600 mt-0.5 flex-shrink-0"
+                className="w-6 h-6 text-white mt-0.5 flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -222,7 +233,7 @@ function VerificationContent() {
                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              <div className="text-sm text-blue-800">
+              <div className="text-sm text-white">
                 <p className="font-semibold mb-1">Certificate Authentication</p>
                 <p>
                   This certificate has been verified against our database and
@@ -235,19 +246,21 @@ function VerificationContent() {
 
           {/* Verified Badge */}
           <div className="text-center pt-6 border-t">
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-6 py-3 rounded-full font-semibold">
-              <svg
-                className="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Officially Verified
+            <div className="bg-green-700 text-white px-8 py-4 rounded-lg shadow-md inline-block">
+              <div className="flex items-center gap-3">
+                <svg
+                  className="w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-xl font-bold">Officially Verified</span>
+              </div>
             </div>
             <p className="text-xs text-gray-500 mt-4">
               Verified on {new Date().toLocaleString()}
