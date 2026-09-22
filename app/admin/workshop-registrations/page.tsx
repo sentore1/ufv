@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import CertificateRenderer from "@/app/components/CertificateRenderer";
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -23,20 +24,26 @@ interface WorkshopRegistration {
   years_experience: string;
   emergency_contact: string;
   country_of_departure: string;
-  arrival_date: string;
-  departure_date: string;
-  accommodation_required: boolean;
-  airport_pickup_required: boolean;
   preferred_languages: string[];
   interpretation_required: boolean;
   dietary_requirements: string;
-  allergies_conditions: string;
-  special_needs: string;
-  expectations: string;
   capacity_building_areas: string[];
-  signature_name: string;
-  signature_date: string;
   created_at: string;
+  certificate_number?: string;
+  certificate_generated_at?: string;
+}
+
+interface CertificateData {
+  participantName: string;
+  certificateNumber: string;
+  verificationUrl: string;
+  directors: Array<{
+    full_name: string;
+    role: string;
+    signature_position: number;
+    display_order: number;
+  }>;
+  issueDate: string;
 }
 
 export default function WorkshopRegistrationsAdmin() {
@@ -46,6 +53,10 @@ export default function WorkshopRegistrationsAdmin() {
   const [selectedRegistration, setSelectedRegistration] = useState<WorkshopRegistration | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOrg, setFilterOrg] = useState("");
+  const [certificateData, setCertificateData] = useState<CertificateData | null>(null);
+  const [generatingCertificate, setGeneratingCertificate] = useState(false);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const certificateCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     if (!localStorage.getItem("adminAuth")) {
@@ -75,6 +86,94 @@ export default function WorkshopRegistrationsAdmin() {
     }
   };
 
+  const handleGenerateCertificate = async (registration: WorkshopRegistration) => {
+    console.log("=== Generate Certificate Clicked ===");
+    console.log("Registration ID:", registration.id);
+    console.log("Registration Name:", registration.full_name);
+    
+    setGeneratingCertificate(true);
+    try {
+      console.log("Calling API...");
+      const response = await fetch("/api/generate-certificate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ registrationId: registration.id }),
+      });
+
+      console.log("API Response Status:", response.status);
+      const data = await response.json();
+      console.log("API Response Data:", data);
+
+      if (!response.ok) {
+        console.error("API Error:", data);
+        throw new Error(data.error || "Failed to generate certificate");
+      }
+      
+      if (data.success) {
+        console.log("✅ Certificate generated successfully!");
+        console.log("Certificate Number:", data.certificateData.certificateNumber);
+        
+        setCertificateData(data.certificateData);
+        setShowCertificateModal(true);
+        
+        // Refresh registrations to show updated certificate_number
+        console.log("Refreshing registrations list...");
+        await fetchRegistrations();
+        
+        // Update selected registration
+        const updatedReg = registrations.find(r => r.id === registration.id);
+        if (updatedReg) {
+          console.log("Updating selected registration with certificate number");
+          setSelectedRegistration({
+            ...updatedReg,
+            certificate_number: data.certificateData.certificateNumber,
+            certificate_generated_at: data.certificateData.issueDate
+          });
+        }
+      } else {
+        console.error("❌ API returned success=false");
+        alert("Failed to generate certificate");
+      }
+    } catch (error) {
+      console.error("❌ Error generating certificate:", error);
+      alert(`Failed to generate certificate. Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setGeneratingCertificate(false);
+      console.log("=== Generate Certificate Complete ===");
+    }
+  };
+
+  const handleDownloadCertificate = () => {
+    const canvas = certificateCanvasRef.current;
+    if (!canvas) {
+      alert("Certificate not ready. Please wait.");
+      return;
+    }
+
+    // Convert canvas to blob and download
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        alert("Failed to generate image");
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `Certificate-${certificateData?.certificateNumber || "download"}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }, "image/png");
+  };
+
+  const handleCertificateReady = (canvas: HTMLCanvasElement) => {
+    certificateCanvasRef.current = canvas;
+  };
+
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this registration?")) return;
 
@@ -95,44 +194,79 @@ export default function WorkshopRegistrationsAdmin() {
 
   const exportToCSV = () => {
     const headers = [
-      "Full Name", "Email", "Phone", "Organization", "Organization Type", "Position",
-      "Gender", "Nationality", "Country of Residence", "Passport Number", "Date of Birth",
-      "Years Experience", "Emergency Contact", "Country of Departure", "Arrival Date",
-      "Departure Date", "Accommodation Required", "Airport Pickup Required",
-      "Preferred Languages", "Interpretation Required", "Dietary Requirements",
-      "Allergies/Conditions", "Special Needs", "Expectations", "Capacity Building Areas",
-      "Signature Name", "Signature Date", "Registration Date"
+      // Section A: Personal Information
+      "Full Name",
+      "Gender",
+      "Date of Birth",
+      "Nationality",
+      "Country of Residence",
+      "Passport/ID Number",
+      
+      // Section B: Organization Details
+      "Organization Name",
+      "Organization Type",
+      "Position Title",
+      "Years of Experience",
+      
+      // Section C: Contact Information
+      "Email Address",
+      "Phone Number",
+      "Emergency Contact",
+      
+      // Section D: Travel Information
+      "Country of Departure",
+      
+      // Section E: Language & Participation
+      "Preferred Languages",
+      "Interpretation Required",
+      
+      // Section F: Dietary Requirements
+      "Dietary Requirements",
+      
+      // Section G: Capacity Building
+      "Capacity Building Areas",
+      
+      // Metadata
+      "Registration Date",
+      "Certificate Number"
     ];
 
     const rows = registrations.map(reg => [
+      // Section A: Personal Information
       reg.full_name,
-      reg.email,
-      reg.phone,
-      reg.organization_name,
-      reg.organization_type || "",
-      reg.position_title || "",
       reg.gender || "",
+      reg.date_of_birth || "",
       reg.nationality || "",
       reg.country_of_residence || "",
       reg.passport_number || "",
-      reg.date_of_birth || "",
+      
+      // Section B: Organization Details
+      reg.organization_name,
+      reg.organization_type || "",
+      reg.position_title || "",
       reg.years_experience || "",
+      
+      // Section C: Contact Information
+      reg.email,
+      reg.phone,
       reg.emergency_contact || "",
+      
+      // Section D: Travel Information
       reg.country_of_departure || "",
-      reg.arrival_date || "",
-      reg.departure_date || "",
-      reg.accommodation_required ? "Yes" : "No",
-      reg.airport_pickup_required ? "Yes" : "No",
+      
+      // Section E: Language & Participation
       reg.preferred_languages?.join("; ") || "",
       reg.interpretation_required ? "Yes" : "No",
+      
+      // Section F: Dietary Requirements
       reg.dietary_requirements || "",
-      reg.allergies_conditions || "",
-      reg.special_needs || "",
-      reg.expectations || "",
+      
+      // Section G: Capacity Building
       reg.capacity_building_areas?.join("; ") || "",
-      reg.signature_name || "",
-      reg.signature_date || "",
-      new Date(reg.created_at).toLocaleString()
+      
+      // Metadata
+      new Date(reg.created_at).toLocaleString(),
+      reg.certificate_number || ""
     ]);
 
     const csvContent = [
@@ -149,6 +283,560 @@ export default function WorkshopRegistrationsAdmin() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const generateAttendanceSheet = (format: 'landscape' | 'portrait' = 'landscape') => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('Please allow popups to generate attendance sheet');
+      return;
+    }
+
+    // Get absolute URLs for logos
+    const baseUrl = window.location.origin;
+    const ufvLogo = `${baseUrl}/partners/UFV.png`;
+    const isdbLogo = `${baseUrl}/partners/isDB.JPG`;
+    const sifLogo = `${baseUrl}/partners/SIF.png`;
+
+    const isLandscape = format === 'landscape';
+    
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Workshop Attendance Sheet - ${isLandscape ? 'Landscape' : 'A4 Portrait'}</title>
+        <style>
+          @media print {
+            body { margin: 0; }
+            @page { size: ${isLandscape ? 'landscape' : 'A4 portrait'}; margin: 15mm; }
+            .no-print { display: none; }
+          }
+          body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: white;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #16a34a;
+            padding-bottom: 15px;
+          }
+          .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: ${isLandscape ? '50px' : '30px'};
+            margin-bottom: 15px;
+          }
+          .logos img {
+            height: ${isLandscape ? '70px' : '50px'};
+            max-width: ${isLandscape ? '150px' : '100px'};
+            object-fit: contain;
+          }
+          h1 {
+            color: #16a34a;
+            font-size: ${isLandscape ? '24px' : '20px'};
+            margin: 10px 0;
+          }
+          .info-section {
+            display: grid;
+            grid-template-columns: ${isLandscape ? 'repeat(3, 1fr)' : 'repeat(2, 1fr)'};
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+          }
+          .info-item {
+            font-size: ${isLandscape ? '11px' : '10px'};
+          }
+          .info-label {
+            font-weight: bold;
+            color: #16a34a;
+            margin-bottom: 3px;
+          }
+          .info-value {
+            color: #333;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: ${isLandscape ? '10px' : '9px'};
+          }
+          th, td {
+            border: 1px solid #000;
+            padding: ${isLandscape ? '6px 4px' : '5px 3px'};
+            text-align: left;
+          }
+          th {
+            background: #16a34a;
+            color: white;
+            font-weight: bold;
+            font-size: ${isLandscape ? '10px' : '9px'};
+          }
+          .signature-col {
+            width: ${isLandscape ? '120px' : '100px'};
+          }
+          .no-col {
+            width: 35px;
+            text-align: center;
+          }
+          .name-col {
+            width: ${isLandscape ? '160px' : '140px'};
+          }
+          .org-col {
+            width: ${isLandscape ? '140px' : '120px'};
+          }
+          .position-col {
+            width: ${isLandscape ? '120px' : '100px'};
+          }
+          .country-col {
+            width: ${isLandscape ? '80px' : '70px'};
+          }
+          .phone-col {
+            width: ${isLandscape ? '100px' : '90px'};
+          }
+          tr:nth-child(even) {
+            background: #f9f9f9;
+          }
+          .footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #16a34a;
+            font-size: ${isLandscape ? '11px' : '10px'};
+          }
+          .signature-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 30px;
+          }
+          .signature-box {
+            text-align: center;
+          }
+          .signature-line {
+            border-top: 2px solid #000;
+            margin-top: 40px;
+            padding-top: 5px;
+          }
+          .print-button {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 20px auto;
+            display: block;
+          }
+          .print-button:hover {
+            background: #15803d;
+          }
+        </style>
+      </head>
+      <body>
+        <button class="print-button no-print" onclick="window.print()">Print Attendance Sheet (${isLandscape ? 'Landscape' : 'A4 Portrait'})</button>
+
+        <div class="header">
+          <div class="logos">
+            <img src="${ufvLogo}" alt="UFV" crossorigin="anonymous">
+            <img src="${isdbLogo}" alt="IsDB" crossorigin="anonymous">
+            <img src="${sifLogo}" alt="SIF" crossorigin="anonymous">
+          </div>
+          <h1>WORKSHOP ATTENDANCE SHEET</h1>
+          <p style="margin: 5px 0; color: #666; font-size: ${isLandscape ? '13px' : '11px'};">
+            Regional Capacity Building Project for Local NGOs Dealing with Muslim Communities in Africa
+          </p>
+        </div>
+
+        <div class="info-section">
+          <div class="info-item">
+            <div class="info-label">Workshop Date:</div>
+            <div class="info-value">${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Location:</div>
+            <div class="info-value">Kigali, Rwanda</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Total Participants:</div>
+            <div class="info-value">${registrations.length} Registered</div>
+          </div>
+          ${isLandscape ? `
+          <div class="info-item">
+            <div class="info-label">Sheet Generated:</div>
+            <div class="info-value">${new Date().toLocaleString()}</div>
+          </div>
+          ` : ''}
+          <div class="info-item">
+            <div class="info-label">Session:</div>
+            <div class="info-value">☐ Morning  ☐ Afternoon  ☐ Full Day</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Facilitator:</div>
+            <div class="info-value">_____________________</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th class="no-col">No.</th>
+              <th class="name-col">Full Name</th>
+              <th class="org-col">Organization</th>
+              ${isLandscape ? '<th class="position-col">Position</th>' : ''}
+              <th class="country-col">Country</th>
+              ${isLandscape ? '<th class="phone-col">Phone</th>' : ''}
+              <th class="signature-col">Signature</th>
+              <th style="width: ${isLandscape ? '60px' : '50px'};">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${registrations.map((reg, index) => `
+              <tr>
+                <td class="no-col">${index + 1}</td>
+                <td>${reg.full_name}</td>
+                <td style="font-size: ${isLandscape ? '9px' : '8px'};">${reg.organization_name}</td>
+                ${isLandscape ? `<td style="font-size: 9px;">${reg.position_title || 'N/A'}</td>` : ''}
+                <td>${reg.country_of_residence || reg.nationality || 'N/A'}</td>
+                ${isLandscape ? `<td style="font-size: 9px;">${reg.phone}</td>` : ''}
+                <td class="signature-col"></td>
+                <td></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div class="footer">
+          <p style="margin-bottom: 10px;">
+            <strong>Instructions for Participants:</strong>
+          </p>
+          <ul style="margin: 5px 0; padding-left: 20px; line-height: 1.6;">
+            <li>Please sign in the <strong>Signature</strong> column upon arrival</li>
+            <li>Write your arrival time in the <strong>Time</strong> column</li>
+            <li>Ensure your information is correct</li>
+          </ul>
+
+          <div class="signature-section">
+            <div class="signature-box">
+              <div class="signature-line">
+                <strong>Workshop Coordinator</strong><br>
+                <span style="font-size: 10px;">Name & Signature</span>
+              </div>
+            </div>
+            <div class="signature-box">
+              <div class="signature-line">
+                <strong>Workshop Facilitator</strong><br>
+                <span style="font-size: 10px;">Name & Signature</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="text-align: center; margin-top: 15px; color: #666; font-size: 10px;">
+            This document is for official workshop attendance tracking purposes.<br>
+            For inquiries, please contact the workshop organizers.
+          </p>
+        </div>
+
+        <button class="print-button no-print" onclick="window.print()">Print Attendance Sheet (${isLandscape ? 'Landscape' : 'A4 Portrait'})</button>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+  };
+
+  const generatePDF = (registration: WorkshopRegistration) => {
+    // Create a printable HTML page
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('Please allow popups to generate PDF');
+      return;
+    }
+
+    // Get absolute URLs for logos
+    const baseUrl = window.location.origin;
+    const ufvLogo = `${baseUrl}/partners/UFV.png`;
+    const isdbLogo = `${baseUrl}/partners/isDB.JPG`;
+    const sifLogo = `${baseUrl}/partners/SIF.png`;
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Workshop Registration - ${registration.full_name}</title>
+        <style>
+          @media print {
+            body { 
+              margin: 0; 
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+            .no-print { display: none; }
+            .logos img {
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+          }
+          body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #16a34a;
+            padding-bottom: 20px;
+          }
+          .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+          }
+          .logos img {
+            height: 60px;
+            max-width: 150px;
+            object-fit: contain;
+            display: block;
+          }
+          h1 {
+            color: #16a34a;
+            font-size: 24px;
+            margin: 10px 0;
+          }
+          h2 {
+            color: #16a34a;
+            font-size: 18px;
+            margin: 20px 0 10px 0;
+            border-bottom: 2px solid #16a34a;
+            padding-bottom: 5px;
+          }
+          .section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+          }
+          .field {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 5px 0;
+          }
+          .field-label {
+            font-weight: bold;
+            color: #555;
+          }
+          .field-value {
+            color: #000;
+          }
+          .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+          }
+          .tag {
+            background: #e5e7eb;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+          }
+          .signature-section {
+            margin-top: 50px;
+            page-break-inside: avoid;
+          }
+          .signature-box {
+            border: 2px solid #000;
+            padding: 40px 20px;
+            margin-top: 20px;
+            min-height: 100px;
+          }
+          .signature-label {
+            font-weight: bold;
+            margin-bottom: 60px;
+            color: #555;
+          }
+          .signature-line {
+            border-top: 2px solid #000;
+            margin-top: 10px;
+            padding-top: 5px;
+            display: flex;
+            justify-content: space-between;
+          }
+          .print-button {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 20px auto;
+            display: block;
+          }
+          .print-button:hover {
+            background: #15803d;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="no-print">
+          <button class="print-button" onclick="window.print()">Print to PDF</button>
+        </div>
+
+        <div class="header">
+          <div class="logos">
+            <img src="${ufvLogo}" alt="UFV" crossorigin="anonymous">
+            <img src="${isdbLogo}" alt="IsDB" crossorigin="anonymous">
+            <img src="${sifLogo}" alt="SIF" crossorigin="anonymous">
+          </div>
+          <h1>Workshop Registration Form</h1>
+          <p style="color: #666; margin: 5px 0;">Registration Date: ${new Date(registration.created_at).toLocaleDateString()}</p>
+        </div>
+
+        <div class="section">
+          <h2>A. Personal Information</h2>
+          <div class="field">
+            <div class="field-label">Full Name:</div>
+            <div class="field-value">${registration.full_name || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Gender:</div>
+            <div class="field-value">${registration.gender || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Date of Birth:</div>
+            <div class="field-value">${registration.date_of_birth || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Nationality:</div>
+            <div class="field-value">${registration.nationality || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Country of Residence:</div>
+            <div class="field-value">${registration.country_of_residence || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Passport/ID Number:</div>
+            <div class="field-value">${registration.passport_number || 'N/A'}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>B. Organization Details</h2>
+          <div class="field">
+            <div class="field-label">Organization Name:</div>
+            <div class="field-value">${registration.organization_name || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Organization Type:</div>
+            <div class="field-value">${registration.organization_type || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Position Title:</div>
+            <div class="field-value">${registration.position_title || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Years of Experience:</div>
+            <div class="field-value">${registration.years_experience || 'N/A'}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>C. Contact Information</h2>
+          <div class="field">
+            <div class="field-label">Email Address:</div>
+            <div class="field-value">${registration.email || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Phone Number:</div>
+            <div class="field-value">${registration.phone || 'N/A'}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Emergency Contact:</div>
+            <div class="field-value">${registration.emergency_contact || 'N/A'}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>D. Travel Information</h2>
+          <div class="field">
+            <div class="field-label">Country of Departure:</div>
+            <div class="field-value">${registration.country_of_departure || 'N/A'}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>E. Language & Participation</h2>
+          <div class="field">
+            <div class="field-label">Preferred Languages:</div>
+            <div class="field-value">
+              <div class="tags">
+                ${registration.preferred_languages?.map(lang => `<span class="tag">${lang}</span>`).join('') || 'N/A'}
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <div class="field-label">Interpretation Required:</div>
+            <div class="field-value">${registration.interpretation_required ? 'Yes' : 'No'}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>F. Dietary Requirements</h2>
+          <div class="field">
+            <div class="field-label">Dietary Requirements:</div>
+            <div class="field-value">${registration.dietary_requirements || 'N/A'}</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>G. Capacity Building</h2>
+          <div class="field">
+            <div class="field-label">Capacity Building Areas:</div>
+            <div class="field-value">
+              <div class="tags">
+                ${registration.capacity_building_areas?.map(area => `<span class="tag">${area}</span>`).join('') || 'N/A'}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="signature-section">
+          <h2>Declaration & Signature</h2>
+          <p style="color: #666; font-style: italic; margin: 15px 0;">
+            I declare that the information provided in this registration form is accurate and complete to the best of my knowledge.
+          </p>
+          <div class="signature-box">
+            <div class="signature-label">Participant's Signature:</div>
+            <div style="height: 60px;"></div>
+            <div class="signature-line">
+              <span>Date: _____________________</span>
+              <span>Signature: _____________________</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="no-print" style="margin-top: 30px; text-align: center;">
+          <button class="print-button" onclick="window.print()">Print to PDF</button>
+        </div>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
   };
 
   const filteredRegistrations = registrations.filter(reg => {
@@ -187,7 +875,25 @@ export default function WorkshopRegistrationsAdmin() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            Export CSV
+            Export to Excel
+          </button>
+          <button
+            onClick={() => generateAttendanceSheet('landscape')}
+            className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Attendance (Landscape)
+          </button>
+          <button
+            onClick={() => generateAttendanceSheet('portrait')}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Attendance (A4)
           </button>
           <button
             onClick={fetchRegistrations}
@@ -205,21 +911,21 @@ export default function WorkshopRegistrationsAdmin() {
           <div className="text-3xl font-bold text-orange-600">{registrations.length}</div>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-gray-600 text-sm font-medium">Accommodation Required</div>
-          <div className="text-3xl font-bold text-blue-600">
-            {registrations.filter(r => r.accommodation_required).length}
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-gray-600 text-sm font-medium">Airport Pickup Required</div>
+          <div className="text-gray-600 text-sm font-medium">Certificates Issued</div>
           <div className="text-3xl font-bold text-green-600">
-            {registrations.filter(r => r.airport_pickup_required).length}
+            {registrations.filter(r => r.certificate_number).length}
           </div>
         </div>
         <div className="bg-white rounded-lg shadow p-6">
           <div className="text-gray-600 text-sm font-medium">Interpretation Required</div>
           <div className="text-3xl font-bold text-purple-600">
             {registrations.filter(r => r.interpretation_required).length}
+          </div>
+        </div>
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="text-gray-600 text-sm font-medium">Registered This Month</div>
+          <div className="text-3xl font-bold text-blue-600">
+            {registrations.filter(r => new Date(r.created_at).getMonth() === new Date().getMonth()).length}
           </div>
         </div>
       </div>
@@ -279,22 +985,29 @@ export default function WorkshopRegistrationsAdmin() {
                   >
                     <div className="flex justify-between items-start mb-2">
                       <h3 className="font-bold text-lg text-gray-900">{reg.full_name}</h3>
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                        {reg.organization_type || "N/A"}
-                      </span>
+                      <div className="flex gap-2">
+                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                          {reg.organization_type || "N/A"}
+                        </span>
+                        {reg.certificate_number && (
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Certified
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <p className="text-sm text-gray-600">{reg.organization_name}</p>
                     <p className="text-sm text-gray-500">{reg.email}</p>
                     <p className="text-sm text-gray-500">{reg.phone}</p>
                     <div className="mt-3 flex gap-2 flex-wrap">
-                      {reg.accommodation_required && (
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">🏨 Accommodation</span>
-                      )}
-                      {reg.airport_pickup_required && (
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">✈️ Pickup</span>
-                      )}
                       {reg.interpretation_required && (
                         <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">🗣️ Interpretation</span>
+                      )}
+                      {reg.dietary_requirements && (
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">🍽️ {reg.dietary_requirements}</span>
                       )}
                     </div>
                     <p className="text-xs text-gray-400 mt-2">
@@ -396,33 +1109,13 @@ export default function WorkshopRegistrationsAdmin() {
                   </div>
                 </div>
 
-                {/* Travel & Accommodation */}
+                {/* Travel Information */}
                 <div className="border-t pt-4">
-                  <h3 className="font-bold text-lg text-blue-700 mb-3">Travel & Accommodation</h3>
+                  <h3 className="font-bold text-lg text-blue-700 mb-3">Travel Information</h3>
                   <div className="space-y-2 text-sm">
                     <div className="grid grid-cols-2 gap-2">
                       <span className="text-gray-600">Country of Departure:</span>
                       <span className="font-medium">{selectedRegistration.country_of_departure || "N/A"}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <span className="text-gray-600">Arrival Date:</span>
-                      <span className="font-medium">{selectedRegistration.arrival_date || "N/A"}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <span className="text-gray-600">Departure Date:</span>
-                      <span className="font-medium">{selectedRegistration.departure_date || "N/A"}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <span className="text-gray-600">Accommodation:</span>
-                      <span className={`font-medium ${selectedRegistration.accommodation_required ? "text-green-600" : ""}`}>
-                        {selectedRegistration.accommodation_required ? "✓ Required" : "Not required"}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <span className="text-gray-600">Airport Pickup:</span>
-                      <span className={`font-medium ${selectedRegistration.airport_pickup_required ? "text-green-600" : ""}`}>
-                        {selectedRegistration.airport_pickup_required ? "✓ Required" : "Not required"}
-                      </span>
                     </div>
                   </div>
                 </div>
@@ -450,33 +1143,21 @@ export default function WorkshopRegistrationsAdmin() {
                   </div>
                 </div>
 
-                {/* Dietary & Special Needs */}
+                {/* Dietary Requirements */}
                 <div className="border-t pt-4">
-                  <h3 className="font-bold text-lg text-blue-700 mb-3">Dietary & Special Needs</h3>
+                  <h3 className="font-bold text-lg text-blue-700 mb-3">Dietary Requirements</h3>
                   <div className="space-y-2 text-sm">
                     <div className="grid grid-cols-2 gap-2">
                       <span className="text-gray-600">Dietary Requirements:</span>
                       <span className="font-medium">{selectedRegistration.dietary_requirements || "N/A"}</span>
                     </div>
-                    <div>
-                      <span className="text-gray-600">Allergies/Conditions:</span>
-                      <p className="mt-1 text-gray-900">{selectedRegistration.allergies_conditions || "None"}</p>
-                    </div>
-                    <div>
-                      <span className="text-gray-600">Special Needs:</span>
-                      <p className="mt-1 text-gray-900">{selectedRegistration.special_needs || "None"}</p>
-                    </div>
                   </div>
                 </div>
 
-                {/* Expectations */}
+                {/* Capacity Building */}
                 <div className="border-t pt-4">
-                  <h3 className="font-bold text-lg text-blue-700 mb-3">Expectations</h3>
+                  <h3 className="font-bold text-lg text-blue-700 mb-3">Capacity Building</h3>
                   <div className="space-y-2 text-sm">
-                    <div>
-                      <span className="text-gray-600">What to gain from workshop:</span>
-                      <p className="mt-1 text-gray-900">{selectedRegistration.expectations || "N/A"}</p>
-                    </div>
                     <div>
                       <span className="text-gray-600">Capacity Building Areas:</span>
                       <div className="mt-1 flex flex-wrap gap-1">
@@ -490,35 +1171,145 @@ export default function WorkshopRegistrationsAdmin() {
                   </div>
                 </div>
 
-                {/* Declaration */}
-                <div className="border-t pt-4">
-                  <h3 className="font-bold text-lg text-blue-700 mb-3">Declaration</h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="grid grid-cols-2 gap-2">
-                      <span className="text-gray-600">Signature Name:</span>
-                      <span className="font-medium">{selectedRegistration.signature_name || "N/A"}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <span className="text-gray-600">Signature Date:</span>
-                      <span className="font-medium">{selectedRegistration.signature_date || "N/A"}</span>
-                    </div>
-                  </div>
-                </div>
-
                 {/* Actions */}
                 <div className="border-t pt-4 flex gap-4">
+                  <button
+                    onClick={() => generatePDF(selectedRegistration)}
+                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    Export PDF
+                  </button>
+                  <button
+                    onClick={() => handleGenerateCertificate(selectedRegistration)}
+                    disabled={generatingCertificate}
+                    className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 disabled:bg-gray-400"
+                  >
+                    {generatingCertificate ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        Generating...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                        </svg>
+                        {selectedRegistration.certificate_number ? 'View Certificate' : 'Generate Certificate'}
+                      </>
+                    )}
+                  </button>
                   <button
                     onClick={() => handleDelete(selectedRegistration.id)}
                     className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
                   >
-                    Delete Registration
+                    Delete
                   </button>
                 </div>
+
+                {/* Certificate Status */}
+                {selectedRegistration.certificate_number && (
+                  <div className="border-t pt-4 mt-4">
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <div className="flex items-start gap-3">
+                        <svg className="w-6 h-6 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div className="text-sm">
+                          <p className="font-semibold text-green-800 mb-1">Certificate Generated</p>
+                          <p className="text-green-700">
+                            Certificate Number: <span className="font-mono font-bold">{selectedRegistration.certificate_number}</span>
+                          </p>
+                          {selectedRegistration.certificate_generated_at && (
+                            <p className="text-green-600 text-xs mt-1">
+                              Generated: {new Date(selectedRegistration.certificate_generated_at).toLocaleString()}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Certificate Modal */}
+      {showCertificateModal && certificateData && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Certificate Preview</h2>
+                <p className="text-sm text-gray-600 mt-1">
+                  Certificate Number: <span className="font-mono font-bold">{certificateData.certificateNumber}</span>
+                </p>
+              </div>
+              <button
+                onClick={() => setShowCertificateModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-6">
+              <CertificateRenderer
+                certificateData={certificateData}
+                onReady={handleCertificateReady}
+              />
+
+              <div className="mt-6 flex gap-4">
+                <button
+                  onClick={handleDownloadCertificate}
+                  className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 font-semibold"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Download Certificate (PNG)
+                </button>
+                <button
+                  onClick={() => {
+                    const url = certificateData.verificationUrl;
+                    window.open(url, '_blank');
+                  }}
+                  className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 font-semibold"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Test Verification
+                </button>
+                <button
+                  onClick={() => setShowCertificateModal(false)}
+                  className="bg-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-400 transition font-semibold"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="mt-4 bg-gray-700 border border-gray-800 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-white mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div className="text-sm text-white">
+                    <p className="font-semibold mb-1">QR Code Verification</p>
+                    <p>The QR code on the certificate links to: <span className="font-mono text-xs break-all">{certificateData.verificationUrl}</span></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
