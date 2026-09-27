@@ -170,6 +170,42 @@ export default function WorkshopRegistrationsAdmin() {
     }, "image/png");
   };
 
+  const handleDownloadCertificatePDF = async () => {
+    const canvas = certificateCanvasRef.current;
+    if (!canvas) {
+      alert("Certificate not ready. Please wait.");
+      return;
+    }
+
+    try {
+      // Dynamically import jsPDF
+      const { jsPDF } = await import('jspdf');
+      
+      // Get canvas dimensions
+      const imgWidth = 297; // A4 width in mm (landscape)
+      const imgHeight = 210; // A4 height in mm (landscape)
+      
+      // Convert canvas to image data
+      const imgData = canvas.toDataURL('image/png', 1.0);
+      
+      // Create PDF in landscape orientation
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      // Add image to PDF
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      
+      // Download PDF
+      pdf.save(`Certificate-${certificateData?.certificateNumber || "download"}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
+  };
+
   const handleCertificateReady = (canvas: HTMLCanvasElement) => {
     certificateCanvasRef.current = canvas;
   };
@@ -1273,7 +1309,16 @@ export default function WorkshopRegistrationsAdmin() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
-                  Download Certificate (PNG)
+                  Download PNG
+                </button>
+                <button
+                  onClick={handleDownloadCertificatePDF}
+                  className="flex-1 bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition flex items-center justify-center gap-2 font-semibold"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  Download PDF
                 </button>
                 <button
                   onClick={() => {
@@ -1285,7 +1330,7 @@ export default function WorkshopRegistrationsAdmin() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
-                  Test Verification
+                  Verify
                 </button>
                 <button
                   onClick={() => setShowCertificateModal(false)}
