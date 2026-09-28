@@ -485,7 +485,7 @@ export default function WorkshopRegistrationsAdmin() {
           </div>
           <h1>WORKSHOP ATTENDANCE SHEET</h1>
           <p style="margin: 5px 0; color: #666; font-size: ${isLandscape ? '13px' : '11px'};">
-            Regional Capacity Building Project for Local NGOs Dealing with Muslim Communities in Africa
+            Regional Capacity Building for Local NGOs Dealing with Muslim Communities in Africa
           </p>
         </div>
 
