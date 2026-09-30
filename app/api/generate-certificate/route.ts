@@ -39,9 +39,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate certificate number if not exists
+    // Check if certificate already exists
     let certificateNumber = registration.certificate_number;
+    let issueDate = registration.certificate_generated_at;
+    
     if (!certificateNumber) {
+      // Generate new certificate number only if one doesn't exist
       console.log("Generating new certificate number...");
       
       const { data: certData, error: certError } = await supabase.rpc(
@@ -63,6 +66,7 @@ export async function POST(request: NextRequest) {
       }
 
       certificateNumber = certData;
+      issueDate = new Date().toISOString();
       console.log("Generated certificate number:", certificateNumber);
 
       // Update registration with certificate number
@@ -70,7 +74,7 @@ export async function POST(request: NextRequest) {
         .from("workshop_registrations")
         .update({
           certificate_number: certificateNumber,
-          certificate_generated_at: new Date().toISOString(),
+          certificate_generated_at: issueDate,
         })
         .eq("id", registrationId)
         .select();
@@ -88,6 +92,10 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
+    } else {
+      console.log("Certificate already exists:", certificateNumber);
+      // Use existing certificate number and date
+      issueDate = issueDate || new Date().toISOString();
     }
 
     // Fetch active directors
@@ -113,7 +121,7 @@ export async function POST(request: NextRequest) {
         certificateNumber: certificateNumber,
         verificationUrl: verificationUrl,
         directors: (directors || []) as CertificateDirector[],
-        issueDate: registration.certificate_generated_at || new Date().toISOString(),
+        issueDate: issueDate,
       },
     });
   } catch (error) {
