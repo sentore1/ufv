@@ -20,6 +20,8 @@ interface CertificateData {
   verificationUrl: string;
   directors: Director[];
   issueDate: string;
+  font?: string;
+  fontSize?: number;
 }
 
 interface CertificateRendererProps {
@@ -74,17 +76,65 @@ export default function CertificateRenderer({
           ctx.fillStyle = "#000000";
 
           // Draw participant name (capitalize first letter of each word, rest lowercase)
-          // Increased size and moved down
+          // Positioned at -200
           const participantName = certificateData.participantName
             .toLowerCase()
             .split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
-          ctx.font = "italic 200px 'Brush Script MT', 'Lucida Handwriting', 'Segoe Script', cursive";
+          
+          // Use custom font if provided, otherwise default
+          const fontFamily = certificateData.font || "Brush Script MT";
+          const fontSize = certificateData.fontSize || 200;
+          
+          console.log("Certificate Rendering - Font Family:", fontFamily);
+          console.log("Certificate Rendering - Font Size:", fontSize);
+          
+          // Build font string with multiple fallbacks
+          let fontString;
+          switch(fontFamily) {
+            case "Segoe Script":
+              fontString = `italic ${fontSize}px "Segoe Script", "Brush Script MT", "Lucida Handwriting", cursive`;
+              break;
+            case "Lucida Handwriting":
+              fontString = `italic ${fontSize}px "Lucida Handwriting", "Brush Script MT", "Segoe Script", cursive`;
+              break;
+            case "Monotype Corsiva":
+              fontString = `italic ${fontSize}px "Monotype Corsiva", "Brush Script MT", cursive`;
+              break;
+            case "Edwardian Script ITC":
+              fontString = `italic ${fontSize}px "Edwardian Script ITC", "Brush Script MT", cursive`;
+              break;
+            case "Vladimir Script":
+              fontString = `italic ${fontSize}px "Vladimir Script", "Brush Script MT", cursive`;
+              break;
+            case "French Script MT":
+              fontString = `italic ${fontSize}px "French Script MT", "Brush Script MT", cursive`;
+              break;
+            case "Kunstler Script":
+              fontString = `italic ${fontSize}px "Kunstler Script", "Brush Script MT", cursive`;
+              break;
+            case "Freestyle Script":
+              fontString = `italic ${fontSize}px "Freestyle Script", "Brush Script MT", cursive`;
+              break;
+            case "Mistral":
+              fontString = `italic ${fontSize}px "Mistral", "Brush Script MT", cursive`;
+              break;
+            default:
+              fontString = `italic ${fontSize}px "Brush Script MT", "Segoe Script", "Lucida Handwriting", cursive`;
+          }
+          
+          console.log("Font String:", fontString);
+          ctx.font = fontString;
+          
+          // Save the current font that was actually applied
+          const appliedFont = ctx.font;
+          console.log("Applied Font:", appliedFont);
+          
           ctx.fillText(
             participantName,
             canvas.width / 2,
-            canvas.height / 2 - 80 // Moved down from -150 to -80
+            canvas.height / 2 - 200 // Set to -200
           );
 
           // Generate QR code with custom color

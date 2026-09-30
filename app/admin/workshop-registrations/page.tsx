@@ -31,6 +31,8 @@ interface WorkshopRegistration {
   created_at: string;
   certificate_number?: string;
   certificate_generated_at?: string;
+  certificate_font?: string;
+  certificate_font_size?: number;
 }
 
 interface CertificateData {
@@ -44,6 +46,8 @@ interface CertificateData {
     display_order: number;
   }>;
   issueDate: string;
+  font?: string;
+  fontSize?: number;
 }
 
 export default function WorkshopRegistrationsAdmin() {
@@ -57,6 +61,33 @@ export default function WorkshopRegistrationsAdmin() {
   const [generatingCertificate, setGeneratingCertificate] = useState(false);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const certificateCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  
+  // Edit mode states
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editedName, setEditedName] = useState("");
+  const [selectedFont, setSelectedFont] = useState("Brush Script MT");
+  const [selectedFontSize, setSelectedFontSize] = useState(200);
+  const [savingChanges, setSavingChanges] = useState(false);
+  
+  // Bulk font update states
+  const [showBulkFontModal, setShowBulkFontModal] = useState(false);
+  const [bulkFont, setBulkFont] = useState("Brush Script MT");
+  const [bulkFontSize, setBulkFontSize] = useState(200);
+  const [bulkUpdating, setBulkUpdating] = useState(false);
+
+  // Available fonts for certificate
+  const certificateFonts = [
+    { value: "Brush Script MT", label: "Brush Script MT (Default)" },
+    { value: "Segoe Script", label: "Segoe Script" },
+    { value: "Lucida Handwriting", label: "Lucida Handwriting" },
+    { value: "Monotype Corsiva", label: "Monotype Corsiva" },
+    { value: "Edwardian Script ITC", label: "Edwardian Script" },
+    { value: "Vladimir Script", label: "Vladimir Script" },
+    { value: "French Script MT", label: "French Script" },
+    { value: "Kunstler Script", label: "Kunstler Script" },
+    { value: "Freestyle Script", label: "Freestyle Script" },
+    { value: "Mistral", label: "Mistral" },
+  ];
 
   useEffect(() => {
     if (!localStorage.getItem("adminAuth")) {
@@ -65,6 +96,103 @@ export default function WorkshopRegistrationsAdmin() {
     }
     fetchRegistrations();
   }, []);
+
+  useEffect(() => {
+    if (selectedRegistration) {
+      setEditedName(selectedRegistration.full_name);
+      setSelectedFont(selectedRegistration.certificate_font || "Brush Script MT");
+      setSelectedFontSize(selectedRegistration.certificate_font_size || 200);
+    }
+  }, [selectedRegistration]);
+
+  const handleSaveNameAndFont = async () => {
+    if (!selectedRegistration) return;
+    
+    setSavingChanges(true);
+    try {
+      const { error } = await supabase
+        .from("workshop_registrations")
+        .update({ 
+          full_name: editedName,
+          certificate_font: selectedFont,
+          certificate_font_size: selectedFontSize
+        })
+        .eq("id", selectedRegistration.id);
+
+      if (error) {
+        console.error("Error updating registration:", error);
+        alert("Failed to save changes. Please try again.");
+      } else {
+        // Update local state
+        setRegistrations(prev => 
+          prev.map(reg => 
+            reg.id === selectedRegistration.id 
+              ? { ...reg, full_name: editedName, certificate_font: selectedFont, certificate_font_size: selectedFontSize }
+              : reg
+          )
+        );
+        setSelectedRegistration({ 
+          ...selectedRegistration, 
+          full_name: editedName, 
+          certificate_font: selectedFont,
+          certificate_font_size: selectedFontSize
+        });
+        setIsEditingName(false);
+        alert("Changes saved successfully!");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("An unexpected error occurred.");
+    } finally {
+      setSavingChanges(false);
+    }
+  };
+
+  const handleBulkFontUpdate = async () => {
+    if (!confirm(`Are you sure you want to update the font and size for ALL ${registrations.length} registrations to "${bulkFont}" at ${bulkFontSize}px?`)) {
+      return;
+    }
+
+    setBulkUpdating(true);
+    try {
+      // Update all registrations with the selected font and size
+      const { error } = await supabase
+        .from("workshop_registrations")
+        .update({ 
+          certificate_font: bulkFont,
+          certificate_font_size: bulkFontSize
+        })
+        .neq("id", "00000000-0000-0000-0000-000000000000"); // Update all records
+
+      if (error) {
+        console.error("Error bulk updating font:", error);
+        alert("Failed to update fonts. Please try again.");
+      } else {
+        // Update local state
+        setRegistrations(prev => 
+          prev.map(reg => ({ 
+            ...reg, 
+            certificate_font: bulkFont,
+            certificate_font_size: bulkFontSize
+          }))
+        );
+        if (selectedRegistration) {
+          setSelectedRegistration({ 
+            ...selectedRegistration, 
+            certificate_font: bulkFont,
+            certificate_font_size: bulkFontSize
+          });
+        }
+        setShowBulkFontModal(false);
+        alert(`Successfully updated font to "${bulkFont}" (${bulkFontSize}px) for all ${registrations.length} registrations!`);
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("An unexpected error occurred.");
+    } finally {
+      setBulkUpdating(false);
+    }
+  };
 
   const fetchRegistrations = async () => {
     setLoading(true);
@@ -90,6 +218,8 @@ export default function WorkshopRegistrationsAdmin() {
     console.log("=== Generate Certificate Clicked ===");
     console.log("Registration ID:", registration.id);
     console.log("Registration Name:", registration.full_name);
+    console.log("Certificate Font:", registration.certificate_font || "Brush Script MT");
+    console.log("Certificate Font Size:", registration.certificate_font_size || 200);
     
     setGeneratingCertificate(true);
     try {
@@ -99,7 +229,11 @@ export default function WorkshopRegistrationsAdmin() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ registrationId: registration.id }),
+        body: JSON.stringify({ 
+          registrationId: registration.id,
+          font: registration.certificate_font || "Brush Script MT",
+          fontSize: registration.certificate_font_size || 200
+        }),
       });
 
       console.log("API Response Status:", response.status);
@@ -114,8 +248,18 @@ export default function WorkshopRegistrationsAdmin() {
       if (data.success) {
         console.log("✅ Certificate generated successfully!");
         console.log("Certificate Number:", data.certificateData.certificateNumber);
+        console.log("Registration Font:", registration.certificate_font);
+        console.log("Registration Font Size:", registration.certificate_font_size);
         
-        setCertificateData(data.certificateData);
+        // Add font to certificate data
+        const certData = {
+          ...data.certificateData,
+          font: registration.certificate_font || "Brush Script MT",
+          fontSize: registration.certificate_font_size || 200
+        };
+        
+        console.log("Certificate Data being set:", certData);
+        setCertificateData(certData);
         setShowCertificateModal(true);
         
         // Refresh registrations to show updated certificate_number
@@ -485,7 +629,7 @@ export default function WorkshopRegistrationsAdmin() {
           </div>
           <h1>WORKSHOP ATTENDANCE SHEET</h1>
           <p style="margin: 5px 0; color: #666; font-size: ${isLandscape ? '13px' : '11px'};">
-            Regional Capacity Building Project for Local NGOs Dealing with Muslim Communities in Africa
+            Regional Capacity Building for Local NGOs Dealing with Muslim Communities in Africa
           </p>
         </div>
 
@@ -905,6 +1049,15 @@ export default function WorkshopRegistrationsAdmin() {
         <h1 className="text-3xl font-bold">Workshop Registrations</h1>
         <div className="flex gap-4">
           <button
+            onClick={() => setShowBulkFontModal(true)}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+            Change Font (All)
+          </button>
+          <button
             onClick={exportToCSV}
             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2"
           >
@@ -1040,10 +1193,20 @@ export default function WorkshopRegistrationsAdmin() {
                     <p className="text-sm text-gray-500">{reg.phone}</p>
                     <div className="mt-3 flex gap-2 flex-wrap">
                       {reg.interpretation_required && (
-                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">🗣️ Interpretation</span>
+                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clipRule="evenodd" />
+                          </svg>
+                          Interpretation
+                        </span>
                       )}
                       {reg.dietary_requirements && (
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">🍽️ {reg.dietary_requirements}</span>
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                          </svg>
+                          {reg.dietary_requirements}
+                        </span>
                       )}
                     </div>
                     <p className="text-xs text-gray-400 mt-2">
@@ -1068,13 +1231,139 @@ export default function WorkshopRegistrationsAdmin() {
               </div>
             ) : (
               <div className="space-y-6">
-                {/* Personal Information */}
+                {/* Personal Information with Edit Controls */}
                 <div>
-                  <h3 className="font-bold text-lg text-blue-700 mb-3">Personal Information</h3>
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="font-bold text-lg text-blue-700">Personal Information</h3>
+                    {!isEditingName && (
+                      <button
+                        onClick={() => setIsEditingName(true)}
+                        className="text-sm bg-orange-600 text-white px-3 py-1 rounded hover:bg-orange-700 transition flex items-center gap-1"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Edit Name & Font
+                      </button>
+                    )}
+                  </div>
+                  
+                  {isEditingName ? (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                      <h4 className="font-semibold text-gray-800 mb-3">Edit Certificate Details</h4>
+                      
+                      {/* Name Edit */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Full Name (for Certificate)
+                        </label>
+                        <input
+                          type="text"
+                          value={editedName}
+                          onChange={(e) => setEditedName(e.target.value)}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        />
+                      </div>
+
+                      {/* Font Selection */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Certificate Font
+                        </label>
+                        <select
+                          value={selectedFont}
+                          onChange={(e) => setSelectedFont(e.target.value)}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        >
+                          {certificateFonts.map(font => (
+                            <option key={font.value} value={font.value}>
+                              {font.label}
+                            </option>
+                          ))}
+                        </select>
+                        <p className="text-xs text-gray-500 mt-1">
+                          This font will be used for the participant name on the certificate
+                        </p>
+                      </div>
+
+                      {/* Font Size Selection */}
+                      <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Font Size: {selectedFontSize}px
+                        </label>
+                        <input
+                          type="range"
+                          min="120"
+                          max="280"
+                          step="10"
+                          value={selectedFontSize}
+                          onChange={(e) => setSelectedFontSize(parseInt(e.target.value))}
+                          className="w-full"
+                        />
+                        <div className="flex justify-between text-xs text-gray-500 mt-1">
+                          <span>Small (120px)</span>
+                          <span>Medium (200px)</span>
+                          <span>Large (280px)</span>
+                        </div>
+                      </div>
+
+                      {/* Font Preview */}
+                      <div className="mb-4 p-3 bg-white border border-gray-200 rounded">
+                        <p className="text-xs text-gray-600 mb-2">Preview:</p>
+                        <p 
+                          className="text-center italic"
+                          style={{ 
+                            fontFamily: selectedFont,
+                            fontSize: `${selectedFontSize / 8}px` // Scale down for preview
+                          }}
+                        >
+                          {editedName || "Sample Name"}
+                        </p>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleSaveNameAndFont}
+                          disabled={savingChanges}
+                          className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition disabled:bg-gray-400 flex items-center justify-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                          </svg>
+                          {savingChanges ? "Saving..." : "Save Changes"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsEditingName(false);
+                            setEditedName(selectedRegistration.full_name);
+                            setSelectedFont(selectedRegistration.certificate_font || "Brush Script MT");
+                            setSelectedFontSize(selectedRegistration.certificate_font_size || 200);
+                          }}
+                          className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
+                  
                   <div className="space-y-2 text-sm">
                     <div className="grid grid-cols-2 gap-2">
                       <span className="text-gray-600">Full Name:</span>
                       <span className="font-medium">{selectedRegistration.full_name}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <span className="text-gray-600">Certificate Font:</span>
+                      <span className="font-medium italic" style={{ fontFamily: selectedRegistration.certificate_font || "Brush Script MT" }}>
+                        {selectedRegistration.certificate_font || "Brush Script MT (Default)"}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <span className="text-gray-600">Font Size:</span>
+                      <span className="font-medium">
+                        {selectedRegistration.certificate_font_size || 200}px
+                      </span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <span className="text-gray-600">Gender:</span>
@@ -1172,8 +1461,15 @@ export default function WorkshopRegistrationsAdmin() {
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <span className="text-gray-600">Interpretation:</span>
-                      <span className={`font-medium ${selectedRegistration.interpretation_required ? "text-green-600" : ""}`}>
-                        {selectedRegistration.interpretation_required ? "✓ Required" : "Not required"}
+                      <span className={`font-medium flex items-center gap-1 ${selectedRegistration.interpretation_required ? "text-green-600" : ""}`}>
+                        {selectedRegistration.interpretation_required ? (
+                          <>
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            Required
+                          </>
+                        ) : "Not required"}
                       </span>
                     </div>
                   </div>
@@ -1351,6 +1647,125 @@ export default function WorkshopRegistrationsAdmin() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Font Update Modal */}
+      {showBulkFontModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Change Font for All Certificates</h2>
+              <button
+                onClick={() => setShowBulkFontModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-gray-600 mb-4">
+                This will update the certificate font for <strong>all {registrations.length} registrations</strong>. 
+                This change will affect all future certificate generations.
+              </p>
+
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Font for All Certificates
+                </label>
+                <select
+                  value={bulkFont}
+                  onChange={(e) => setBulkFont(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  {certificateFonts.map(font => (
+                    <option key={font.value} value={font.value}>
+                      {font.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Font Size Selection */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Font Size: {bulkFontSize}px
+                </label>
+                <input
+                  type="range"
+                  min="120"
+                  max="280"
+                  step="10"
+                  value={bulkFontSize}
+                  onChange={(e) => setBulkFontSize(parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Small (120px)</span>
+                  <span>Medium (200px)</span>
+                  <span>Large (280px)</span>
+                </div>
+              </div>
+
+              {/* Font Preview */}
+              <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded">
+                <p className="text-xs text-gray-600 mb-2">Font Preview:</p>
+                <p 
+                  className="text-center italic"
+                  style={{ 
+                    fontFamily: bulkFont,
+                    fontSize: `${bulkFontSize / 6}px` // Scale down for preview
+                  }}
+                >
+                  Sample Certificate Name
+                </p>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                <div className="flex gap-2">
+                  <svg className="w-5 h-5 text-yellow-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <div className="text-sm text-yellow-800">
+                    <p className="font-semibold">Warning:</p>
+                    <p>This action will update all registrations. Individual font and size preferences will be overwritten.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                onClick={handleBulkFontUpdate}
+                disabled={bulkUpdating}
+                className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold disabled:bg-gray-400 flex items-center justify-center gap-2"
+              >
+                {bulkUpdating ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Update All Certificates
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setShowBulkFontModal(false)}
+                disabled={bulkUpdating}
+                className="flex-1 bg-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-400 transition font-semibold disabled:bg-gray-200"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
